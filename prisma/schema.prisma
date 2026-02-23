@@ -1,0 +1,387 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider        = "prisma-client"
+  output          = "../src/generated/prisma"
+  moduleFormat    = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+
+
+
+
+
+
+
+// --------------------------------------
+// Enums
+// --------------------------------------
+
+enum UserRole {
+  ADMIN
+  JOB_SEEKER
+  EMPLOYER 
+  COMPANY  // Agency or Company
+}
+
+enum UserStatus {
+  PENDING   // before admin approval
+  ACTIVE    // after admin approval
+  BLOCKED   // blocked by admin
+  REJECTED  // declined by admin
+}
+
+enum JobType {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  INTERNSHIP
+  REMOTE
+  ON_SITE
+  HYBRID
+}
+
+enum JobStatus {
+  OPEN
+  CLOSED
+  PAUSED
+  BLOCKED_BY_ADMIN // blocked by admin
+}
+
+enum InterviewStatus {
+  SCHEDULED
+  COMPLETED
+  REJECTED // Not Selected
+  CANCELLED
+}
+
+
+enum ApplicationStatus {
+  APPLIED
+  VIEWED
+  INTERVIEW
+  HIRED
+  REJECTED
+}
+// --------------------------------------
+// 1. User & Authentication
+// --------------------------------------
+
+model User {
+  id        String     @id @default(uuid())
+  email     String     @unique
+  password  String
+  role      UserRole
+  
+  // Admin approval & verification
+  status    UserStatus @default(PENDING) // Admin approves the account
+  rejectionReason String?
+  isVerified Boolean   @default(false)   // Email verification status
+  
+  // OTP & Security
+  otpCode       String?   // 4-6 digit code
+  otpExpiry     DateTime?
+  resetToken    String?
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Profiles
+  adminProfile     AdminProfile?
+  jobSeekerProfile JobSeekerProfile?
+  employerProfile  EmployerProfile? // Company & Employer both use this
+
+  // Common Relations
+  notifications    Notification[]
+  sentMessages     Message[]      @relation("Sender")
+  conversations    ConversationParticipant[]
+  reports          Report[]       @relation("Reporter")
+}
+
+
+// admin personal information
+model AdminProfile {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  fullName   String
+  profilePic String?
+}
+
+// --------------------------------------
+// 2. Categories (Admin Managed)
+// --------------------------------------
+
+model Category {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?  @db.Text // Short description
+  image       String?  // Category icon/image
+  
+  jobs        Job[]
+  jobSeekers  JobSeekerProfile[]
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// --------------------------------------
+// 3. Profiles (Job Seeker & Employer)
+// --------------------------------------
+
+model JobSeekerProfile {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Basic Info (Screen: User Approvals -> View)
+  fullName      String
+  phone         String?
+  gender        String? // Male/Female/Other
+  dob           DateTime? // Date of Birth
+  profilePic    String?
+  location      String?
+  about         String? @db.Text // Overview
+
+  // Professional Details
+  preferredJobCategories Category[] // Relation to Category model (Many-to-Many)
+  employmentType         JobType[]  // Enum Array
+  experienceLevel        String?    // Entry, Mid, Senior
+
+  // Documents (Verification)
+  idCardFront   String?
+  idCardBack    String?
+  selfieImage   String?
+  resumeUrl     String?
+
+  // Relations
+  education     Education[]
+  experience    Experience[]
+  skills        String[] // Array of strings e.g. ["Python", "Java"]
+  
+  applications  Application[]
+  savedJobs     SavedJob[]
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+// Employer/Company Profile
+model EmployerProfile {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Company/Employer Info
+  companyName   String? 
+  fullName      String  // Contact Person
+  phone         String?
+  profilePic    String? 
+  location      String?
+  about         String? @db.Text
+  website       String?
+
+  // Verification Documents
+  licenseFile   String? // Trade License / Business Registration
+  idCardFront   String? 
+  idCardBack    String?
+  
+  // Admin Verification Logic
+  isVerified    Boolean  @default(false) // Only after admin checks documents
+  status        UserStatus @default(PENDING) // Reflects UserStatus of this profile
+
+  // Relations
+  jobsPosted    Job[]
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+// --------------------------------------
+// 4. Detailed Sections
+// --------------------------------------
+
+model Education {
+  id             String           @id @default(uuid())
+  jobSeekerId    String
+  jobSeeker      JobSeekerProfile @relation(fields: [jobSeekerId], references: [id], onDelete: Cascade)
+
+  degreeName     String // Qualification (e.g. Diploma, BSc)
+  institution    String // e.g. HEART Trust / NTA
+  startDate      DateTime // Started Year
+  completionYear DateTime? // Completion Year
+  isCurrent      Boolean @default(false)
+}
+
+model Experience {
+  id             String           @id @default(uuid())
+  jobSeekerId    String
+  jobSeeker      JobSeekerProfile @relation(fields: [jobSeekerId], references: [id], onDelete: Cascade)
+
+  designation    String // Job Title
+  companyName    String
+  startDate      DateTime
+  endDate        DateTime?
+  isCurrent      Boolean @default(false)
+  description    String?
+}
+
+// --------------------------------------
+// 5. Jobs & Interviews
+// --------------------------------------
+
+model Job {
+  id             String   @id @default(uuid())
+  employerId     String
+  employer       EmployerProfile @relation(fields: [employerId], references: [id])
+
+  title          String
+  description    String   @db.Text
+  location       String
+  salaryRange    String?  
+  
+  // Relations
+  categoryId     String
+  category       Category @relation(fields: [categoryId], references: [id])
+  
+  jobType        JobType[]
+  status         JobStatus @default(OPEN)
+
+  applications   Application[]
+  savedBy        SavedJob[]
+  reports        Report[] // reports against this job
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Application {
+  id             String            @id @default(uuid())
+  jobId          String
+  job            Job               @relation(fields: [jobId], references: [id])
+  jobSeekerId    String
+  jobSeeker      JobSeekerProfile  @relation(fields: [jobSeekerId], references: [id])
+
+  status         ApplicationStatus @default(APPLIED) // APPLIED, VIEWED, INTERVIEW, HIRED
+  interview      Interview?
+
+  createdAt      DateTime @default(now())
+  editedAt       DateTime? 
+
+  @@unique([jobId, jobSeekerId])
+}
+
+model Interview {
+  id             String        @id @default(uuid())
+  applicationId  String        @unique
+  application    Application   @relation(fields: [applicationId], references: [id])
+
+  scheduleDate   DateTime      // Date & Time
+  meetingLink    String?       // Zoom Link
+  status         InterviewStatus @default(SCHEDULED)
+  
+  notes          String?
+
+  createdAt      DateTime @default(now())
+  editedAt       DateTime? 
+}
+
+// --------------------------------------
+// 6. Admin Settings & CMS (Content)
+// --------------------------------------
+
+// About Us, Terms, Privacy Policy 
+model SystemContent {
+  id        String   @id @default(uuid())
+  key       String   @unique // e.g. "privacy_policy", "terms_condition", "about_us"
+  title     String
+  content   String   @db.Text // HTML or Markdown content
+  updatedAt DateTime @updatedAt
+}
+
+// --------------------------------------
+// 7. Support & Reports
+// --------------------------------------
+
+// "Reviews & Reports" 
+model Report {
+  id          String   @id @default(uuid())
+  reporterId  String
+  reporter    User     @relation("Reporter", fields: [reporterId], references: [id])
+
+  jobId       String?  // see if the report is against a job
+  job         Job?     @relation(fields: [jobId], references: [id])
+  
+  reason      String
+  details     String?  @db.Text
+  status      String   @default("PENDING") // PENDING, RESOLVED
+
+  createdAt   DateTime @default(now())
+  editedAt       DateTime? 
+}
+
+// --------------------------------------
+// 8. Inbox & Utils
+// --------------------------------------
+
+model SavedJob {
+  id          String           @id @default(uuid())
+  jobId       String
+  job         Job              @relation(fields: [jobId], references: [id])
+  jobSeekerId String
+  jobSeeker   JobSeekerProfile @relation(fields: [jobSeekerId], references: [id])
+  createdAt   DateTime         @default(now())
+  @@unique([jobId, jobSeekerId])
+}
+
+model Conversation {
+  id           String   @id @default(uuid())
+  participants ConversationParticipant[]
+  messages     Message[]
+  updatedAt    DateTime @updatedAt
+}
+
+model ConversationParticipant {
+  id             String       @id @default(uuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@unique([conversationId, userId])
+}
+
+model Message {
+  id             String       @id @default(uuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderId       String
+  sender         User         @relation("Sender", fields: [senderId], references: [id])
+  content        String?
+  attachmentUrl  String?
+  isRead         Boolean      @default(false)       // unread/seen status
+  isDeleted Boolean @default(false)
+  createdAt      DateTime     @default(now())
+  editedAt       DateTime?                              // last edited timestamp, optional
+}
+
+
+model Notification {
+  id        String   @id @default(uuid())
+  type String? // optional type field
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
