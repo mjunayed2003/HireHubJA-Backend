@@ -4,7 +4,7 @@ import { AuthService } from './auth.service';
 import { RegisterJobSeekerDto } from './dto/register-job-seeker.dto';
 import { RegisterEmployerDto } from './dto/register-employer.dto';
 import type { Multer } from 'multer';
-import { LoginDto } from './dto/auth.dto';
+import { ForgotPasswordDto, LoginDto, ResetPasswordDto } from './dto/auth.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { UploadedFiles, UseInterceptors } from '@nestjs/common';
 
@@ -79,5 +79,23 @@ export class AuthController {
   async logout(@Request() req) {
     
     return this.authService.logout(req.user.id); 
+  }
+
+
+
+
+
+    // ==========================================
+  // 🔑 FORGOT PASSWORD & RESET
+  // ==========================================
+  
+  @Post('forgot-password')
+  async forgotPassword(@Body() dto: ForgotPasswordDto) {
+    return this.authService.forgotPassword(dto);
+  }
+
+  @Post('reset-password')
+  async resetPassword(@Body() dto: ResetPasswordDto) {
+    return this.authService.resetPassword(dto);
   }
 }

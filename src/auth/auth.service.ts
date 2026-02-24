@@ -1,4 +1,4 @@
-import { BadRequestException, ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, NotFoundException, ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
 import { RegisterJobSeekerDto } from './dto/register-job-seeker.dto';
@@ -6,11 +6,13 @@ import { RegisterEmployerDto } from './dto/register-employer.dto';
 import { UserRole } from '../generated/prisma/client';
 import { LoginDto } from './dto/auth.dto';
 import { JwtService } from '@nestjs/jwt';
+import { MailerService } from '@nestjs-modules/mailer'
+import { ForgotPasswordDto, ResetPasswordDto } from './dto/auth.dto';
 
 
 @Injectable()
 export class AuthService {
-  constructor(private prisma: PrismaService, private jwtService: JwtService) {}
+  constructor(private prisma: PrismaService, private jwtService: JwtService, private readonly mailService: MailerService,) {}
 
   // ----------------------------------------------------
   // JOB SEEKER REGISTRATION
@@ -204,4 +206,101 @@ export class AuthService {
     
     return { message: 'Logged out successfully' };
   }
+
+
+
+
+
+   // ==========================================
+  // ✅ 1. FORGOT PASSWORD (Send OTP via Email)
+  // ==========================================
+  async forgotPassword(dto: ForgotPasswordDto) {
+    // chack user
+    const user = await this.prisma.user.findUnique({
+      where: { email: dto.email },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User with this email does not exist');
+    }
+
+    // generate 6 digit otp
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    
+    // ৩.otp expiry 10 minuter
+    const expiryDate = new Date();
+    expiryDate.setMinutes(expiryDate.getMinutes() + 10);
+
+    // save OTP and expiry to database
+    await this.prisma.user.update({
+      where: { email: dto.email },
+      data: {
+        otpCode: otp,
+        otpExpiry: expiryDate,
+      },
+    });
+
+    // send mail 
+    try {
+      await this.mailService.sendMail({
+        to: dto.email,
+        subject: 'Password Reset Request - HireHubJA',
+        html: `
+          <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
+            <h2 style="color: #333;">Password Reset Request</h2>
+            <p>Hello,</p>
+            <p>We received a request to reset your password. Use the OTP below to proceed:</p>
+            <h1 style="color: #007bff; letter-spacing: 5px;">${otp}</h1>
+            <p>This code will expire in 10 minutes.</p>
+            <p>If you did not request this, please ignore this email.</p>
+            <br>
+            <p>Best Regards,<br>HireHubJA Team</p>
+          </div>
+        `,
+      });
+    } catch (error) {
+      throw new BadRequestException('Failed to send OTP email');
+    }
+
+    return { message: 'OTP has been sent to your email successfully.' };
+  }
+
+  // ==========================================
+  // ✅ 2. RESET PASSWORD (Verify OTP & Change Password)
+  // ==========================================
+  async resetPassword(dto: ResetPasswordDto) {
+    const user = await this.prisma.user.findUnique({
+      where: { email: dto.email },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    //  chack OTP validity
+    if (!user.otpCode || user.otpCode !== dto.otp) {
+      throw new BadRequestException('Invalid OTP provided.');
+    }
+
+    if (!user.otpExpiry || new Date() > user.otpExpiry) {
+      throw new BadRequestException('OTP has expired. Please request a new one.');
+    }
+
+
+    // new password hash
+    const hashedPassword = await bcrypt.hash(dto.newPassword, 10);
+
+    // remove OTP 
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: {
+        password: hashedPassword,
+        otpCode: null,
+        otpExpiry: null,
+      },
+    });
+
+    return { message: 'Password reset successfully. You can now login with your new password.' };
+  }
+
 }
