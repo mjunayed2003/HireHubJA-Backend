@@ -198,7 +198,7 @@ model EmployerProfile {
   
   // Admin Verification Logic
   isVerified    Boolean  @default(false) // Only after admin checks documents
-  status        UserStatus @default(PENDING) // Reflects UserStatus of this profile
+  status        UserStatus @default(ACTIVE) // Reflects UserStatus of this profile
 
   // Relations
   jobsPosted    Job[]
@@ -371,7 +371,7 @@ model Message {
   isRead         Boolean      @default(false)       // unread/seen status
   isDeleted Boolean @default(false)
   createdAt      DateTime     @default(now())
-  editedAt       DateTime?                              // last edited timestamp, optional
+  editedAt       DateTime?                              // last edited timestamp, optional  
 }
 
 

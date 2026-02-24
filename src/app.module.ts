@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { MailerModule } from '@nestjs-modules/mailer';
+import { JobSeekerModule } from './job-seeker/job-seeker.module';
 
 
 @Module({
@@ -35,6 +36,10 @@ import { MailerModule } from '@nestjs-modules/mailer';
         from: `"Job Portal Support" <${process.env.MAIL_FROM}>`,
       },
     }),
+
+
+
+    JobSeekerModule,
 
   ],
   controllers: [AppController],
