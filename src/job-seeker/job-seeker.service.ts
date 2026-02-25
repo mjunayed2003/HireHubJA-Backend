@@ -25,7 +25,7 @@ export class JobSeekerService {
         employer: { select: { companyName: true, profilePic: true } },
         category: true,
       },
-      orderBy: { createdAt: 'desc' }, 
+      orderBy: { createdAt: 'desc' },
     });
   }
 

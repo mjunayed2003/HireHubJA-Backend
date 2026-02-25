@@ -8,6 +8,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { JobSeekerModule } from './job-seeker/job-seeker.module';
+import { EmployerModule } from './employer/employer.module';
 
 
 @Module({
@@ -40,6 +41,10 @@ import { JobSeekerModule } from './job-seeker/job-seeker.module';
 
 
     JobSeekerModule,
+
+
+
+    EmployerModule,
 
   ],
   controllers: [AppController],
