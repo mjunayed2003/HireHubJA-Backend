@@ -176,31 +176,31 @@ model JobSeekerProfile {
   updatedAt     DateTime @updatedAt
 }
 
-// Employer/Company Profile
+// Company & Employer Profile 
 model EmployerProfile {
   id     String @id @default(uuid())
   userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  // Company/Employer Info
-  companyName   String? 
-  fullName      String  // Contact Person
+  companyName   String?
+  fullName      String
   phone         String?
-  profilePic    String? 
+  profilePic    String?
   location      String?
-  about         String? @db.Text
+  about         String?  @db.Text
   website       String?
 
-  // Verification Documents
-  licenseFile   String? // Trade License / Business Registration
-  idCardFront   String? 
-  idCardBack    String?
-  
-  // Admin Verification Logic
-  isVerified    Boolean  @default(false) // Only after admin checks documents
-  status        UserStatus @default(ACTIVE) // Reflects UserStatus of this profile
+  businessRegCertId  String?  // Business Registration Certificate ID
+  taxId              String?  // Tax ID
+  authorizedRepId    String?  // Authorized Representative ID
+  licenseFile        String?  // Business Registration Certificate File
 
-  // Relations
+  idCardFront   String?
+  idCardBack    String?
+
+  isVerified    Boolean    @default(false)
+  status        UserStatus @default(ACTIVE)
+
   jobsPosted    Job[]
 
   createdAt     DateTime @default(now())
@@ -248,18 +248,34 @@ model Job {
   title          String
   description    String   @db.Text
   location       String
-  salaryRange    String?  
-  
+  isRemote       Boolean  @default(false)        // ✅ Remote toggle
+
+  // Salary
+  salaryType      String?  // "FIXED" | "RANGE" | "NEGOTIABLE"
+  salaryFrequency String?  // "MONTHLY" | "WEEKLY" | "CONTRACT"
+  salaryAmount    String?  // e.g. "1000" or "1000-2000"
+  isAnonymous     Boolean  @default(false)        // ✅ Post anonymously
+
+  // Job Details
+  responsibilities String[] // ✅ Array of strings
+  benefits         String[] // ✅ Array of strings
+
+  // Candidate Criteria
+  experienceLevel  String?  // "Entry" | "Mid" | "Senior"
+  minExperience    Int?     // Minimum years
+  educationLevel   String?  // "High School", "Bachelor's" etc.
+  numberOfEmployees Int?    // ✅ Number of employees needed
+  deadline         DateTime? // ✅ Application deadline
+
   // Relations
   categoryId     String
   category       Category @relation(fields: [categoryId], references: [id])
-  
   jobType        JobType[]
   status         JobStatus @default(OPEN)
 
   applications   Application[]
   savedBy        SavedJob[]
-  reports        Report[] // reports against this job
+  reports        Report[]
 
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
@@ -272,11 +288,15 @@ model Application {
   jobSeekerId    String
   jobSeeker      JobSeekerProfile  @relation(fields: [jobSeekerId], references: [id])
 
-  status         ApplicationStatus @default(APPLIED) // APPLIED, VIEWED, INTERVIEW, HIRED
-  interview      Interview?
+  status         ApplicationStatus @default(APPLIED)
 
+  resumeUrl      String?
+  availableFrom  DateTime?
+  shortMessage   String?
+
+  interview      Interview?
   createdAt      DateTime @default(now())
-  editedAt       DateTime? 
+  editedAt       DateTime?
 
   @@unique([jobId, jobSeekerId])
 }
@@ -286,14 +306,16 @@ model Interview {
   applicationId  String        @unique
   application    Application   @relation(fields: [applicationId], references: [id])
 
-  scheduleDate   DateTime      // Date & Time
+  interviewType  String?       // ✅ "Video (Zoom)", "In-Person"
+  scheduleDate   DateTime      // Date
+  scheduleTime   String?       // ✅ "11:00AM-11:30AM"
+  duration       String?       // ✅ "30 minutes"
   meetingLink    String?       // Zoom Link
   status         InterviewStatus @default(SCHEDULED)
-  
   notes          String?
 
   createdAt      DateTime @default(now())
-  editedAt       DateTime? 
+  editedAt       DateTime?
 }
 
 // --------------------------------------

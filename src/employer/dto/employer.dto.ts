@@ -1,11 +1,18 @@
-import { IsArray, IsEnum, IsNotEmpty, IsOptional, IsString, IsDateString } from 'class-validator';
-import { JobType, JobStatus, ApplicationStatus } from '@prisma/client';
+import { IsArray, IsEnum, IsNotEmpty, IsOptional, IsString, IsDateString, IsBoolean, IsInt, Min  } from 'class-validator';
+import { JobType, JobStatus, ApplicationStatus } from '../../generated/prisma/client';
+
 
 // 1. Post Job DTO
 export class CreateJobDto {
+  // ── Step 1: Job Basics ──────────────────────────────
   @IsString()
   @IsNotEmpty()
   title: string;
+
+  @IsInt()
+  @Min(1)
+  @IsOptional()
+  numberOfEmployees?: number;
 
   @IsString()
   @IsNotEmpty()
@@ -13,30 +20,93 @@ export class CreateJobDto {
 
   @IsArray()
   @IsEnum(JobType, { each: true })
-  jobType: JobType[]; // ["FULL_TIME", "REMOTE"]
+  jobType: JobType[]; // ["FULL_TIME", "PART_TIME"]
 
   @IsString()
   @IsNotEmpty()
   location: string;
 
-  @IsString()
+  @IsBoolean()
   @IsOptional()
-  salaryRange?: string; // e.g. "1000-2000"
+  isRemote?: boolean;
 
+  @IsDateString()
+  @IsOptional()
+  deadline?: string;
+
+  // ── Step 2: Job Details ──────────────────────────────
   @IsString()
   @IsNotEmpty()
-  description: string; // HTML or Text format
+  description: string;
+
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  responsibilities?: string[];
+
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  skills?: string[];
+
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  benefits?: string[];
+
+  // ── Step 3: Skills & Candidate Criteria ─────────────
+  @IsString()
+  @IsOptional()
+  experienceLevel?: string; // "Entry" | "Mid" | "Senior"
+
+  @IsInt()
+  @Min(0)
+  @IsOptional()
+  minExperience?: number;
+
+  @IsString()
+  @IsOptional()
+  educationLevel?: string;
+
+  // ── Step 4: Salary & Payment ─────────────────────────
+  @IsString()
+  @IsOptional()
+  salaryType?: string; // "FIXED" | "RANGE" | "NEGOTIABLE"
+
+  @IsString()
+  @IsOptional()
+  salaryFrequency?: string; // "MONTHLY" | "WEEKLY" | "CONTRACT"
+
+  @IsString()
+  @IsOptional()
+  salaryAmount?: string; // "1000" or "1000-2000"
+
+  @IsBoolean()
+  @IsOptional()
+  isAnonymous?: boolean;
 }
 
 // 2. Schedule Interview DTO
 export class ScheduleInterviewDto {
   @IsDateString()
   @IsNotEmpty()
-  scheduleDate: string; // "2026-01-22T11:00:00Z"
+  scheduleDate: string;
 
   @IsString()
   @IsOptional()
-  meetingLink?: string; // Zoom Link
+  scheduleTime?: string; // ✅ "11:00AM"
+
+  @IsString()
+  @IsOptional()
+  interviewType?: string; // ✅ "Video (Zoom)"
+
+  @IsString()
+  @IsOptional()
+  duration?: string; // ✅ "30 minutes"
+
+  @IsString()
+  @IsOptional()
+  meetingLink?: string;
 
   @IsString()
   @IsOptional()

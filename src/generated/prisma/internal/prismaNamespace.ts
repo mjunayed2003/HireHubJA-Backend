@@ -1791,6 +1791,9 @@ export const EmployerProfileScalarFieldEnum = {
   location: 'location',
   about: 'about',
   website: 'website',
+  businessRegCertId: 'businessRegCertId',
+  taxId: 'taxId',
+  authorizedRepId: 'authorizedRepId',
   licenseFile: 'licenseFile',
   idCardFront: 'idCardFront',
   idCardBack: 'idCardBack',
@@ -1836,7 +1839,18 @@ export const JobScalarFieldEnum = {
   title: 'title',
   description: 'description',
   location: 'location',
-  salaryRange: 'salaryRange',
+  isRemote: 'isRemote',
+  salaryType: 'salaryType',
+  salaryFrequency: 'salaryFrequency',
+  salaryAmount: 'salaryAmount',
+  isAnonymous: 'isAnonymous',
+  responsibilities: 'responsibilities',
+  benefits: 'benefits',
+  experienceLevel: 'experienceLevel',
+  minExperience: 'minExperience',
+  educationLevel: 'educationLevel',
+  numberOfEmployees: 'numberOfEmployees',
+  deadline: 'deadline',
   categoryId: 'categoryId',
   jobType: 'jobType',
   status: 'status',
@@ -1852,6 +1866,9 @@ export const ApplicationScalarFieldEnum = {
   jobId: 'jobId',
   jobSeekerId: 'jobSeekerId',
   status: 'status',
+  resumeUrl: 'resumeUrl',
+  availableFrom: 'availableFrom',
+  shortMessage: 'shortMessage',
   createdAt: 'createdAt',
   editedAt: 'editedAt'
 } as const
@@ -1862,7 +1879,10 @@ export type ApplicationScalarFieldEnum = (typeof ApplicationScalarFieldEnum)[key
 export const InterviewScalarFieldEnum = {
   id: 'id',
   applicationId: 'applicationId',
+  interviewType: 'interviewType',
   scheduleDate: 'scheduleDate',
+  scheduleTime: 'scheduleTime',
+  duration: 'duration',
   meetingLink: 'meetingLink',
   status: 'status',
   notes: 'notes',
@@ -2061,6 +2081,20 @@ export type EnumJobTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaMo
 
 
 /**
+ * Reference to a field of type 'Int'
+ */
+export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+    
+
+
+/**
+ * Reference to a field of type 'Int[]'
+ */
+export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
  * Reference to a field of type 'JobStatus'
  */
 export type EnumJobStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'JobStatus'>
@@ -2103,16 +2137,16 @@ export type ListEnumInterviewStatusFieldRefInput<$PrismaModel> = FieldRefInputTy
 
 
 /**
- * Reference to a field of type 'Int'
+ * Reference to a field of type 'Float'
  */
-export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int'>
+export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
     
 
 
 /**
- * Reference to a field of type 'Int[]'
+ * Reference to a field of type 'Float[]'
  */
-export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+export type ListFloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float[]'>
     
 
 /**

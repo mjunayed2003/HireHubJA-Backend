@@ -9,6 +9,9 @@ import { join } from 'path';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { JobSeekerModule } from './job-seeker/job-seeker.module';
 import { EmployerModule } from './employer/employer.module';
+import { CategoryModule } from './category/category.module';
+import { UploadController } from './upload/upload.controller';
+import { PublicModule } from './public/public.module';
 
 
 @Module({
@@ -37,17 +40,13 @@ import { EmployerModule } from './employer/employer.module';
         from: `"Job Portal Support" <${process.env.MAIL_FROM}>`,
       },
     }),
-
-
-
     JobSeekerModule,
-
-
-
     EmployerModule,
+    CategoryModule,
+    PublicModule,
 
   ],
-  controllers: [AppController],
+  controllers: [AppController, UploadController],
   providers: [AppService],
 })
 export class AppModule { }

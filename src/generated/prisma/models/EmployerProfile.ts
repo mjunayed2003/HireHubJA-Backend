@@ -34,6 +34,9 @@ export type EmployerProfileMinAggregateOutputType = {
   location: string | null
   about: string | null
   website: string | null
+  businessRegCertId: string | null
+  taxId: string | null
+  authorizedRepId: string | null
   licenseFile: string | null
   idCardFront: string | null
   idCardBack: string | null
@@ -53,6 +56,9 @@ export type EmployerProfileMaxAggregateOutputType = {
   location: string | null
   about: string | null
   website: string | null
+  businessRegCertId: string | null
+  taxId: string | null
+  authorizedRepId: string | null
   licenseFile: string | null
   idCardFront: string | null
   idCardBack: string | null
@@ -72,6 +78,9 @@ export type EmployerProfileCountAggregateOutputType = {
   location: number
   about: number
   website: number
+  businessRegCertId: number
+  taxId: number
+  authorizedRepId: number
   licenseFile: number
   idCardFront: number
   idCardBack: number
@@ -93,6 +102,9 @@ export type EmployerProfileMinAggregateInputType = {
   location?: true
   about?: true
   website?: true
+  businessRegCertId?: true
+  taxId?: true
+  authorizedRepId?: true
   licenseFile?: true
   idCardFront?: true
   idCardBack?: true
@@ -112,6 +124,9 @@ export type EmployerProfileMaxAggregateInputType = {
   location?: true
   about?: true
   website?: true
+  businessRegCertId?: true
+  taxId?: true
+  authorizedRepId?: true
   licenseFile?: true
   idCardFront?: true
   idCardBack?: true
@@ -131,6 +146,9 @@ export type EmployerProfileCountAggregateInputType = {
   location?: true
   about?: true
   website?: true
+  businessRegCertId?: true
+  taxId?: true
+  authorizedRepId?: true
   licenseFile?: true
   idCardFront?: true
   idCardBack?: true
@@ -223,6 +241,9 @@ export type EmployerProfileGroupByOutputType = {
   location: string | null
   about: string | null
   website: string | null
+  businessRegCertId: string | null
+  taxId: string | null
+  authorizedRepId: string | null
   licenseFile: string | null
   idCardFront: string | null
   idCardBack: string | null
@@ -263,6 +284,9 @@ export type EmployerProfileWhereInput = {
   location?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
   about?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
   website?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
+  businessRegCertId?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
+  taxId?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
+  authorizedRepId?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
   licenseFile?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
   idCardFront?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
   idCardBack?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
@@ -284,6 +308,9 @@ export type EmployerProfileOrderByWithRelationInput = {
   location?: Prisma.SortOrderInput | Prisma.SortOrder
   about?: Prisma.SortOrderInput | Prisma.SortOrder
   website?: Prisma.SortOrderInput | Prisma.SortOrder
+  businessRegCertId?: Prisma.SortOrderInput | Prisma.SortOrder
+  taxId?: Prisma.SortOrderInput | Prisma.SortOrder
+  authorizedRepId?: Prisma.SortOrderInput | Prisma.SortOrder
   licenseFile?: Prisma.SortOrderInput | Prisma.SortOrder
   idCardFront?: Prisma.SortOrderInput | Prisma.SortOrder
   idCardBack?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -308,6 +335,9 @@ export type EmployerProfileWhereUniqueInput = Prisma.AtLeast<{
   location?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
   about?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
   website?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
+  businessRegCertId?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
+  taxId?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
+  authorizedRepId?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
   licenseFile?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
   idCardFront?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
   idCardBack?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
@@ -329,6 +359,9 @@ export type EmployerProfileOrderByWithAggregationInput = {
   location?: Prisma.SortOrderInput | Prisma.SortOrder
   about?: Prisma.SortOrderInput | Prisma.SortOrder
   website?: Prisma.SortOrderInput | Prisma.SortOrder
+  businessRegCertId?: Prisma.SortOrderInput | Prisma.SortOrder
+  taxId?: Prisma.SortOrderInput | Prisma.SortOrder
+  authorizedRepId?: Prisma.SortOrderInput | Prisma.SortOrder
   licenseFile?: Prisma.SortOrderInput | Prisma.SortOrder
   idCardFront?: Prisma.SortOrderInput | Prisma.SortOrder
   idCardBack?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -354,6 +387,9 @@ export type EmployerProfileScalarWhereWithAggregatesInput = {
   location?: Prisma.StringNullableWithAggregatesFilter<"EmployerProfile"> | string | null
   about?: Prisma.StringNullableWithAggregatesFilter<"EmployerProfile"> | string | null
   website?: Prisma.StringNullableWithAggregatesFilter<"EmployerProfile"> | string | null
+  businessRegCertId?: Prisma.StringNullableWithAggregatesFilter<"EmployerProfile"> | string | null
+  taxId?: Prisma.StringNullableWithAggregatesFilter<"EmployerProfile"> | string | null
+  authorizedRepId?: Prisma.StringNullableWithAggregatesFilter<"EmployerProfile"> | string | null
   licenseFile?: Prisma.StringNullableWithAggregatesFilter<"EmployerProfile"> | string | null
   idCardFront?: Prisma.StringNullableWithAggregatesFilter<"EmployerProfile"> | string | null
   idCardBack?: Prisma.StringNullableWithAggregatesFilter<"EmployerProfile"> | string | null
@@ -372,6 +408,9 @@ export type EmployerProfileCreateInput = {
   location?: string | null
   about?: string | null
   website?: string | null
+  businessRegCertId?: string | null
+  taxId?: string | null
+  authorizedRepId?: string | null
   licenseFile?: string | null
   idCardFront?: string | null
   idCardBack?: string | null
@@ -393,6 +432,9 @@ export type EmployerProfileUncheckedCreateInput = {
   location?: string | null
   about?: string | null
   website?: string | null
+  businessRegCertId?: string | null
+  taxId?: string | null
+  authorizedRepId?: string | null
   licenseFile?: string | null
   idCardFront?: string | null
   idCardBack?: string | null
@@ -412,6 +454,9 @@ export type EmployerProfileUpdateInput = {
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessRegCertId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authorizedRepId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -433,6 +478,9 @@ export type EmployerProfileUncheckedUpdateInput = {
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessRegCertId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authorizedRepId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -453,6 +501,9 @@ export type EmployerProfileCreateManyInput = {
   location?: string | null
   about?: string | null
   website?: string | null
+  businessRegCertId?: string | null
+  taxId?: string | null
+  authorizedRepId?: string | null
   licenseFile?: string | null
   idCardFront?: string | null
   idCardBack?: string | null
@@ -471,6 +522,9 @@ export type EmployerProfileUpdateManyMutationInput = {
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessRegCertId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authorizedRepId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -490,6 +544,9 @@ export type EmployerProfileUncheckedUpdateManyInput = {
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessRegCertId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authorizedRepId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -514,6 +571,9 @@ export type EmployerProfileCountOrderByAggregateInput = {
   location?: Prisma.SortOrder
   about?: Prisma.SortOrder
   website?: Prisma.SortOrder
+  businessRegCertId?: Prisma.SortOrder
+  taxId?: Prisma.SortOrder
+  authorizedRepId?: Prisma.SortOrder
   licenseFile?: Prisma.SortOrder
   idCardFront?: Prisma.SortOrder
   idCardBack?: Prisma.SortOrder
@@ -533,6 +593,9 @@ export type EmployerProfileMaxOrderByAggregateInput = {
   location?: Prisma.SortOrder
   about?: Prisma.SortOrder
   website?: Prisma.SortOrder
+  businessRegCertId?: Prisma.SortOrder
+  taxId?: Prisma.SortOrder
+  authorizedRepId?: Prisma.SortOrder
   licenseFile?: Prisma.SortOrder
   idCardFront?: Prisma.SortOrder
   idCardBack?: Prisma.SortOrder
@@ -552,6 +615,9 @@ export type EmployerProfileMinOrderByAggregateInput = {
   location?: Prisma.SortOrder
   about?: Prisma.SortOrder
   website?: Prisma.SortOrder
+  businessRegCertId?: Prisma.SortOrder
+  taxId?: Prisma.SortOrder
+  authorizedRepId?: Prisma.SortOrder
   licenseFile?: Prisma.SortOrder
   idCardFront?: Prisma.SortOrder
   idCardBack?: Prisma.SortOrder
@@ -621,6 +687,9 @@ export type EmployerProfileCreateWithoutUserInput = {
   location?: string | null
   about?: string | null
   website?: string | null
+  businessRegCertId?: string | null
+  taxId?: string | null
+  authorizedRepId?: string | null
   licenseFile?: string | null
   idCardFront?: string | null
   idCardBack?: string | null
@@ -640,6 +709,9 @@ export type EmployerProfileUncheckedCreateWithoutUserInput = {
   location?: string | null
   about?: string | null
   website?: string | null
+  businessRegCertId?: string | null
+  taxId?: string | null
+  authorizedRepId?: string | null
   licenseFile?: string | null
   idCardFront?: string | null
   idCardBack?: string | null
@@ -675,6 +747,9 @@ export type EmployerProfileUpdateWithoutUserInput = {
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessRegCertId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authorizedRepId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -694,6 +769,9 @@ export type EmployerProfileUncheckedUpdateWithoutUserInput = {
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessRegCertId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authorizedRepId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -713,6 +791,9 @@ export type EmployerProfileCreateWithoutJobsPostedInput = {
   location?: string | null
   about?: string | null
   website?: string | null
+  businessRegCertId?: string | null
+  taxId?: string | null
+  authorizedRepId?: string | null
   licenseFile?: string | null
   idCardFront?: string | null
   idCardBack?: string | null
@@ -733,6 +814,9 @@ export type EmployerProfileUncheckedCreateWithoutJobsPostedInput = {
   location?: string | null
   about?: string | null
   website?: string | null
+  businessRegCertId?: string | null
+  taxId?: string | null
+  authorizedRepId?: string | null
   licenseFile?: string | null
   idCardFront?: string | null
   idCardBack?: string | null
@@ -767,6 +851,9 @@ export type EmployerProfileUpdateWithoutJobsPostedInput = {
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessRegCertId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authorizedRepId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -787,6 +874,9 @@ export type EmployerProfileUncheckedUpdateWithoutJobsPostedInput = {
   location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessRegCertId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authorizedRepId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -837,6 +927,9 @@ export type EmployerProfileSelect<ExtArgs extends runtime.Types.Extensions.Inter
   location?: boolean
   about?: boolean
   website?: boolean
+  businessRegCertId?: boolean
+  taxId?: boolean
+  authorizedRepId?: boolean
   licenseFile?: boolean
   idCardFront?: boolean
   idCardBack?: boolean
@@ -859,6 +952,9 @@ export type EmployerProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   location?: boolean
   about?: boolean
   website?: boolean
+  businessRegCertId?: boolean
+  taxId?: boolean
+  authorizedRepId?: boolean
   licenseFile?: boolean
   idCardFront?: boolean
   idCardBack?: boolean
@@ -879,6 +975,9 @@ export type EmployerProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   location?: boolean
   about?: boolean
   website?: boolean
+  businessRegCertId?: boolean
+  taxId?: boolean
+  authorizedRepId?: boolean
   licenseFile?: boolean
   idCardFront?: boolean
   idCardBack?: boolean
@@ -899,6 +998,9 @@ export type EmployerProfileSelectScalar = {
   location?: boolean
   about?: boolean
   website?: boolean
+  businessRegCertId?: boolean
+  taxId?: boolean
+  authorizedRepId?: boolean
   licenseFile?: boolean
   idCardFront?: boolean
   idCardBack?: boolean
@@ -908,7 +1010,7 @@ export type EmployerProfileSelectScalar = {
   updatedAt?: boolean
 }
 
-export type EmployerProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "companyName" | "fullName" | "phone" | "profilePic" | "location" | "about" | "website" | "licenseFile" | "idCardFront" | "idCardBack" | "isVerified" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["employerProfile"]>
+export type EmployerProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "companyName" | "fullName" | "phone" | "profilePic" | "location" | "about" | "website" | "businessRegCertId" | "taxId" | "authorizedRepId" | "licenseFile" | "idCardFront" | "idCardBack" | "isVerified" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["employerProfile"]>
 export type EmployerProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   jobsPosted?: boolean | Prisma.EmployerProfile$jobsPostedArgs<ExtArgs>
@@ -937,6 +1039,9 @@ export type $EmployerProfilePayload<ExtArgs extends runtime.Types.Extensions.Int
     location: string | null
     about: string | null
     website: string | null
+    businessRegCertId: string | null
+    taxId: string | null
+    authorizedRepId: string | null
     licenseFile: string | null
     idCardFront: string | null
     idCardBack: string | null
@@ -1378,6 +1483,9 @@ export interface EmployerProfileFieldRefs {
   readonly location: Prisma.FieldRef<"EmployerProfile", 'String'>
   readonly about: Prisma.FieldRef<"EmployerProfile", 'String'>
   readonly website: Prisma.FieldRef<"EmployerProfile", 'String'>
+  readonly businessRegCertId: Prisma.FieldRef<"EmployerProfile", 'String'>
+  readonly taxId: Prisma.FieldRef<"EmployerProfile", 'String'>
+  readonly authorizedRepId: Prisma.FieldRef<"EmployerProfile", 'String'>
   readonly licenseFile: Prisma.FieldRef<"EmployerProfile", 'String'>
   readonly idCardFront: Prisma.FieldRef<"EmployerProfile", 'String'>
   readonly idCardBack: Prisma.FieldRef<"EmployerProfile", 'String'>

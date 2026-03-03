@@ -3,7 +3,6 @@ import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { AuthService } from './auth.service';
 import { RegisterJobSeekerDto } from './dto/register-job-seeker.dto';
 import { RegisterEmployerDto } from './dto/register-employer.dto';
-import type { Multer } from 'multer';
 import { ForgotPasswordDto, LoginDto, ResetPasswordDto } from './dto/auth.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { UploadedFiles, UseInterceptors } from '@nestjs/common';
@@ -26,18 +25,18 @@ export class AuthController {
       { name: 'selfieImage', maxCount: 1 },
     ]),
   )
-  async registerJobSeeker(
-    @Body() dto: RegisterJobSeekerDto,
-    @UploadedFiles() files: { 
-      profilePic?: Multer.File[], 
-      resume?: Multer.File[],
-      idCardFront?: Multer.File[],
-      idCardBack?: Multer.File[],
-      selfieImage?: Multer.File[]
-    },
-  ) {
-    return this.authService.registerJobSeeker(dto, files);
-  }
+async registerJobSeeker(
+  @Body() dto: RegisterJobSeekerDto,
+  @UploadedFiles() files: { 
+    profilePic?: Express.Multer.File[], 
+    resume?: Express.Multer.File[],
+    idCardFront?: Express.Multer.File[],
+    idCardBack?: Express.Multer.File[],
+    selfieImage?: Express.Multer.File[]
+  },
+) {
+  return this.authService.registerJobSeeker(dto, files);
+}
 
   // ============================================
   // 2. EMPLOYER / COMPANY REGISTRATION
@@ -51,17 +50,17 @@ export class AuthController {
       { name: 'idCardBack', maxCount: 1 },
     ]),
   )
-  async registerEmployer(
-    @Body() dto: RegisterEmployerDto,
-    @UploadedFiles() files: { 
-      profilePic?: Multer.File[], 
-      licenseFile?: Multer.File[],
-      idCardFront?: Multer.File[],
-      idCardBack?: Multer.File[]
-    },
-  ) {
-    return this.authService.registerEmployer(dto, files);
-  }
+async registerEmployer(
+  @Body() dto: RegisterEmployerDto,
+  @UploadedFiles() files: { 
+    profilePic?: Express.Multer.File[], 
+    licenseFile?: Express.Multer.File[],
+    idCardFront?: Express.Multer.File[],
+    idCardBack?: Express.Multer.File[]
+  },
+) {
+  return this.authService.registerEmployer(dto, files);
+}
 
 
     @Post('login')
