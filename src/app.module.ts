@@ -12,6 +12,7 @@ import { EmployerModule } from './employer/employer.module';
 import { CategoryModule } from './category/category.module';
 import { UploadController } from './upload/upload.controller';
 import { PublicModule } from './public/public.module';
+import { NotificationModule } from './notification/notification.module';
 
 
 @Module({
@@ -44,6 +45,7 @@ import { PublicModule } from './public/public.module';
     EmployerModule,
     CategoryModule,
     PublicModule,
+    NotificationModule,
 
   ],
   controllers: [AppController, UploadController],
