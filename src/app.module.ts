@@ -13,6 +13,7 @@ import { CategoryModule } from './category/category.module';
 import { UploadController } from './upload/upload.controller';
 import { PublicModule } from './public/public.module';
 import { NotificationModule } from './notification/notification.module';
+import { MessagesModule } from './messages/messages.module';
 
 
 @Module({
@@ -46,6 +47,7 @@ import { NotificationModule } from './notification/notification.module';
     CategoryModule,
     PublicModule,
     NotificationModule,
+    MessagesModule,
 
   ],
   controllers: [AppController, UploadController],

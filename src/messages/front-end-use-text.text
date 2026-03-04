@@ -1,0 +1,25 @@
+// Connect
+const socket = io('http://localhost:4000/chat', {
+  auth: { token: 'your_jwt_token' }
+});
+
+// Join conversation
+socket.emit('join_conversation', { conversationId: 'uuid' });
+
+// Receive messages
+socket.on('conversation_messages', (messages) => console.log(messages));
+
+// Send message
+socket.emit('send_message', {
+  conversationId: 'uuid',
+  content: 'Hello!'
+});
+
+// Receive new message
+socket.on('new_message', (message) => console.log(message));
+
+// Delete message
+socket.emit('delete_message', { messageId: 'uuid' });
+
+// Message deleted event
+socket.on('message_deleted', ({ messageId }) => console.log(messageId));
