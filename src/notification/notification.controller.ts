@@ -10,7 +10,6 @@ import { NotificationService } from './notification.service';
 export class NotificationController {
   constructor(private readonly notificationService: NotificationService) {}
 
-  // ✅ Static routes আগে
   @Get('unread-count')
   async getUnreadCount(@Request() req) {
     return this.notificationService.getUnreadCount(req.user.id);
@@ -26,7 +25,7 @@ export class NotificationController {
     return this.notificationService.deleteAllNotifications(req.user.id);
   }
 
-  // ✅ Dynamic routes পরে
+
   @Get()
   async getNotifications(@Request() req) {
     return this.notificationService.getNotifications(req.user.id);

@@ -3,10 +3,14 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { ApplyJobDto, ReportJobDto } from './dto/job-action.dto';
 import * as bcrypt from 'bcrypt';
 import { UpdateProfileDto, ChangePasswordDto } from './dto/profile.dto';
+import { NotificationService } from 'src/notification/notification.service';
 
 @Injectable()
 export class JobSeekerService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private notificationService: NotificationService, // ✅
+  ) {}
 
   // ==================================================
   // 1. HOME & SEARCH
@@ -69,28 +73,45 @@ export class JobSeekerService {
   // ==================================================
   // 3. APPLY JOB
   // ==================================================
-async applyJob(userId: string, dto: ApplyJobDto, resumeUrl: string | null) {
-  const profileId = await this.getProfileId(userId);
+  async applyJob(userId: string, dto: ApplyJobDto, resumeUrl: string | null) {
+    const profileId = await this.getProfileId(userId);
 
-  const existingApp = await this.prisma.application.findUnique({
-    where: {
-      jobId_jobSeekerId: { jobId: dto.jobId, jobSeekerId: profileId },
-    },
-  });
+    const existingApp = await this.prisma.application.findUnique({
+      where: {
+        jobId_jobSeekerId: { jobId: dto.jobId, jobSeekerId: profileId },
+      },
+    });
 
-  if (existingApp) throw new BadRequestException('You have already applied to this job!');
+    if (existingApp) throw new BadRequestException('You have already applied to this job!');
 
-  return this.prisma.application.create({
-    data: {
-      jobId:         dto.jobId,
-      jobSeekerId:   profileId,
-      status:        'APPLIED',
-      resumeUrl:     resumeUrl,
-      availableFrom: dto.availableFrom ? new Date(dto.availableFrom) : null,
-      shortMessage:  dto.shortMessage ?? null,
-    },
-  });
-}
+    const application = await this.prisma.application.create({
+      data: {
+        jobId:         dto.jobId,
+        jobSeekerId:   profileId,
+        status:        'APPLIED',
+        resumeUrl:     resumeUrl,
+        availableFrom: dto.availableFrom ? new Date(dto.availableFrom) : null,
+        shortMessage:  dto.shortMessage ?? null,
+      },
+    });
+
+    // ✅ Employer কে notification পাঠান
+    const job = await this.prisma.job.findUnique({
+      where: { id: dto.jobId },
+      include: { employer: true },
+    });
+
+    if (job) {
+      await this.notificationService.createNotification(
+        job.employer.userId,
+        'New Application Received',
+        `Someone applied for your job: ${job.title}`,
+        'APPLICATION',
+      );
+    }
+
+    return application;
+  }
 
   // ==================================================
   // 4. BOOKMARK / SAVE JOB (Toggle)
@@ -174,134 +195,130 @@ async applyJob(userId: string, dto: ApplyJobDto, resumeUrl: string | null) {
     return profile.id;
   }
 
-
+  // ==================================================
+  // GET PROFILE
+  // ==================================================
+  async getProfile(userId: string) {
+    const profile = await this.prisma.jobSeekerProfile.findUnique({
+      where: { userId },
+      include: {
+        education: true,
+        experience: true,
+        preferredJobCategories: true,
+      },
+    });
+    if (!profile) throw new NotFoundException('Profile not found');
+    return profile;
+  }
 
   // ==================================================
-// GET PROFILE
-// ==================================================
-async getProfile(userId: string) {
-  const profile = await this.prisma.jobSeekerProfile.findUnique({
-    where: { userId },
-    include: {
-      education: true,
-      experience: true,
-      preferredJobCategories: true,
-    },
-  });
-  if (!profile) throw new NotFoundException('Profile not found');
-  return profile;
-}
+  // UPDATE PROFILE
+  // ==================================================
+  async updateProfile(
+    userId: string,
+    dto: UpdateProfileDto,
+    profilePic?: string | null,
+    resumeUrl?: string | null,
+  ) {
+    const profile = await this.prisma.jobSeekerProfile.findUnique({
+      where: { userId },
+    });
+    if (!profile) throw new NotFoundException('Profile not found');
 
-// ==================================================
-// UPDATE PROFILE
-// ==================================================
-async updateProfile(
-  userId: string,
-  dto: UpdateProfileDto,
-  profilePic?: string | null,
-  resumeUrl?: string | null,
-) {
-  const profile = await this.prisma.jobSeekerProfile.findUnique({
-    where: { userId },
-  });
-  if (!profile) throw new NotFoundException('Profile not found');
+    const skills = typeof dto.skills === 'string'
+      ? JSON.parse(dto.skills)
+      : dto.skills ?? undefined;
 
-  // ✅ form-data থেকে আসলে string হয়, parse করতে হবে
-  const skills = typeof dto.skills === 'string'
-    ? JSON.parse(dto.skills)
-    : dto.skills ?? undefined;
+    const education = typeof dto.education === 'string'
+      ? JSON.parse(dto.education)
+      : dto.education;
 
-  const education = typeof dto.education === 'string'
-    ? JSON.parse(dto.education)
-    : dto.education;
+    const experience = typeof dto.experience === 'string'
+      ? JSON.parse(dto.experience)
+      : dto.experience;
 
-  const experience = typeof dto.experience === 'string'
-    ? JSON.parse(dto.experience)
-    : dto.experience;
+    if (education) {
+      await this.prisma.education.deleteMany({
+        where: { jobSeekerId: profile.id },
+      });
+    }
 
-  if (education) {
-    await this.prisma.education.deleteMany({
-      where: { jobSeekerId: profile.id },
+    if (experience) {
+      await this.prisma.experience.deleteMany({
+        where: { jobSeekerId: profile.id },
+      });
+    }
+
+    return this.prisma.jobSeekerProfile.update({
+      where: { userId },
+      data: {
+        fullName:        dto.fullName,
+        phone:           dto.phone,
+        location:        dto.location,
+        about:           dto.about,
+        experienceLevel: dto.experienceLevel,
+        skills:          skills,
+        profilePic:      profilePic ?? undefined,
+        resumeUrl:       resumeUrl ?? undefined,
+
+        education: education ? {
+          create: education.map((edu) => ({
+            degreeName:     edu.degreeName,
+            institution:    edu.institution,
+            startDate:      new Date(edu.startDate),
+            completionYear: edu.completionYear
+                            ? new Date(edu.completionYear)
+                            : null,
+            isCurrent:      edu.isCurrent ?? false,
+          })),
+        } : undefined,
+
+        experience: experience ? {
+          create: experience.map((exp) => ({
+            designation: exp.designation,
+            companyName: exp.companyName,
+            startDate:   new Date(exp.startDate),
+            endDate:     exp.endDate ? new Date(exp.endDate) : null,
+            isCurrent:   exp.isCurrent ?? false,
+            description: exp.description,
+          })),
+        } : undefined,
+      },
+      include: {
+        education: true,
+        experience: true,
+      },
     });
   }
 
-  if (experience) {
-    await this.prisma.experience.deleteMany({
-      where: { jobSeekerId: profile.id },
+  // ==================================================
+  // CHANGE PASSWORD
+  // ==================================================
+  async changePassword(userId: string, dto: ChangePasswordDto) {
+    if (dto.newPassword !== dto.confirmPassword) {
+      throw new BadRequestException('Passwords do not match');
+    }
+
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user) throw new NotFoundException('User not found');
+
+    const isMatch = await bcrypt.compare(dto.currentPassword, user.password);
+    if (!isMatch) throw new BadRequestException('Current password is incorrect');
+
+    const hashed = await bcrypt.hash(dto.newPassword, 10);
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { password: hashed },
     });
+
+    return { message: 'Password changed successfully' };
   }
 
-  return this.prisma.jobSeekerProfile.update({
-    where: { userId },
-    data: {
-      fullName:        dto.fullName,
-      phone:           dto.phone,
-      location:        dto.location,
-      about:           dto.about,
-      experienceLevel: dto.experienceLevel,
-      skills:          skills,
-      profilePic:      profilePic ?? undefined,
-      resumeUrl:       resumeUrl ?? undefined,
-
-      education: education ? {
-        create: education.map((edu) => ({
-          degreeName:     edu.degreeName,
-          institution:    edu.institution,
-          startDate:      new Date(edu.startDate),
-          completionYear: edu.completionYear
-                          ? new Date(edu.completionYear)
-                          : null,
-          isCurrent:      edu.isCurrent ?? false,
-        })),
-      } : undefined,
-
-      experience: experience ? {
-        create: experience.map((exp) => ({
-          designation: exp.designation,
-          companyName: exp.companyName,
-          startDate:   new Date(exp.startDate),
-          endDate:     exp.endDate ? new Date(exp.endDate) : null,
-          isCurrent:   exp.isCurrent ?? false,
-          description: exp.description,
-        })),
-      } : undefined,
-    },
-    include: {
-      education: true,
-      experience: true,
-    },
-  });
-}
-
-// ==================================================
-// CHANGE PASSWORD
-// ==================================================
-async changePassword(userId: string, dto: ChangePasswordDto) {
-  if (dto.newPassword !== dto.confirmPassword) {
-    throw new BadRequestException('Passwords do not match');
+  // ==================================================
+  // DELETE ACCOUNT
+  // ==================================================
+  async deleteAccount(userId: string) {
+    await this.prisma.user.delete({ where: { id: userId } });
+    return { message: 'Account deleted successfully' };
   }
-
-  const user = await this.prisma.user.findUnique({ where: { id: userId } });
-  if (!user) throw new NotFoundException('User not found');
-
-  const isMatch = await bcrypt.compare(dto.currentPassword, user.password);
-  if (!isMatch) throw new BadRequestException('Current password is incorrect');
-
-  const hashed = await bcrypt.hash(dto.newPassword, 10);
-  await this.prisma.user.update({
-    where: { id: userId },
-    data: { password: hashed },
-  });
-
-  return { message: 'Password changed successfully' };
-}
-
-
-// ==================================================
-// DELETE ACCOUNT
-// ==================================================
-async deleteAccount(userId: string) {
-  await this.prisma.user.delete({ where: { id: userId } });
-  return { message: 'Account deleted successfully' };
-}
 }

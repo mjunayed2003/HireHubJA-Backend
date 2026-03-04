@@ -223,11 +223,8 @@ export class AuthService {
     if (!user) {
       throw new NotFoundException('User with this email does not exist');
     }
-
-    // generate 6 digit otp
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     
-    // ৩.otp expiry 10 minuter
     const expiryDate = new Date();
     expiryDate.setMinutes(expiryDate.getMinutes() + 10);
 
