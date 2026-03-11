@@ -62,6 +62,7 @@ enum InterviewStatus {
   COMPLETED
   REJECTED // Not Selected
   CANCELLED
+   HIRED
 }
 
 
@@ -72,6 +73,19 @@ enum ApplicationStatus {
   HIRED
   REJECTED
 }
+
+
+
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+
+
 // --------------------------------------
 // 1. User & Authentication
 // --------------------------------------
@@ -171,6 +185,7 @@ model JobSeekerProfile {
   
   applications  Application[]
   savedJobs     SavedJob[]
+  payments    Payment[]
 
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
@@ -199,9 +214,10 @@ model EmployerProfile {
   idCardBack    String?
 
   isVerified    Boolean    @default(false)
-  status        UserStatus @default(ACTIVE)
+  status        UserStatus @default(PENDING)
 
   jobsPosted    Job[]
+  payments    Payment[]
 
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
@@ -313,6 +329,7 @@ model Interview {
   meetingLink    String?       // Zoom Link
   status         InterviewStatus @default(SCHEDULED)
   notes          String?
+  payment     Payment?
 
   createdAt      DateTime @default(now())
   editedAt       DateTime?
@@ -406,4 +423,48 @@ model Notification {
   message   String
   isRead    Boolean  @default(false)
   createdAt DateTime @default(now())
+}
+
+
+model Payment {
+  id              String        @id @default(uuid())
+  // Order Info
+  orderId         String        @unique 
+  // Fygaro Info
+  transactionId   String?       @unique 
+  // Amount
+  amount          Decimal       @db.Decimal(10, 2)  // agreed salary (6 months)
+  platformFee     Decimal       @db.Decimal(10, 2)  // 10% fee
+  totalAmount     Decimal       @db.Decimal(10, 2)  // amount + fee
+  currency        String        @default("JMD")
+  // Status
+  status          PaymentStatus @default(PENDING)
+  // Relations — Employer pays
+  employerId      String
+  employer        EmployerProfile @relation(fields: [employerId], references: [id])
+  // Candidate 
+  candidateId     String
+  candidate       JobSeekerProfile @relation(fields: [candidateId], references: [id])
+  // Interview  payment
+  interviewId     String        @unique
+  interview       Interview     @relation(fields: [interviewId], references: [id])
+  // Timestamps
+  paidAt          DateTime?
+  webhookReceivedAt DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  webhookLogs     WebhookLog[]
+
+  @@index([orderId])
+  @@index([status])
+}
+
+model WebhookLog {
+  id            String   @id @default(uuid())
+  transactionId String   @unique  
+  rawPayload    Json
+  processedAt   DateTime @default(now())
+
+  paymentId     String
+  payment       Payment  @relation(fields: [paymentId], references: [id])
 }

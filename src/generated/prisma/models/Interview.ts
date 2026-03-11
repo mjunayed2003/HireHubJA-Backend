@@ -231,6 +231,7 @@ export type InterviewWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Interview"> | Date | string
   editedAt?: Prisma.DateTimeNullableFilter<"Interview"> | Date | string | null
   application?: Prisma.XOR<Prisma.ApplicationScalarRelationFilter, Prisma.ApplicationWhereInput>
+  payment?: Prisma.XOR<Prisma.PaymentNullableScalarRelationFilter, Prisma.PaymentWhereInput> | null
 }
 
 export type InterviewOrderByWithRelationInput = {
@@ -246,6 +247,7 @@ export type InterviewOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   editedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   application?: Prisma.ApplicationOrderByWithRelationInput
+  payment?: Prisma.PaymentOrderByWithRelationInput
 }
 
 export type InterviewWhereUniqueInput = Prisma.AtLeast<{
@@ -264,6 +266,7 @@ export type InterviewWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Interview"> | Date | string
   editedAt?: Prisma.DateTimeNullableFilter<"Interview"> | Date | string | null
   application?: Prisma.XOR<Prisma.ApplicationScalarRelationFilter, Prisma.ApplicationWhereInput>
+  payment?: Prisma.XOR<Prisma.PaymentNullableScalarRelationFilter, Prisma.PaymentWhereInput> | null
 }, "id" | "applicationId">
 
 export type InterviewOrderByWithAggregationInput = {
@@ -312,6 +315,7 @@ export type InterviewCreateInput = {
   createdAt?: Date | string
   editedAt?: Date | string | null
   application: Prisma.ApplicationCreateNestedOneWithoutInterviewInput
+  payment?: Prisma.PaymentCreateNestedOneWithoutInterviewInput
 }
 
 export type InterviewUncheckedCreateInput = {
@@ -326,6 +330,7 @@ export type InterviewUncheckedCreateInput = {
   notes?: string | null
   createdAt?: Date | string
   editedAt?: Date | string | null
+  payment?: Prisma.PaymentUncheckedCreateNestedOneWithoutInterviewInput
 }
 
 export type InterviewUpdateInput = {
@@ -340,6 +345,7 @@ export type InterviewUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   application?: Prisma.ApplicationUpdateOneRequiredWithoutInterviewNestedInput
+  payment?: Prisma.PaymentUpdateOneWithoutInterviewNestedInput
 }
 
 export type InterviewUncheckedUpdateInput = {
@@ -354,6 +360,7 @@ export type InterviewUncheckedUpdateInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  payment?: Prisma.PaymentUncheckedUpdateOneWithoutInterviewNestedInput
 }
 
 export type InterviewCreateManyInput = {
@@ -444,6 +451,11 @@ export type InterviewMinOrderByAggregateInput = {
   editedAt?: Prisma.SortOrder
 }
 
+export type InterviewScalarRelationFilter = {
+  is?: Prisma.InterviewWhereInput
+  isNot?: Prisma.InterviewWhereInput
+}
+
 export type InterviewCreateNestedOneWithoutApplicationInput = {
   create?: Prisma.XOR<Prisma.InterviewCreateWithoutApplicationInput, Prisma.InterviewUncheckedCreateWithoutApplicationInput>
   connectOrCreate?: Prisma.InterviewCreateOrConnectWithoutApplicationInput
@@ -480,6 +492,20 @@ export type EnumInterviewStatusFieldUpdateOperationsInput = {
   set?: $Enums.InterviewStatus
 }
 
+export type InterviewCreateNestedOneWithoutPaymentInput = {
+  create?: Prisma.XOR<Prisma.InterviewCreateWithoutPaymentInput, Prisma.InterviewUncheckedCreateWithoutPaymentInput>
+  connectOrCreate?: Prisma.InterviewCreateOrConnectWithoutPaymentInput
+  connect?: Prisma.InterviewWhereUniqueInput
+}
+
+export type InterviewUpdateOneRequiredWithoutPaymentNestedInput = {
+  create?: Prisma.XOR<Prisma.InterviewCreateWithoutPaymentInput, Prisma.InterviewUncheckedCreateWithoutPaymentInput>
+  connectOrCreate?: Prisma.InterviewCreateOrConnectWithoutPaymentInput
+  upsert?: Prisma.InterviewUpsertWithoutPaymentInput
+  connect?: Prisma.InterviewWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.InterviewUpdateToOneWithWhereWithoutPaymentInput, Prisma.InterviewUpdateWithoutPaymentInput>, Prisma.InterviewUncheckedUpdateWithoutPaymentInput>
+}
+
 export type InterviewCreateWithoutApplicationInput = {
   id?: string
   interviewType?: string | null
@@ -491,6 +517,7 @@ export type InterviewCreateWithoutApplicationInput = {
   notes?: string | null
   createdAt?: Date | string
   editedAt?: Date | string | null
+  payment?: Prisma.PaymentCreateNestedOneWithoutInterviewInput
 }
 
 export type InterviewUncheckedCreateWithoutApplicationInput = {
@@ -504,6 +531,7 @@ export type InterviewUncheckedCreateWithoutApplicationInput = {
   notes?: string | null
   createdAt?: Date | string
   editedAt?: Date | string | null
+  payment?: Prisma.PaymentUncheckedCreateNestedOneWithoutInterviewInput
 }
 
 export type InterviewCreateOrConnectWithoutApplicationInput = {
@@ -533,10 +561,84 @@ export type InterviewUpdateWithoutApplicationInput = {
   notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  payment?: Prisma.PaymentUpdateOneWithoutInterviewNestedInput
 }
 
 export type InterviewUncheckedUpdateWithoutApplicationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
+  interviewType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduleDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  scheduleTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumInterviewStatusFieldUpdateOperationsInput | $Enums.InterviewStatus
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  payment?: Prisma.PaymentUncheckedUpdateOneWithoutInterviewNestedInput
+}
+
+export type InterviewCreateWithoutPaymentInput = {
+  id?: string
+  interviewType?: string | null
+  scheduleDate: Date | string
+  scheduleTime?: string | null
+  duration?: string | null
+  meetingLink?: string | null
+  status?: $Enums.InterviewStatus
+  notes?: string | null
+  createdAt?: Date | string
+  editedAt?: Date | string | null
+  application: Prisma.ApplicationCreateNestedOneWithoutInterviewInput
+}
+
+export type InterviewUncheckedCreateWithoutPaymentInput = {
+  id?: string
+  applicationId: string
+  interviewType?: string | null
+  scheduleDate: Date | string
+  scheduleTime?: string | null
+  duration?: string | null
+  meetingLink?: string | null
+  status?: $Enums.InterviewStatus
+  notes?: string | null
+  createdAt?: Date | string
+  editedAt?: Date | string | null
+}
+
+export type InterviewCreateOrConnectWithoutPaymentInput = {
+  where: Prisma.InterviewWhereUniqueInput
+  create: Prisma.XOR<Prisma.InterviewCreateWithoutPaymentInput, Prisma.InterviewUncheckedCreateWithoutPaymentInput>
+}
+
+export type InterviewUpsertWithoutPaymentInput = {
+  update: Prisma.XOR<Prisma.InterviewUpdateWithoutPaymentInput, Prisma.InterviewUncheckedUpdateWithoutPaymentInput>
+  create: Prisma.XOR<Prisma.InterviewCreateWithoutPaymentInput, Prisma.InterviewUncheckedCreateWithoutPaymentInput>
+  where?: Prisma.InterviewWhereInput
+}
+
+export type InterviewUpdateToOneWithWhereWithoutPaymentInput = {
+  where?: Prisma.InterviewWhereInput
+  data: Prisma.XOR<Prisma.InterviewUpdateWithoutPaymentInput, Prisma.InterviewUncheckedUpdateWithoutPaymentInput>
+}
+
+export type InterviewUpdateWithoutPaymentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  interviewType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  scheduleDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  scheduleTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  duration?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  meetingLink?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.EnumInterviewStatusFieldUpdateOperationsInput | $Enums.InterviewStatus
+  notes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  application?: Prisma.ApplicationUpdateOneRequiredWithoutInterviewNestedInput
+}
+
+export type InterviewUncheckedUpdateWithoutPaymentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  applicationId?: Prisma.StringFieldUpdateOperationsInput | string
   interviewType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   scheduleDate?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   scheduleTime?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -563,6 +665,7 @@ export type InterviewSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   createdAt?: boolean
   editedAt?: boolean
   application?: boolean | Prisma.ApplicationDefaultArgs<ExtArgs>
+  payment?: boolean | Prisma.Interview$paymentArgs<ExtArgs>
 }, ExtArgs["result"]["interview"]>
 
 export type InterviewSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -612,6 +715,7 @@ export type InterviewSelectScalar = {
 export type InterviewOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "applicationId" | "interviewType" | "scheduleDate" | "scheduleTime" | "duration" | "meetingLink" | "status" | "notes" | "createdAt" | "editedAt", ExtArgs["result"]["interview"]>
 export type InterviewInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   application?: boolean | Prisma.ApplicationDefaultArgs<ExtArgs>
+  payment?: boolean | Prisma.Interview$paymentArgs<ExtArgs>
 }
 export type InterviewIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   application?: boolean | Prisma.ApplicationDefaultArgs<ExtArgs>
@@ -624,6 +728,7 @@ export type $InterviewPayload<ExtArgs extends runtime.Types.Extensions.InternalA
   name: "Interview"
   objects: {
     application: Prisma.$ApplicationPayload<ExtArgs>
+    payment: Prisma.$PaymentPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1032,6 +1137,7 @@ readonly fields: InterviewFieldRefs;
 export interface Prisma__InterviewClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   application<T extends Prisma.ApplicationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.ApplicationDefaultArgs<ExtArgs>>): Prisma.Prisma__ApplicationClient<runtime.Types.Result.GetResult<Prisma.$ApplicationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  payment<T extends Prisma.Interview$paymentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Interview$paymentArgs<ExtArgs>>): Prisma.Prisma__PaymentClient<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1465,6 +1571,25 @@ export type InterviewDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Limit how many Interviews to delete.
    */
   limit?: number
+}
+
+/**
+ * Interview.payment
+ */
+export type Interview$paymentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Payment
+   */
+  select?: Prisma.PaymentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Payment
+   */
+  omit?: Prisma.PaymentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PaymentInclude<ExtArgs> | null
+  where?: Prisma.PaymentWhereInput
 }
 
 /**

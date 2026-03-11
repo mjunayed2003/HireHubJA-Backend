@@ -296,6 +296,7 @@ export type EmployerProfileWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"EmployerProfile"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   jobsPosted?: Prisma.JobListRelationFilter
+  payments?: Prisma.PaymentListRelationFilter
 }
 
 export type EmployerProfileOrderByWithRelationInput = {
@@ -320,6 +321,7 @@ export type EmployerProfileOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   jobsPosted?: Prisma.JobOrderByRelationAggregateInput
+  payments?: Prisma.PaymentOrderByRelationAggregateInput
 }
 
 export type EmployerProfileWhereUniqueInput = Prisma.AtLeast<{
@@ -347,6 +349,7 @@ export type EmployerProfileWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"EmployerProfile"> | Date | string
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   jobsPosted?: Prisma.JobListRelationFilter
+  payments?: Prisma.PaymentListRelationFilter
 }, "id" | "userId">
 
 export type EmployerProfileOrderByWithAggregationInput = {
@@ -420,6 +423,7 @@ export type EmployerProfileCreateInput = {
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutEmployerProfileInput
   jobsPosted?: Prisma.JobCreateNestedManyWithoutEmployerInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutEmployerInput
 }
 
 export type EmployerProfileUncheckedCreateInput = {
@@ -443,6 +447,7 @@ export type EmployerProfileUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   jobsPosted?: Prisma.JobUncheckedCreateNestedManyWithoutEmployerInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutEmployerInput
 }
 
 export type EmployerProfileUpdateInput = {
@@ -466,6 +471,7 @@ export type EmployerProfileUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutEmployerProfileNestedInput
   jobsPosted?: Prisma.JobUpdateManyWithoutEmployerNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutEmployerNestedInput
 }
 
 export type EmployerProfileUncheckedUpdateInput = {
@@ -489,6 +495,7 @@ export type EmployerProfileUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   jobsPosted?: Prisma.JobUncheckedUpdateManyWithoutEmployerNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutEmployerNestedInput
 }
 
 export type EmployerProfileCreateManyInput = {
@@ -678,6 +685,20 @@ export type EmployerProfileUpdateOneRequiredWithoutJobsPostedNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.EmployerProfileUpdateToOneWithWhereWithoutJobsPostedInput, Prisma.EmployerProfileUpdateWithoutJobsPostedInput>, Prisma.EmployerProfileUncheckedUpdateWithoutJobsPostedInput>
 }
 
+export type EmployerProfileCreateNestedOneWithoutPaymentsInput = {
+  create?: Prisma.XOR<Prisma.EmployerProfileCreateWithoutPaymentsInput, Prisma.EmployerProfileUncheckedCreateWithoutPaymentsInput>
+  connectOrCreate?: Prisma.EmployerProfileCreateOrConnectWithoutPaymentsInput
+  connect?: Prisma.EmployerProfileWhereUniqueInput
+}
+
+export type EmployerProfileUpdateOneRequiredWithoutPaymentsNestedInput = {
+  create?: Prisma.XOR<Prisma.EmployerProfileCreateWithoutPaymentsInput, Prisma.EmployerProfileUncheckedCreateWithoutPaymentsInput>
+  connectOrCreate?: Prisma.EmployerProfileCreateOrConnectWithoutPaymentsInput
+  upsert?: Prisma.EmployerProfileUpsertWithoutPaymentsInput
+  connect?: Prisma.EmployerProfileWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.EmployerProfileUpdateToOneWithWhereWithoutPaymentsInput, Prisma.EmployerProfileUpdateWithoutPaymentsInput>, Prisma.EmployerProfileUncheckedUpdateWithoutPaymentsInput>
+}
+
 export type EmployerProfileCreateWithoutUserInput = {
   id?: string
   companyName?: string | null
@@ -698,6 +719,7 @@ export type EmployerProfileCreateWithoutUserInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   jobsPosted?: Prisma.JobCreateNestedManyWithoutEmployerInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutEmployerInput
 }
 
 export type EmployerProfileUncheckedCreateWithoutUserInput = {
@@ -720,6 +742,7 @@ export type EmployerProfileUncheckedCreateWithoutUserInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   jobsPosted?: Prisma.JobUncheckedCreateNestedManyWithoutEmployerInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutEmployerInput
 }
 
 export type EmployerProfileCreateOrConnectWithoutUserInput = {
@@ -758,6 +781,7 @@ export type EmployerProfileUpdateWithoutUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   jobsPosted?: Prisma.JobUpdateManyWithoutEmployerNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutEmployerNestedInput
 }
 
 export type EmployerProfileUncheckedUpdateWithoutUserInput = {
@@ -780,6 +804,7 @@ export type EmployerProfileUncheckedUpdateWithoutUserInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   jobsPosted?: Prisma.JobUncheckedUpdateManyWithoutEmployerNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutEmployerNestedInput
 }
 
 export type EmployerProfileCreateWithoutJobsPostedInput = {
@@ -802,6 +827,7 @@ export type EmployerProfileCreateWithoutJobsPostedInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutEmployerProfileInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutEmployerInput
 }
 
 export type EmployerProfileUncheckedCreateWithoutJobsPostedInput = {
@@ -824,6 +850,7 @@ export type EmployerProfileUncheckedCreateWithoutJobsPostedInput = {
   status?: $Enums.UserStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutEmployerInput
 }
 
 export type EmployerProfileCreateOrConnectWithoutJobsPostedInput = {
@@ -862,6 +889,7 @@ export type EmployerProfileUpdateWithoutJobsPostedInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutEmployerProfileNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutEmployerNestedInput
 }
 
 export type EmployerProfileUncheckedUpdateWithoutJobsPostedInput = {
@@ -884,6 +912,115 @@ export type EmployerProfileUncheckedUpdateWithoutJobsPostedInput = {
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutEmployerNestedInput
+}
+
+export type EmployerProfileCreateWithoutPaymentsInput = {
+  id?: string
+  companyName?: string | null
+  fullName: string
+  phone?: string | null
+  profilePic?: string | null
+  location?: string | null
+  about?: string | null
+  website?: string | null
+  businessRegCertId?: string | null
+  taxId?: string | null
+  authorizedRepId?: string | null
+  licenseFile?: string | null
+  idCardFront?: string | null
+  idCardBack?: string | null
+  isVerified?: boolean
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutEmployerProfileInput
+  jobsPosted?: Prisma.JobCreateNestedManyWithoutEmployerInput
+}
+
+export type EmployerProfileUncheckedCreateWithoutPaymentsInput = {
+  id?: string
+  userId: string
+  companyName?: string | null
+  fullName: string
+  phone?: string | null
+  profilePic?: string | null
+  location?: string | null
+  about?: string | null
+  website?: string | null
+  businessRegCertId?: string | null
+  taxId?: string | null
+  authorizedRepId?: string | null
+  licenseFile?: string | null
+  idCardFront?: string | null
+  idCardBack?: string | null
+  isVerified?: boolean
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  jobsPosted?: Prisma.JobUncheckedCreateNestedManyWithoutEmployerInput
+}
+
+export type EmployerProfileCreateOrConnectWithoutPaymentsInput = {
+  where: Prisma.EmployerProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.EmployerProfileCreateWithoutPaymentsInput, Prisma.EmployerProfileUncheckedCreateWithoutPaymentsInput>
+}
+
+export type EmployerProfileUpsertWithoutPaymentsInput = {
+  update: Prisma.XOR<Prisma.EmployerProfileUpdateWithoutPaymentsInput, Prisma.EmployerProfileUncheckedUpdateWithoutPaymentsInput>
+  create: Prisma.XOR<Prisma.EmployerProfileCreateWithoutPaymentsInput, Prisma.EmployerProfileUncheckedCreateWithoutPaymentsInput>
+  where?: Prisma.EmployerProfileWhereInput
+}
+
+export type EmployerProfileUpdateToOneWithWhereWithoutPaymentsInput = {
+  where?: Prisma.EmployerProfileWhereInput
+  data: Prisma.XOR<Prisma.EmployerProfileUpdateWithoutPaymentsInput, Prisma.EmployerProfileUncheckedUpdateWithoutPaymentsInput>
+}
+
+export type EmployerProfileUpdateWithoutPaymentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessRegCertId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authorizedRepId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutEmployerProfileNestedInput
+  jobsPosted?: Prisma.JobUpdateManyWithoutEmployerNestedInput
+}
+
+export type EmployerProfileUncheckedUpdateWithoutPaymentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessRegCertId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authorizedRepId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  jobsPosted?: Prisma.JobUncheckedUpdateManyWithoutEmployerNestedInput
 }
 
 
@@ -893,10 +1030,12 @@ export type EmployerProfileUncheckedUpdateWithoutJobsPostedInput = {
 
 export type EmployerProfileCountOutputType = {
   jobsPosted: number
+  payments: number
 }
 
 export type EmployerProfileCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   jobsPosted?: boolean | EmployerProfileCountOutputTypeCountJobsPostedArgs
+  payments?: boolean | EmployerProfileCountOutputTypeCountPaymentsArgs
 }
 
 /**
@@ -914,6 +1053,13 @@ export type EmployerProfileCountOutputTypeDefaultArgs<ExtArgs extends runtime.Ty
  */
 export type EmployerProfileCountOutputTypeCountJobsPostedArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   where?: Prisma.JobWhereInput
+}
+
+/**
+ * EmployerProfileCountOutputType without action
+ */
+export type EmployerProfileCountOutputTypeCountPaymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PaymentWhereInput
 }
 
 
@@ -939,6 +1085,7 @@ export type EmployerProfileSelect<ExtArgs extends runtime.Types.Extensions.Inter
   updatedAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   jobsPosted?: boolean | Prisma.EmployerProfile$jobsPostedArgs<ExtArgs>
+  payments?: boolean | Prisma.EmployerProfile$paymentsArgs<ExtArgs>
   _count?: boolean | Prisma.EmployerProfileCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["employerProfile"]>
 
@@ -1014,6 +1161,7 @@ export type EmployerProfileOmit<ExtArgs extends runtime.Types.Extensions.Interna
 export type EmployerProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   jobsPosted?: boolean | Prisma.EmployerProfile$jobsPostedArgs<ExtArgs>
+  payments?: boolean | Prisma.EmployerProfile$paymentsArgs<ExtArgs>
   _count?: boolean | Prisma.EmployerProfileCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type EmployerProfileIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1028,6 +1176,7 @@ export type $EmployerProfilePayload<ExtArgs extends runtime.Types.Extensions.Int
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
     jobsPosted: Prisma.$JobPayload<ExtArgs>[]
+    payments: Prisma.$PaymentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1445,6 +1594,7 @@ export interface Prisma__EmployerProfileClient<T, Null = never, ExtArgs extends 
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   jobsPosted<T extends Prisma.EmployerProfile$jobsPostedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EmployerProfile$jobsPostedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  payments<T extends Prisma.EmployerProfile$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EmployerProfile$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1910,6 +2060,30 @@ export type EmployerProfile$jobsPostedArgs<ExtArgs extends runtime.Types.Extensi
   take?: number
   skip?: number
   distinct?: Prisma.JobScalarFieldEnum | Prisma.JobScalarFieldEnum[]
+}
+
+/**
+ * EmployerProfile.payments
+ */
+export type EmployerProfile$paymentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Payment
+   */
+  select?: Prisma.PaymentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Payment
+   */
+  omit?: Prisma.PaymentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PaymentInclude<ExtArgs> | null
+  where?: Prisma.PaymentWhereInput
+  orderBy?: Prisma.PaymentOrderByWithRelationInput | Prisma.PaymentOrderByWithRelationInput[]
+  cursor?: Prisma.PaymentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PaymentScalarFieldEnum | Prisma.PaymentScalarFieldEnum[]
 }
 
 /**

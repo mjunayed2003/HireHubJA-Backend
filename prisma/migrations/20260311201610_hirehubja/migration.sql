@@ -11,10 +11,13 @@ CREATE TYPE "JobType" AS ENUM ('FULL_TIME', 'PART_TIME', 'CONTRACT', 'INTERNSHIP
 CREATE TYPE "JobStatus" AS ENUM ('OPEN', 'CLOSED', 'PAUSED', 'BLOCKED_BY_ADMIN');
 
 -- CreateEnum
-CREATE TYPE "InterviewStatus" AS ENUM ('SCHEDULED', 'COMPLETED', 'REJECTED', 'CANCELLED');
+CREATE TYPE "InterviewStatus" AS ENUM ('SCHEDULED', 'COMPLETED', 'REJECTED', 'CANCELLED', 'HIRED');
 
 -- CreateEnum
 CREATE TYPE "ApplicationStatus" AS ENUM ('APPLIED', 'VIEWED', 'INTERVIEW', 'HIRED', 'REJECTED');
+
+-- CreateEnum
+CREATE TYPE "PaymentStatus" AS ENUM ('PENDING', 'PAID', 'FAILED', 'REFUNDED');
 
 -- CreateTable
 CREATE TABLE "User" (
@@ -91,6 +94,9 @@ CREATE TABLE "EmployerProfile" (
     "location" TEXT,
     "about" TEXT,
     "website" TEXT,
+    "businessRegCertId" TEXT,
+    "taxId" TEXT,
+    "authorizedRepId" TEXT,
     "licenseFile" TEXT,
     "idCardFront" TEXT,
     "idCardBack" TEXT,
@@ -136,7 +142,18 @@ CREATE TABLE "Job" (
     "title" TEXT NOT NULL,
     "description" TEXT NOT NULL,
     "location" TEXT NOT NULL,
-    "salaryRange" TEXT,
+    "isRemote" BOOLEAN NOT NULL DEFAULT false,
+    "salaryType" TEXT,
+    "salaryFrequency" TEXT,
+    "salaryAmount" TEXT,
+    "isAnonymous" BOOLEAN NOT NULL DEFAULT false,
+    "responsibilities" TEXT[],
+    "benefits" TEXT[],
+    "experienceLevel" TEXT,
+    "minExperience" INTEGER,
+    "educationLevel" TEXT,
+    "numberOfEmployees" INTEGER,
+    "deadline" TIMESTAMP(3),
     "categoryId" TEXT NOT NULL,
     "jobType" "JobType"[],
     "status" "JobStatus" NOT NULL DEFAULT 'OPEN',
@@ -152,6 +169,9 @@ CREATE TABLE "Application" (
     "jobId" TEXT NOT NULL,
     "jobSeekerId" TEXT NOT NULL,
     "status" "ApplicationStatus" NOT NULL DEFAULT 'APPLIED',
+    "resumeUrl" TEXT,
+    "availableFrom" TIMESTAMP(3),
+    "shortMessage" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "editedAt" TIMESTAMP(3),
 
@@ -162,7 +182,10 @@ CREATE TABLE "Application" (
 CREATE TABLE "Interview" (
     "id" TEXT NOT NULL,
     "applicationId" TEXT NOT NULL,
+    "interviewType" TEXT,
     "scheduleDate" TIMESTAMP(3) NOT NULL,
+    "scheduleTime" TEXT,
+    "duration" TEXT,
     "meetingLink" TEXT,
     "status" "InterviewStatus" NOT NULL DEFAULT 'SCHEDULED',
     "notes" TEXT,
@@ -253,6 +276,38 @@ CREATE TABLE "Notification" (
 );
 
 -- CreateTable
+CREATE TABLE "Payment" (
+    "id" TEXT NOT NULL,
+    "orderId" TEXT NOT NULL,
+    "transactionId" TEXT,
+    "amount" DECIMAL(10,2) NOT NULL,
+    "platformFee" DECIMAL(10,2) NOT NULL,
+    "totalAmount" DECIMAL(10,2) NOT NULL,
+    "currency" TEXT NOT NULL DEFAULT 'JMD',
+    "status" "PaymentStatus" NOT NULL DEFAULT 'PENDING',
+    "employerId" TEXT NOT NULL,
+    "candidateId" TEXT NOT NULL,
+    "interviewId" TEXT NOT NULL,
+    "paidAt" TIMESTAMP(3),
+    "webhookReceivedAt" TIMESTAMP(3),
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "Payment_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "WebhookLog" (
+    "id" TEXT NOT NULL,
+    "transactionId" TEXT NOT NULL,
+    "rawPayload" JSONB NOT NULL,
+    "processedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "paymentId" TEXT NOT NULL,
+
+    CONSTRAINT "WebhookLog_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "_CategoryToJobSeekerProfile" (
     "A" TEXT NOT NULL,
     "B" TEXT NOT NULL,
@@ -289,6 +344,24 @@ CREATE UNIQUE INDEX "SavedJob_jobId_jobSeekerId_key" ON "SavedJob"("jobId", "job
 
 -- CreateIndex
 CREATE UNIQUE INDEX "ConversationParticipant_conversationId_userId_key" ON "ConversationParticipant"("conversationId", "userId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Payment_orderId_key" ON "Payment"("orderId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Payment_transactionId_key" ON "Payment"("transactionId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Payment_interviewId_key" ON "Payment"("interviewId");
+
+-- CreateIndex
+CREATE INDEX "Payment_orderId_idx" ON "Payment"("orderId");
+
+-- CreateIndex
+CREATE INDEX "Payment_status_idx" ON "Payment"("status");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "WebhookLog_transactionId_key" ON "WebhookLog"("transactionId");
 
 -- CreateIndex
 CREATE INDEX "_CategoryToJobSeekerProfile_B_index" ON "_CategoryToJobSeekerProfile"("B");
@@ -349,6 +422,18 @@ ALTER TABLE "Message" ADD CONSTRAINT "Message_senderId_fkey" FOREIGN KEY ("sende
 
 -- AddForeignKey
 ALTER TABLE "Notification" ADD CONSTRAINT "Notification_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Payment" ADD CONSTRAINT "Payment_employerId_fkey" FOREIGN KEY ("employerId") REFERENCES "EmployerProfile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Payment" ADD CONSTRAINT "Payment_candidateId_fkey" FOREIGN KEY ("candidateId") REFERENCES "JobSeekerProfile"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Payment" ADD CONSTRAINT "Payment_interviewId_fkey" FOREIGN KEY ("interviewId") REFERENCES "Interview"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "WebhookLog" ADD CONSTRAINT "WebhookLog_paymentId_fkey" FOREIGN KEY ("paymentId") REFERENCES "Payment"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_CategoryToJobSeekerProfile" ADD CONSTRAINT "_CategoryToJobSeekerProfile_A_fkey" FOREIGN KEY ("A") REFERENCES "Category"("id") ON DELETE CASCADE ON UPDATE CASCADE;

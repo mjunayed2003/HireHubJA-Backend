@@ -14,6 +14,7 @@ import { UploadController } from './upload/upload.controller';
 import { PublicModule } from './public/public.module';
 import { NotificationModule } from './notification/notification.module';
 import { MessagesModule } from './messages/messages.module';
+import { PaymentModule } from './payment/payment.module';
 
 
 @Module({
@@ -48,6 +49,7 @@ import { MessagesModule } from './messages/messages.module';
     PublicModule,
     NotificationModule,
     MessagesModule,
+    PaymentModule,
 
   ],
   controllers: [AppController, UploadController],
