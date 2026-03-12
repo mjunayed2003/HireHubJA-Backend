@@ -18,6 +18,7 @@ import { PaymentModule } from './payment/payment.module';
 import { DashboardModule } from './admin/dashboard/dashboard.module';
 import { AdminAuthModule } from './admin/admin-auth/admin.auth.module';
 import { AdminUsersModule } from './admin/admin-users/admin.users.module';
+import { AdminReportsModule } from './admin/admin-reports/admin.reports.module';
 
 
 @Module({
@@ -56,6 +57,7 @@ import { AdminUsersModule } from './admin/admin-users/admin.users.module';
     DashboardModule,
     AdminAuthModule,
     AdminUsersModule,
+    AdminReportsModule,
 
   ],
   controllers: [AppController, UploadController],
