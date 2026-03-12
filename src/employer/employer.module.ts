@@ -4,7 +4,7 @@ import { EmployerService } from './employer.service';
 import { NotificationModule } from 'src/notification/notification.module';
 
 @Module({
-  imports: [NotificationModule], // ✅
+  imports: [NotificationModule],
   controllers: [EmployerController],
   providers: [EmployerService],
 })

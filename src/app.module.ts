@@ -15,6 +15,9 @@ import { PublicModule } from './public/public.module';
 import { NotificationModule } from './notification/notification.module';
 import { MessagesModule } from './messages/messages.module';
 import { PaymentModule } from './payment/payment.module';
+import { DashboardModule } from './admin/dashboard/dashboard.module';
+import { AdminAuthModule } from './admin/admin-auth/admin.auth.module';
+import { AdminUsersModule } from './admin/admin-users/admin.users.module';
 
 
 @Module({
@@ -50,6 +53,9 @@ import { PaymentModule } from './payment/payment.module';
     NotificationModule,
     MessagesModule,
     PaymentModule,
+    DashboardModule,
+    AdminAuthModule,
+    AdminUsersModule,
 
   ],
   controllers: [AppController, UploadController],

@@ -12,11 +12,13 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
     transform: true,
+    transformOptions: {
+      enableImplicitConversion: true,
+    },
   }));
 
   app.enableCors();
 
-  // ✅ Static files serve
   app.useStaticAssets(join(__dirname, '..', 'uploads'), {
     prefix: '/uploads',
   });
