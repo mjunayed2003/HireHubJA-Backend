@@ -19,6 +19,7 @@ import { DashboardModule } from './admin/dashboard/dashboard.module';
 import { AdminAuthModule } from './admin/admin-auth/admin.auth.module';
 import { AdminUsersModule } from './admin/admin-users/admin.users.module';
 import { AdminReportsModule } from './admin/admin-reports/admin.reports.module';
+import { AdminProfileModule } from './admin/admin-profile/admin.profile.module';
 
 
 @Module({
@@ -58,6 +59,7 @@ import { AdminReportsModule } from './admin/admin-reports/admin.reports.module';
     AdminAuthModule,
     AdminUsersModule,
     AdminReportsModule,
+    AdminProfileModule,
 
   ],
   controllers: [AppController, UploadController],
