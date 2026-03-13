@@ -9,13 +9,15 @@ async function bootstrap() {
     rawBody: true,
   });
 
-  app.useGlobalPipes(new ValidationPipe({
-    whitelist: true,
-    transform: true,
-    transformOptions: {
-      enableImplicitConversion: true,
-    },
-  }));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+    }),
+  );
 
   app.enableCors();
 
@@ -24,6 +26,10 @@ async function bootstrap() {
   });
 
   const port = process.env.PORT || 4000;
-  await app.listen(port);
+
+  await app.listen(port, '0.0.0.0');
+
+  console.log(`Server running on port ${port}`);
 }
+
 bootstrap();
