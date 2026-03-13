@@ -112,3 +112,8 @@ export type Payment = Prisma.PaymentModel
  * 
  */
 export type WebhookLog = Prisma.WebhookLogModel
+/**
+ * Model SubscriptionPlan
+ * 
+ */
+export type SubscriptionPlan = Prisma.SubscriptionPlanModel

@@ -69,7 +69,8 @@ export const ModelName = {
   Message: 'Message',
   Notification: 'Notification',
   Payment: 'Payment',
-  WebhookLog: 'WebhookLog'
+  WebhookLog: 'WebhookLog',
+  SubscriptionPlan: 'SubscriptionPlan'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -110,7 +111,9 @@ export const AdminProfileScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
   fullName: 'fullName',
-  profilePic: 'profilePic'
+  profilePic: 'profilePic',
+  phone: 'phone',
+  location: 'location'
 } as const
 
 export type AdminProfileScalarFieldEnum = (typeof AdminProfileScalarFieldEnum)[keyof typeof AdminProfileScalarFieldEnum]
@@ -374,6 +377,21 @@ export const WebhookLogScalarFieldEnum = {
 } as const
 
 export type WebhookLogScalarFieldEnum = (typeof WebhookLogScalarFieldEnum)[keyof typeof WebhookLogScalarFieldEnum]
+
+
+export const SubscriptionPlanScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  price: 'price',
+  duration: 'duration',
+  slotsAvailable: 'slotsAvailable',
+  features: 'features',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SubscriptionPlanScalarFieldEnum = (typeof SubscriptionPlanScalarFieldEnum)[keyof typeof SubscriptionPlanScalarFieldEnum]
 
 
 export const SortOrder = {

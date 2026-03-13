@@ -29,6 +29,8 @@ export type AdminProfileMinAggregateOutputType = {
   userId: string | null
   fullName: string | null
   profilePic: string | null
+  phone: string | null
+  location: string | null
 }
 
 export type AdminProfileMaxAggregateOutputType = {
@@ -36,6 +38,8 @@ export type AdminProfileMaxAggregateOutputType = {
   userId: string | null
   fullName: string | null
   profilePic: string | null
+  phone: string | null
+  location: string | null
 }
 
 export type AdminProfileCountAggregateOutputType = {
@@ -43,6 +47,8 @@ export type AdminProfileCountAggregateOutputType = {
   userId: number
   fullName: number
   profilePic: number
+  phone: number
+  location: number
   _all: number
 }
 
@@ -52,6 +58,8 @@ export type AdminProfileMinAggregateInputType = {
   userId?: true
   fullName?: true
   profilePic?: true
+  phone?: true
+  location?: true
 }
 
 export type AdminProfileMaxAggregateInputType = {
@@ -59,6 +67,8 @@ export type AdminProfileMaxAggregateInputType = {
   userId?: true
   fullName?: true
   profilePic?: true
+  phone?: true
+  location?: true
 }
 
 export type AdminProfileCountAggregateInputType = {
@@ -66,6 +76,8 @@ export type AdminProfileCountAggregateInputType = {
   userId?: true
   fullName?: true
   profilePic?: true
+  phone?: true
+  location?: true
   _all?: true
 }
 
@@ -146,6 +158,8 @@ export type AdminProfileGroupByOutputType = {
   userId: string
   fullName: string
   profilePic: string | null
+  phone: string | null
+  location: string | null
   _count: AdminProfileCountAggregateOutputType | null
   _min: AdminProfileMinAggregateOutputType | null
   _max: AdminProfileMaxAggregateOutputType | null
@@ -174,6 +188,8 @@ export type AdminProfileWhereInput = {
   userId?: Prisma.StringFilter<"AdminProfile"> | string
   fullName?: Prisma.StringFilter<"AdminProfile"> | string
   profilePic?: Prisma.StringNullableFilter<"AdminProfile"> | string | null
+  phone?: Prisma.StringNullableFilter<"AdminProfile"> | string | null
+  location?: Prisma.StringNullableFilter<"AdminProfile"> | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
@@ -182,6 +198,8 @@ export type AdminProfileOrderByWithRelationInput = {
   userId?: Prisma.SortOrder
   fullName?: Prisma.SortOrder
   profilePic?: Prisma.SortOrderInput | Prisma.SortOrder
+  phone?: Prisma.SortOrderInput | Prisma.SortOrder
+  location?: Prisma.SortOrderInput | Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
 }
 
@@ -193,6 +211,8 @@ export type AdminProfileWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.AdminProfileWhereInput | Prisma.AdminProfileWhereInput[]
   fullName?: Prisma.StringFilter<"AdminProfile"> | string
   profilePic?: Prisma.StringNullableFilter<"AdminProfile"> | string | null
+  phone?: Prisma.StringNullableFilter<"AdminProfile"> | string | null
+  location?: Prisma.StringNullableFilter<"AdminProfile"> | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id" | "userId">
 
@@ -201,6 +221,8 @@ export type AdminProfileOrderByWithAggregationInput = {
   userId?: Prisma.SortOrder
   fullName?: Prisma.SortOrder
   profilePic?: Prisma.SortOrderInput | Prisma.SortOrder
+  phone?: Prisma.SortOrderInput | Prisma.SortOrder
+  location?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.AdminProfileCountOrderByAggregateInput
   _max?: Prisma.AdminProfileMaxOrderByAggregateInput
   _min?: Prisma.AdminProfileMinOrderByAggregateInput
@@ -214,12 +236,16 @@ export type AdminProfileScalarWhereWithAggregatesInput = {
   userId?: Prisma.StringWithAggregatesFilter<"AdminProfile"> | string
   fullName?: Prisma.StringWithAggregatesFilter<"AdminProfile"> | string
   profilePic?: Prisma.StringNullableWithAggregatesFilter<"AdminProfile"> | string | null
+  phone?: Prisma.StringNullableWithAggregatesFilter<"AdminProfile"> | string | null
+  location?: Prisma.StringNullableWithAggregatesFilter<"AdminProfile"> | string | null
 }
 
 export type AdminProfileCreateInput = {
   id?: string
   fullName: string
   profilePic?: string | null
+  phone?: string | null
+  location?: string | null
   user: Prisma.UserCreateNestedOneWithoutAdminProfileInput
 }
 
@@ -228,12 +254,16 @@ export type AdminProfileUncheckedCreateInput = {
   userId: string
   fullName: string
   profilePic?: string | null
+  phone?: string | null
+  location?: string | null
 }
 
 export type AdminProfileUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.StringFieldUpdateOperationsInput | string
   profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutAdminProfileNestedInput
 }
 
@@ -242,6 +272,8 @@ export type AdminProfileUncheckedUpdateInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.StringFieldUpdateOperationsInput | string
   profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type AdminProfileCreateManyInput = {
@@ -249,12 +281,16 @@ export type AdminProfileCreateManyInput = {
   userId: string
   fullName: string
   profilePic?: string | null
+  phone?: string | null
+  location?: string | null
 }
 
 export type AdminProfileUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.StringFieldUpdateOperationsInput | string
   profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type AdminProfileUncheckedUpdateManyInput = {
@@ -262,6 +298,8 @@ export type AdminProfileUncheckedUpdateManyInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.StringFieldUpdateOperationsInput | string
   profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type AdminProfileNullableScalarRelationFilter = {
@@ -274,6 +312,8 @@ export type AdminProfileCountOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   fullName?: Prisma.SortOrder
   profilePic?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
+  location?: Prisma.SortOrder
 }
 
 export type AdminProfileMaxOrderByAggregateInput = {
@@ -281,6 +321,8 @@ export type AdminProfileMaxOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   fullName?: Prisma.SortOrder
   profilePic?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
+  location?: Prisma.SortOrder
 }
 
 export type AdminProfileMinOrderByAggregateInput = {
@@ -288,6 +330,8 @@ export type AdminProfileMinOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   fullName?: Prisma.SortOrder
   profilePic?: Prisma.SortOrder
+  phone?: Prisma.SortOrder
+  location?: Prisma.SortOrder
 }
 
 export type AdminProfileCreateNestedOneWithoutUserInput = {
@@ -326,12 +370,16 @@ export type AdminProfileCreateWithoutUserInput = {
   id?: string
   fullName: string
   profilePic?: string | null
+  phone?: string | null
+  location?: string | null
 }
 
 export type AdminProfileUncheckedCreateWithoutUserInput = {
   id?: string
   fullName: string
   profilePic?: string | null
+  phone?: string | null
+  location?: string | null
 }
 
 export type AdminProfileCreateOrConnectWithoutUserInput = {
@@ -354,12 +402,16 @@ export type AdminProfileUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.StringFieldUpdateOperationsInput | string
   profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type AdminProfileUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   fullName?: Prisma.StringFieldUpdateOperationsInput | string
   profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -369,6 +421,8 @@ export type AdminProfileSelect<ExtArgs extends runtime.Types.Extensions.Internal
   userId?: boolean
   fullName?: boolean
   profilePic?: boolean
+  phone?: boolean
+  location?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["adminProfile"]>
 
@@ -377,6 +431,8 @@ export type AdminProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Types.
   userId?: boolean
   fullName?: boolean
   profilePic?: boolean
+  phone?: boolean
+  location?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["adminProfile"]>
 
@@ -385,6 +441,8 @@ export type AdminProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.
   userId?: boolean
   fullName?: boolean
   profilePic?: boolean
+  phone?: boolean
+  location?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["adminProfile"]>
 
@@ -393,9 +451,11 @@ export type AdminProfileSelectScalar = {
   userId?: boolean
   fullName?: boolean
   profilePic?: boolean
+  phone?: boolean
+  location?: boolean
 }
 
-export type AdminProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "fullName" | "profilePic", ExtArgs["result"]["adminProfile"]>
+export type AdminProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "fullName" | "profilePic" | "phone" | "location", ExtArgs["result"]["adminProfile"]>
 export type AdminProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -416,6 +476,8 @@ export type $AdminProfilePayload<ExtArgs extends runtime.Types.Extensions.Intern
     userId: string
     fullName: string
     profilePic: string | null
+    phone: string | null
+    location: string | null
   }, ExtArgs["result"]["adminProfile"]>
   composites: {}
 }
@@ -844,6 +906,8 @@ export interface AdminProfileFieldRefs {
   readonly userId: Prisma.FieldRef<"AdminProfile", 'String'>
   readonly fullName: Prisma.FieldRef<"AdminProfile", 'String'>
   readonly profilePic: Prisma.FieldRef<"AdminProfile", 'String'>
+  readonly phone: Prisma.FieldRef<"AdminProfile", 'String'>
+  readonly location: Prisma.FieldRef<"AdminProfile", 'String'>
 }
     
 

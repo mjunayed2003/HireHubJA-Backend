@@ -22,12 +22,20 @@ export class AdminProfileService {
             id: true,
             fullName: true,
             profilePic: true,
+            phone: true,
+            location: true,
           },
         },
       },
     });
 
     if (!user) throw new NotFoundException('Admin not found');
+    let adminProfile = user.adminProfile;
+    if (!adminProfile) {
+      adminProfile = await this.prisma.adminProfile.create({
+        data: { userId, fullName: '' },
+      });
+    }
 
     return {
       success: true,
@@ -36,8 +44,10 @@ export class AdminProfileService {
         email: user.email,
         role: user.role,
         createdAt: user.createdAt,
-        fullName: user.adminProfile?.fullName ?? '',
-        profilePic: user.adminProfile?.profilePic ?? null,
+        fullName: adminProfile?.fullName ?? '',
+        profilePic: adminProfile?.profilePic ?? null,
+        phone: adminProfile?.phone ?? null,
+        location: adminProfile?.location ?? null,
       },
     };
   }
@@ -55,17 +65,25 @@ export class AdminProfileService {
       include: { adminProfile: true },
     });
 
-    if (!user?.adminProfile) throw new NotFoundException('Admin profile not found');
+    if (!user) throw new NotFoundException('Admin not found');
+
+    if (!user.adminProfile) {
+      await this.prisma.adminProfile.create({
+        data: { userId, fullName: dto.fullName ?? '' },
+      });
+    }
 
     const profilePic = profilePicFile
       ? `/uploads/${profilePicFile.filename}`
-      : user.adminProfile.profilePic;
+      : user.adminProfile?.profilePic ?? null;
 
     const updated = await this.prisma.adminProfile.update({
       where: { userId },
       data: {
-        fullName: dto.fullName ?? user.adminProfile.fullName,
+        fullName: dto.fullName ?? user.adminProfile?.fullName ?? '',
         profilePic,
+        phone: dto.phone ?? user.adminProfile?.phone ?? null,
+        location: dto.location ?? user.adminProfile?.location ?? null,
       },
     });
 
@@ -75,6 +93,8 @@ export class AdminProfileService {
       data: {
         fullName: updated.fullName,
         profilePic: updated.profilePic,
+        phone: updated.phone,
+        location: updated.location,
       },
     };
   }

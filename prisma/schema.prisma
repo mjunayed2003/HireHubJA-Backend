@@ -130,6 +130,8 @@ model AdminProfile {
   
   fullName   String
   profilePic String?
+  phone      String?
+  location   String?
 }
 
 // --------------------------------------
@@ -467,4 +469,17 @@ model WebhookLog {
 
   paymentId     String
   payment       Payment  @relation(fields: [paymentId], references: [id])
+}
+
+
+model SubscriptionPlan {
+  id             String   @id @default(uuid())
+  name           String
+  price          Float
+  duration       Int
+  slotsAvailable Int
+  features       String[]
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 }

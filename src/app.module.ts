@@ -21,6 +21,8 @@ import { AdminUsersModule } from './admin/admin-users/admin.users.module';
 import { AdminReportsModule } from './admin/admin-reports/admin.reports.module';
 import { AdminProfileModule } from './admin/admin-profile/admin.profile.module';
 import { AdminJobsModule } from './admin/admin-jobs/admin.jobs.module';
+import { SubscriptionModule } from './admin/subscription/subscription.module';
+import { AdminInterviewsModule } from './admin/admin.interviews/admin.interviews.module';
 
 
 @Module({
@@ -62,6 +64,8 @@ import { AdminJobsModule } from './admin/admin-jobs/admin.jobs.module';
     AdminReportsModule,
     AdminProfileModule,
     AdminJobsModule,
+    SubscriptionModule,
+    AdminInterviewsModule,
 
   ],
   controllers: [AppController, UploadController],
