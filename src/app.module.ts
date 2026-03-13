@@ -20,6 +20,7 @@ import { AdminAuthModule } from './admin/admin-auth/admin.auth.module';
 import { AdminUsersModule } from './admin/admin-users/admin.users.module';
 import { AdminReportsModule } from './admin/admin-reports/admin.reports.module';
 import { AdminProfileModule } from './admin/admin-profile/admin.profile.module';
+import { AdminJobsModule } from './admin/admin-jobs/admin.jobs.module';
 
 
 @Module({
@@ -60,6 +61,7 @@ import { AdminProfileModule } from './admin/admin-profile/admin.profile.module';
     AdminUsersModule,
     AdminReportsModule,
     AdminProfileModule,
+    AdminJobsModule,
 
   ],
   controllers: [AppController, UploadController],

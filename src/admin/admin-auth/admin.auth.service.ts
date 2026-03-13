@@ -4,12 +4,14 @@ import {
     ForbiddenException,
     NotFoundException,
     ConflictException,
+    BadRequestException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/auth.dto';
 import { CreateAdminDto } from './dto/create-admin.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 import { UserRole, UserStatus } from '../../generated/prisma/client';
 
 @Injectable()
@@ -122,5 +124,32 @@ export class AdminAuthService {
             message: `Admin deleted successfully`,
         };
     }
+
+
+
+
+
+// ─────────────────────────────────────────────────────
+// CHANGE PASSWORD
+// ─────────────────────────────────────────────────────
+    async changePassword(userId: string, dto: ChangePasswordDto) {
+  if (dto.newPassword !== dto.confirmPassword) {
+    throw new BadRequestException('Passwords do not match');
+  }
+
+  const user = await this.prisma.user.findUnique({ where: { id: userId } });
+  if (!user) throw new NotFoundException('User not found');
+
+  const isMatch = await bcrypt.compare(dto.currentPassword, user.password);
+  if (!isMatch) throw new BadRequestException('Current password is incorrect');
+
+  const hashed = await bcrypt.hash(dto.newPassword, 10);
+  await this.prisma.user.update({
+    where: { id: userId },
+    data: { password: hashed },
+  });
+
+  return { success: true, message: 'Password changed successfully' };
+}
 
 }

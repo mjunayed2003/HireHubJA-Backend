@@ -10,6 +10,7 @@ import {
 import { AdminAuthService } from './admin.auth.service';
 import { LoginDto } from './dto/auth.dto';
 import { CreateAdminDto } from './dto/create-admin.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
 import { RolesGuard } from './guards/roles.guard';
 import { Roles } from './decorators/roles.decorator';
@@ -43,5 +44,18 @@ export class AdminAuthController {
   async deleteAdmin(@Param('id') id: string, @Request() req) {
     return this.adminAuthService.deleteAdmin(id, req.user.id);
   }
+
+
+
+
+
+// POST /admin/auth/change-password
+
+  @Post('change-password')
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(UserRole.ADMIN)
+async changePassword(@Body() dto: ChangePasswordDto, @Request() req) {
+  return this.adminAuthService.changePassword(req.user.id, dto);
+}
 
 }
