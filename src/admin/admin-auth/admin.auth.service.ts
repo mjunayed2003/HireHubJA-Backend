@@ -55,6 +55,8 @@ export class AdminAuthService {
                 role: user.role,
                 fullName: user.adminProfile?.fullName ?? '',
                 profilePic: user.adminProfile?.profilePic ?? null,
+                phone: user.adminProfile?.phone ?? null,
+                location: user.adminProfile?.location ?? null,
             },
         };
     }

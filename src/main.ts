@@ -21,9 +21,9 @@ async function bootstrap() {
 
   app.enableCors();
 
-  app.useStaticAssets(join(__dirname, '..', 'uploads'), {
-    prefix: '/uploads',
-  });
+app.useStaticAssets(join(process.cwd(), 'uploads'), {
+  prefix: '/uploads',
+});
 
   const port = process.env.PORT || 4000;
 
