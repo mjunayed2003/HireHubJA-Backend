@@ -4,13 +4,12 @@ import {
   Get,
   Body,
   Param,
-  Headers,
-  Req,
-  HttpCode,
-  HttpStatus,
+  Query,
+  Res,
   UseGuards,
   Request,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { PaymentService } from './payment.service';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
@@ -20,9 +19,7 @@ export class PaymentController {
   constructor(private readonly paymentService: PaymentService) {}
 
   // ============================================
-  // 1. PAYMENT URL
-  // POST /payment/create-url
-  // Employer only (JWT protected)
+  // 1. CREATE PAYMENT URL
   // ============================================
   @UseGuards(JwtAuthGuard)
   @Post('create-url')
@@ -34,26 +31,19 @@ export class PaymentController {
   }
 
   // ============================================
-  // 2. WEBHOOK — Fygaro automatically POST
-  // POST /payment/webhook
-  // Public — No JWT (Fygaro call )
+  // 2. FAC RETURN URL
   // ============================================
-  @Post('webhook')
-  @HttpCode(HttpStatus.OK)
-  async handleWebhook(
-    @Req() req: any,
-    @Headers('fygaro-signature') signature: string,
-    @Headers('fygaro-key-id') keyId: string,
+  @Get('return')
+  async handleReturn(
+    @Query() query: Record<string, string>,
+    @Res() res: Response,
   ) {
-    // rawBody main.ts
-    const rawBody = req.rawBody?.toString() || JSON.stringify(req.body);
-    return this.paymentService.handleWebhook(rawBody, signature, keyId);
+    const result = await this.paymentService.handleReturn(query);
+    return res.redirect(result.redirect);
   }
 
   // ============================================
   // 3. PAYMENT STATUS CHECK
-  // GET /payment/status/:orderId
-  // Success page এ verify 
   // ============================================
   @Get('status/:orderId')
   async getPaymentStatus(@Param('orderId') orderId: string) {
@@ -61,8 +51,7 @@ export class PaymentController {
   }
 
   // ============================================
-  // 4. EMPLOYER  PAYMENT
-  // GET /payment/my-payments
+  // 4. MY PAYMENTS (Employer)
   // ============================================
   @UseGuards(JwtAuthGuard)
   @Get('my-payments')

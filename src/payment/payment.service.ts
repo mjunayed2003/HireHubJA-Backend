@@ -5,8 +5,8 @@ import {
   ForbiddenException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import * as jwt from 'jsonwebtoken';
 import * as crypto from 'crypto';
+import * as https from 'https';
 import { v4 as uuidv4 } from 'uuid';
 import { CreatePaymentDto } from './dto/create-payment.dto';
 import { InterviewStatus } from '../generated/prisma/client';
@@ -15,11 +15,53 @@ import { InterviewStatus } from '../generated/prisma/client';
 export class PaymentService {
   constructor(private prisma: PrismaService) {}
 
-  // ============================================
-  // 1. PAYMENT URL  (Employer call )
-  // ============================================
+  // ─────────────────────────────────────────────────────
+  // HELPERS — FAC Signature & XML
+  // ─────────────────────────────────────────────────────
+
+  private generateFACSignature(
+    merchantId: string,
+    merchantPassword: string,
+    orderId: string,
+    amount: string,
+    currency: string,
+  ): string {
+    // FAC signature = MD5(password + merchantId + orderId + amount + currency)
+    const raw = merchantPassword + merchantId + orderId + amount + currency;
+    return crypto.createHash('md5').update(raw).digest('hex').toUpperCase();
+  }
+
+  private buildPaymentXML(params: {
+    merchantId: string;
+    accessCode: string;
+    orderId: string;
+    amount: string;
+    currency: string;
+    signature: string;
+    returnUrl: string;
+    description: string;
+  }): string {
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<FAC_TransactionRequest>
+  <TransactionDetails>
+    <MerchantId>${params.merchantId}</MerchantId>
+    <MerchantPassword>${params.accessCode}</MerchantPassword>
+    <TransactionCode>0</TransactionCode>
+    <OrderID>${params.orderId}</OrderID>
+    <Amount>${params.amount}</Amount>
+    <Currency>${params.currency}</Currency>
+    <CurrencyExponent>2</CurrencyExponent>
+    <ResponseURL>${params.returnUrl}</ResponseURL>
+    <Signature>${params.signature}</Signature>
+    <Memo>${params.description}</Memo>
+  </TransactionDetails>
+</FAC_TransactionRequest>`;
+  }
+
+  // ─────────────────────────────────────────────────────
+  // 1. CREATE PAYMENT URL
+  // ─────────────────────────────────────────────────────
   async createPaymentUrl(dto: CreatePaymentDto, employerUserId: string) {
-    // find Employer  profile 
     const employerProfile = await this.prisma.employerProfile.findUnique({
       where: { userId: employerUserId },
     });
@@ -28,7 +70,6 @@ export class PaymentService {
       throw new NotFoundException('Employer profile not found');
     }
 
-    // Find Interview — application, job, jobSeeker
     const interview = await this.prisma.interview.findUnique({
       where: { id: dto.interviewId },
       include: {
@@ -49,12 +90,10 @@ export class PaymentService {
       throw new ForbiddenException('You are not authorized for this interview');
     }
 
-    // Interview HIRED status chack
     if (interview.status !== InterviewStatus.HIRED) {
       throw new BadRequestException('Candidate must be hired before making payment');
     }
 
-    // Already PAID payment check
     const existingPayment = await this.prisma.payment.findUnique({
       where: { interviewId: dto.interviewId },
     });
@@ -67,28 +106,21 @@ export class PaymentService {
     const salaryAmount = parseFloat(interview.application.job.salaryAmount || '0');
     const months = 6;
     const amount = salaryAmount * months;
-    const platformFee = amount * 0.10; // 10%
+    const platformFee = amount * 0.10;
     const totalAmount = amount + platformFee;
 
-    // Unique orderId
     const orderId = `ORD-${uuidv4()}`;
 
-    // DB  PENDING payment create 
+    // DB এ PENDING payment save
     await this.prisma.payment.upsert({
       where: { interviewId: dto.interviewId },
-      update: {
-        orderId,
-        amount,
-        platformFee,
-        totalAmount,
-        status: 'PENDING',
-      },
+      update: { orderId, amount, platformFee, totalAmount, status: 'PENDING' },
       create: {
         orderId,
         amount,
         platformFee,
         totalAmount,
-        currency: 'JMD',
+        currency: process.env.FAC_CURRENCY_CODE === '388' ? 'JMD' : 'USD',
         status: 'PENDING',
         employerId: employerProfile.id,
         candidateId: interview.application.jobSeeker.id,
@@ -96,24 +128,31 @@ export class PaymentService {
       },
     });
 
-    // Fygaro JWT 
-    const payload = {
-      amount: totalAmount.toFixed(2),
-      currency: 'JMD',
-      custom_reference: orderId,
-      exp: Math.floor(Date.now() / 1000) + 3600, // 1 hour
-    };
+    // FAC config from .env
+    const merchantId = process.env.FAC_MERCHANT_ID!;
+    const merchantPassword = process.env.FAC_API_PASSWORD!;
+    const accessCode = process.env.FAC_ACCESS_CODE!;
+    const currencyCode = process.env.FAC_CURRENCY_CODE || '388';
+    const facUrl = process.env.FAC_PAYMENT_URL!;
+    const returnUrl = process.env.FAC_RETURN_URL!;
 
-    const header = {
-      alg: 'HS256' as const,
-      typ: 'JWT',
-      kid: process.env.FYGARO_API_KEY,
-    };
+    // Amount in cents (no decimal)
+    const amountInCents = Math.round(totalAmount * 100).toString();
 
-    const token = jwt.sign(payload, process.env.FYGARO_SECRET!, { header });
-    const paymentUrl = `${process.env.FYGARO_BUTTON_URL}?jwt=${token}`;
+    // Signature generate
+    const signature = this.generateFACSignature(
+      merchantId,
+      merchantPassword,
+      orderId,
+      amountInCents,
+      currencyCode,
+    );
+
+    // Payment URL
+    const paymentUrl = `${facUrl}?MerchantId=${merchantId}&AccessCode=${accessCode}&OrderID=${orderId}&Amount=${amountInCents}&Currency=${currencyCode}&Signature=${signature}&ResponseURL=${encodeURIComponent(returnUrl)}`;
 
     return {
+      success: true,
       paymentUrl,
       summary: {
         candidateName: interview.application.jobSeeker.fullName,
@@ -123,106 +162,57 @@ export class PaymentService {
         amount,
         platformFee,
         totalAmount,
-        currency: 'JMD',
+        currency: currencyCode === '388' ? 'JMD' : 'USD',
         orderId,
       },
     };
   }
 
-  // ============================================
-  // 2. WEBHOOK — Fygaro automatically call 
-  // ============================================
-  async handleWebhook(rawBody: string, signature: string, keyId: string) {
-    // Signature verify
-    if (!signature || !keyId) {
-      throw new BadRequestException('Missing Fygaro headers');
+  // ─────────────────────────────────────────────────────
+  // 2. RETURN URL HANDLER
+  // ─────────────────────────────────────────────────────
+  async handleReturn(query: Record<string, string>) {
+    const { OrderID, ReasonCode, ReasonCodeDesc } = query;
+
+    if (!OrderID) {
+      throw new BadRequestException('Invalid return data');
     }
 
-    const parts = signature.split(',');
-    const t = parts.find((p) => p.startsWith('t='))?.split('=')[1];
-    const v1 = parts.find((p) => p.startsWith('v1='))?.split('=')[1];
-
-    if (!t || !v1) {
-      throw new BadRequestException('Malformed signature header');
-    }
-
-    // Replay attack  — 5 min  reject
-    if (Math.abs(Date.now() / 1000 - parseInt(t)) > 300) {
-      throw new BadRequestException('Stale timestamp — possible replay attack');
-    }
-
-    // HMAC verify 
-    const secret = process.env.FYGARO_SECRET!;
-    const message = `${t}.${rawBody}`;
-    const expected = crypto
-      .createHmac('sha256', secret)
-      .update(message)
-      .digest('hex');
-
-    if (!crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(v1))) {
-      throw new BadRequestException('Invalid signature');
-    }
-
-    // Payload parse 
-    const payload = JSON.parse(rawBody);
-    const { transactionId, customReference, amount } = payload;
-
-    // Duplicate webhook check — same transactionId
-    const existingLog = await this.prisma.webhookLog.findUnique({
-      where: { transactionId },
-    });
-
-    if (existingLog) {
-      // Already processed 
-      return { received: true };
-    }
-
-    // Find payment record by orderId 
     const payment = await this.prisma.payment.findUnique({
-      where: { orderId: customReference },
+      where: { orderId: OrderID },
     });
 
     if (!payment) {
-      throw new NotFoundException('Payment record not found');
+      throw new NotFoundException('Payment not found');
     }
 
-    // Amount verify  — tamper check
-if (
-  parseFloat(payment.totalAmount.toString()).toFixed(2) !==
-  parseFloat(amount).toFixed(2)
-) {
-      throw new BadRequestException('Amount mismatch — possible tampering');
-    }
-
-    // DB update  — Prisma Transaction use  (atomic)
-    await this.prisma.$transaction([
-      // Payment status PAID 
-      this.prisma.payment.update({
-        where: { orderId: customReference },
+    // ReasonCode "1" = success
+    if (ReasonCode === '1') {
+      await this.prisma.payment.update({
+        where: { orderId: OrderID },
         data: {
           status: 'PAID',
-          transactionId,
           paidAt: new Date(),
-          webhookReceivedAt: new Date(),
+          transactionId: query.TransactionId || null,
         },
-      }),
+      });
 
-      // Webhook log save  (duplicate)
-      this.prisma.webhookLog.create({
-        data: {
-          transactionId,
-          rawPayload: payload,
-          paymentId: payment.id,
-        },
-      }),
-    ]);
+      const frontendSuccess = process.env.FRONTEND_SUCCESS_URL || 'http://localhost:3000/payment/success';
+      return { redirect: `${frontendSuccess}?orderId=${OrderID}` };
+    } else {
+      await this.prisma.payment.update({
+        where: { orderId: OrderID },
+        data: { status: 'FAILED' },
+      });
 
-    return { received: true };
+      const frontendFailed = process.env.FRONTEND_FAILED_URL || 'http://localhost:3000/payment/failed';
+      return { redirect: `${frontendFailed}?orderId=${OrderID}&reason=${ReasonCodeDesc || 'Payment failed'}` };
+    }
   }
 
-  // ============================================
-  // 3. PAYMENT STATUS CHECK (Success page এ)
-  // ============================================
+  // ─────────────────────────────────────────────────────
+  // 3. PAYMENT STATUS CHECK
+  // ─────────────────────────────────────────────────────
   async getPaymentStatus(orderId: string) {
     const payment = await this.prisma.payment.findUnique({
       where: { orderId },
@@ -238,12 +228,12 @@ if (
       throw new NotFoundException('Payment not found');
     }
 
-    return payment;
+    return { success: true, data: payment };
   }
 
-  // ============================================
-  // 4. EMPLOYER  PAYMENT 
-  // ============================================
+  // ─────────────────────────────────────────────────────
+  // 4. MY PAYMENTS (Employer)
+  // ─────────────────────────────────────────────────────
   async getMyPayments(employerUserId: string) {
     const employerProfile = await this.prisma.employerProfile.findUnique({
       where: { userId: employerUserId },
@@ -253,12 +243,10 @@ if (
       throw new NotFoundException('Employer profile not found');
     }
 
-    return this.prisma.payment.findMany({
+    const payments = await this.prisma.payment.findMany({
       where: { employerId: employerProfile.id },
       include: {
-        candidate: {
-          select: { fullName: true, profilePic: true },
-        },
+        candidate: { select: { fullName: true, profilePic: true } },
         interview: {
           include: {
             application: {
@@ -269,5 +257,7 @@ if (
       },
       orderBy: { createdAt: 'desc' },
     });
+
+    return { success: true, data: payments };
   }
 }
