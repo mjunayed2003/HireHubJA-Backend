@@ -138,7 +138,7 @@ export class AdminUsersService {
             idCardFront: true,
             idCardBack: true,
             selfieImage: true,
-            preferredJobCategories: { select: { name: true } },
+            preferredJobCategories: { select: { id: true, name: true, image: true } },
             education: true,
             experience: true,
           },

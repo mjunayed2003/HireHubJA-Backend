@@ -1,21 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { UserRole, UserStatus, JobStatus, PaymentStatus } from '../../generated/prisma/client';
-import { subDays, startOfDay, endOfDay, startOfWeek, startOfMonth, startOfYear, eachDayOfInterval, eachMonthOfInterval, format } from 'date-fns';
+import { subDays, startOfWeek, startOfMonth, startOfYear, eachDayOfInterval, eachMonthOfInterval, format } from 'date-fns';
 import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class DashboardService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) { }
 
   // ─────────────────────────────────────────────────────────────
-  // 1. STATS — stat card
+  // 1. STATS
   // ─────────────────────────────────────────────────────────────
   async getStats() {
     const now = new Date();
     const thirtyDaysAgo = subDays(now, 30);
-    const sixtyDaysAgo = subDays(now, 60);
 
-    // Current counts
     const [totalJobSeekers, totalEmployers, totalCompanies, activeJobPosts] = await Promise.all([
       this.prisma.user.count({ where: { role: UserRole.JOB_SEEKER } }),
       this.prisma.user.count({ where: { role: UserRole.EMPLOYER } }),
@@ -24,18 +22,10 @@ export class DashboardService {
     ]);
 
     const [prevJobSeekers, prevEmployers, prevCompanies, prevActiveJobs] = await Promise.all([
-      this.prisma.user.count({
-        where: { role: UserRole.JOB_SEEKER, createdAt: { lt: thirtyDaysAgo } },
-      }),
-      this.prisma.user.count({
-        where: { role: UserRole.EMPLOYER, createdAt: { lt: thirtyDaysAgo } },
-      }),
-      this.prisma.user.count({
-        where: { role: UserRole.COMPANY, createdAt: { lt: thirtyDaysAgo } },
-      }),
-      this.prisma.job.count({
-        where: { status: JobStatus.OPEN, createdAt: { lt: thirtyDaysAgo } },
-      }),
+      this.prisma.user.count({ where: { role: UserRole.JOB_SEEKER, createdAt: { lt: thirtyDaysAgo } } }),
+      this.prisma.user.count({ where: { role: UserRole.EMPLOYER, createdAt: { lt: thirtyDaysAgo } } }),
+      this.prisma.user.count({ where: { role: UserRole.COMPANY, createdAt: { lt: thirtyDaysAgo } } }),
+      this.prisma.job.count({ where: { status: JobStatus.OPEN, createdAt: { lt: thirtyDaysAgo } } }),
     ]);
 
     const calcGrowth = (current: number, prev: number) => {
@@ -71,7 +61,7 @@ export class DashboardService {
   }
 
   // ─────────────────────────────────────────────────────────────
-  // 2. PIE CHART — User type distribution
+  // 2. PIE CHART
   // ─────────────────────────────────────────────────────────────
   async getPieChart() {
     const [totalJobSeekers, totalEmployers, totalCompanies, activeJobSeekers, activeEmployers, activeCompanies] =
@@ -113,7 +103,7 @@ export class DashboardService {
   }
 
   // ─────────────────────────────────────────────────────────────
-  // 3. EARNINGS — Line chart (weekly / monthly / yearly)
+  // 3. EARNINGS
   // ─────────────────────────────────────────────────────────────
   async getEarnings(period: 'weekly' | 'monthly' | 'yearly' = 'weekly') {
     const now = new Date();
@@ -128,10 +118,9 @@ export class DashboardService {
       groupFormat = 'dd';
     } else {
       startDate = startOfYear(now);
-      groupFormat = 'MMM'; // Jan, Feb...
+      groupFormat = 'MMM';
     }
 
-    // PAID payments fetch 
     const payments = await this.prisma.payment.findMany({
       where: {
         status: PaymentStatus.PAID,
@@ -143,21 +132,10 @@ export class DashboardService {
       },
     });
 
-    // Date range 
     let labels: string[] = [];
     let dataMap: Record<string, number> = {};
 
-    if (period === 'weekly') {
-      const days = eachDayOfInterval({ start: startDate, end: now });
-      labels = days.map((d) => format(d, groupFormat));
-      labels.forEach((l) => (dataMap[l] = 0));
-      payments.forEach((p) => {
-        if (p.paidAt) {
-          const key = format(p.paidAt, groupFormat);
-          dataMap[key] = (dataMap[key] || 0) + Number(p.platformFee);
-        }
-      });
-    } else if (period === 'monthly') {
+    if (period === 'weekly' || period === 'monthly') {
       const days = eachDayOfInterval({ start: startDate, end: now });
       labels = days.map((d) => format(d, groupFormat));
       labels.forEach((l) => (dataMap[l] = 0));
@@ -196,7 +174,7 @@ export class DashboardService {
   }
 
   // ─────────────────────────────────────────────────────────────
-  // 4. APPROVAL REQUESTS — Registration approval table
+  // 4. APPROVAL REQUESTS
   // ─────────────────────────────────────────────────────────────
   async getApprovalRequests(
     type: 'JOB_SEEKER' | 'EMPLOYER' | 'COMPANY' = 'JOB_SEEKER',
@@ -223,43 +201,52 @@ export class DashboardService {
         jobSeekerProfile:
           type === 'JOB_SEEKER'
             ? {
-                select: {
-                  fullName: true,
-                  profilePic: true,
-                  idCardFront: true,
-                  idCardBack: true,
-                  selfieImage: true,
-                  resumeUrl: true,
+              select: {
+                fullName: true,
+                profilePic: true,
+                idCardFront: true,
+                idCardBack: true,
+                selfieImage: true,
+                resumeUrl: true,
+                preferredJobCategories: {  // ← Category[] relation
+                  select: {
+                    name: true,
+                  },
                 },
-              }
+              },
+            }
             : false,
         employerProfile:
           type === 'EMPLOYER' || type === 'COMPANY'
             ? {
-                select: {
-                  fullName: true,
-                  companyName: true,
-                  profilePic: true,
-                  idCardFront: true,
-                  idCardBack: true,
-                  licenseFile: true,
-                },
-              }
+              select: {
+                fullName: true,
+                companyName: true,
+                profilePic: true,
+                idCardFront: true,
+                idCardBack: true,
+                licenseFile: true,
+              },
+            }
             : false,
       },
     });
 
     const formatted = users.map((u) => {
       const profile = u.jobSeekerProfile || u.employerProfile;
-      const categories = null;
+
+      // ← Fix: preferredJobCategories 
+      const categories = (u.jobSeekerProfile as any)?.preferredJobCategories?.map(
+        (c: { name: string }) => c.name
+      ) ?? [];
 
       return {
         userId: u.id,
         fullName: profile?.fullName ?? 'N/A',
         email: u.email,
         registrationDate: u.createdAt,
-        category: categories,
-        verificationStatus: u.status, // PENDING
+        category: categories.length > 0 ? categories.join(', ') : null,
+        verificationStatus: u.status,
         profilePic: profile?.profilePic ?? null,
         hasDocuments: !!(
           (u.jobSeekerProfile?.idCardFront || u.employerProfile?.idCardFront) &&
@@ -279,7 +266,7 @@ export class DashboardService {
   }
 
   // ─────────────────────────────────────────────────────────────
-  // 5. RECENT INTERVIEWS — Interview scheduled table
+  // 5. RECENT INTERVIEWS
   // ─────────────────────────────────────────────────────────────
   async getRecentInterviews(limit: number = 10) {
     const interviews = await this.prisma.interview.findMany({
@@ -323,7 +310,7 @@ export class DashboardService {
       interviewDateTime: `${i.scheduleTime ?? ''}, ${new Date(i.scheduleDate).toLocaleDateString('en-GB')}`,
       scheduleDate: i.scheduleDate,
       scheduleTime: i.scheduleTime,
-      status: i.status, // SCHEDULED | COMPLETED | CANCELLED | HIRED | REJECTED
+      status: i.status,
       interviewType: i.interviewType,
     }));
 

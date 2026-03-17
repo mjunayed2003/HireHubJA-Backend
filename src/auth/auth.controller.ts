@@ -1,7 +1,9 @@
 import {
   Body, Controller, Post, HttpCode, HttpStatus,
   UseGuards, Request, UseInterceptors, UploadedFiles, UploadedFile,
+  BadRequestException,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'path';
@@ -23,7 +25,10 @@ const storage = diskStorage({
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(
+    private readonly authService: AuthService,
+    private readonly jwtService: JwtService,
+  ) { }
 
   // ─────────────────────────────────────────────────────
   // 1. REGISTER → tempToken পাবে
@@ -47,16 +52,6 @@ export class AuthController {
     return this.authService.verifyOtp(req.user.id, body.otp);
   }
 
-  // ─────────────────────────────────────────────────────
-  // 3. RESEND OTP
-  // POST /auth/resend-otp
-  // Authorization: Bearer {{tempToken}}
-  // ─────────────────────────────────────────────────────
-  @Post('resend-otp')
-  @HttpCode(HttpStatus.OK)
-  async resendOtp(@Body() body: { email: string }) {
-    return this.authService.resendOtp(body.email);
-  }
 
   // ═══════════════════════════════════════════════════
   // JOB SEEKER STEPS — Authorization: Bearer {{token}}
@@ -221,11 +216,28 @@ export class AuthController {
 
 
 
-  @UseGuards(JwtAuthGuard)
-@Post('forgot-password/resend-otp')
+// Forgot Password Resend OTP — token or email
+@Post('resend-otp')
 @HttpCode(HttpStatus.OK)
-async resendForgotPasswordOtp(@Request() req) {
-  return this.authService.resendForgotPasswordOtp(req.user.id);
+async resendOtp(
+  @Body() body: { email?: string },
+  @Request() req,
+) {
+  const authHeader = req.headers?.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    try {
+      const token = authHeader.split(' ')[1];
+      const decoded = this.jwtService.decode(token) as any;
+      if (decoded?.email) {
+        return this.authService.resendOtp(decoded.email);
+      }
+    } catch {}
+  }
+  if (body.email) {
+    return this.authService.resendOtp(body.email);
+  }
+
+  throw new BadRequestException('Token or email required');
 }
 
 }

@@ -536,8 +536,8 @@ export class AuthService {
 
 
 
-  async resendForgotPasswordOtp(userId: string) {
-  const user = await this.prisma.user.findUnique({ where: { id: userId } });
+async resendForgotPasswordOtpByEmail(email: string) {
+  const user = await this.prisma.user.findUnique({ where: { email } });
   if (!user) throw new NotFoundException('User not found');
 
   const otp = Math.floor(100000 + Math.random() * 900000).toString();
@@ -565,6 +565,12 @@ export class AuthService {
     throw new BadRequestException('Failed to send OTP');
   }
 
-  return { success: true, message: 'OTP resent successfully.' };
+  const tempToken = await this.generateTempToken(user.id, user.email, user.role);
+
+  return {
+    success: true,
+    message: 'OTP resent successfully.',
+    tempToken,
+  };
 }
 }

@@ -1,20 +1,20 @@
 import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
 
 export class RegisterDto {
-  @IsNotEmpty() @IsString() fullName: string;
-  @IsNotEmpty() @IsEmail() email: string;
-  @IsNotEmpty() @IsString() @MinLength(6) password: string;
-  @IsNotEmpty() @IsEnum(['JOB_SEEKER', 'EMPLOYER', 'COMPANY']) role: string;
+  @IsNotEmpty() @IsString() fullName!: string;
+  @IsNotEmpty() @IsEmail() email!: string;
+  @IsNotEmpty() @IsString() @MinLength(6) password!: string;
+  @IsNotEmpty() @IsEnum(['JOB_SEEKER', 'EMPLOYER', 'COMPANY']) role!: string;
   @IsOptional() @IsString() companyName?: string;
 }
 
 export class LoginDto {
-  @IsNotEmpty() @IsEmail() email: string;
-  @IsNotEmpty() @IsString() password: string;
+  @IsNotEmpty() @IsEmail() email!: string;
+  @IsNotEmpty() @IsString() password!: string;
 }
 
 export class ForgotPasswordDto {
-  @IsNotEmpty() @IsEmail() email: string;
+  @IsNotEmpty() @IsEmail() email!: string;
 }
 
 export class JobSeekerBasicDto {
