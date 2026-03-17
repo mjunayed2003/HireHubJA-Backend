@@ -97,7 +97,7 @@ model User {
   role      UserRole
   
   // Admin approval & verification
-  status    UserStatus @default(PENDING) // Admin approves the account
+  status    UserStatus @default(ACTIVE) // Admin approves the account
   rejectionReason String?
   isVerified Boolean   @default(false)   // Email verification status
   

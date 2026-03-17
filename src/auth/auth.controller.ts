@@ -1,100 +1,233 @@
-import { Body, Controller, Post, HttpCode, HttpStatus, UseGuards, Request } from '@nestjs/common';
-import { FileFieldsInterceptor } from '@nestjs/platform-express';
+import {
+  Body, Controller, Post, HttpCode, HttpStatus,
+  UseGuards, Request, UseInterceptors, UploadedFiles, UploadedFile,
+} from '@nestjs/common';
+import { FileFieldsInterceptor, FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
 import { AuthService } from './auth.service';
-import { RegisterJobSeekerDto } from './dto/register-job-seeker.dto';
-import { RegisterEmployerDto } from './dto/register-employer.dto';
-import { ForgotPasswordDto, LoginDto, ResetPasswordDto } from './dto/auth.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
-import { UploadedFiles, UseInterceptors } from '@nestjs/common';
+import {
+  RegisterDto, LoginDto, ForgotPasswordDto,
+  JobSeekerBasicDto, JobSeekerEducationDto, JobSeekerProfessionalDto,
+  EmployerBasicDto, CompanyBasicDto,
+} from './dto/auth.dto';
 
+const storage = diskStorage({
+  destination: './uploads',
+  filename: (req, file, cb) => {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    cb(null, `${file.fieldname}-${uniqueSuffix}${extname(file.originalname)}`);
+  },
+});
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
-  // ============================================
-  // 1. JOB SEEKER REGISTRATION
-  // ============================================
-  @Post('register/job-seeker')
+  // ─────────────────────────────────────────────────────
+  // 1. REGISTER → tempToken পাবে
+  // POST /auth/register
+  // ─────────────────────────────────────────────────────
+  @Post('register')
+  async register(@Body() dto: RegisterDto) {
+    return this.authService.register(dto);
+  }
+
+  // ─────────────────────────────────────────────────────
+  // 2. VERIFY OTP → main token পাবে
+  // POST /auth/verify-otp
+  // Authorization: Bearer {{tempToken}}
+  // Body: { otp }
+  // ─────────────────────────────────────────────────────
+  @UseGuards(JwtAuthGuard)
+  @Post('verify-otp')
+  @HttpCode(HttpStatus.OK)
+  async verifyOtp(@Body() body: { otp: string }, @Request() req) {
+    return this.authService.verifyOtp(req.user.id, body.otp);
+  }
+
+  // ─────────────────────────────────────────────────────
+  // 3. RESEND OTP
+  // POST /auth/resend-otp
+  // Authorization: Bearer {{tempToken}}
+  // ─────────────────────────────────────────────────────
+  @Post('resend-otp')
+  @HttpCode(HttpStatus.OK)
+  async resendOtp(@Body() body: { email: string }) {
+    return this.authService.resendOtp(body.email);
+  }
+
+  // ═══════════════════════════════════════════════════
+  // JOB SEEKER STEPS — Authorization: Bearer {{token}}
+  // ═══════════════════════════════════════════════════
+
+  @UseGuards(JwtAuthGuard)
+  @Post('profile/job-seeker/basic')
+  @UseInterceptors(FileInterceptor('profilePic', { storage }))
+  async jobSeekerBasic(
+    @Body() dto: JobSeekerBasicDto,
+    @UploadedFile() profilePic: Express.Multer.File,
+    @Request() req,
+  ) {
+    return this.authService.updateJobSeekerBasic(req.user.id, dto, profilePic);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('profile/job-seeker/education')
+  async jobSeekerEducation(@Body() dto: JobSeekerEducationDto, @Request() req) {
+    return this.authService.updateJobSeekerEducation(req.user.id, dto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('profile/job-seeker/professional')
+  @UseInterceptors(FileInterceptor('resume', { storage }))
+  async jobSeekerProfessional(
+    @Body() dto: JobSeekerProfessionalDto,
+    @UploadedFile() resume: Express.Multer.File,
+    @Request() req,
+  ) {
+    return this.authService.updateJobSeekerProfessional(
+      req.user.id, dto, { resume: resume ? [resume] : [] }
+    );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('profile/job-seeker/verification')
   @UseInterceptors(
     FileFieldsInterceptor([
-      { name: 'profilePic', maxCount: 1 },
-      { name: 'resume', maxCount: 1 },
       { name: 'idCardFront', maxCount: 1 },
       { name: 'idCardBack', maxCount: 1 },
       { name: 'selfieImage', maxCount: 1 },
-    ]),
+    ], { storage }),
   )
-async registerJobSeeker(
-  @Body() dto: RegisterJobSeekerDto,
-  @UploadedFiles() files: { 
-    profilePic?: Express.Multer.File[], 
-    resume?: Express.Multer.File[],
-    idCardFront?: Express.Multer.File[],
-    idCardBack?: Express.Multer.File[],
-    selfieImage?: Express.Multer.File[]
-  },
-) {
-  return this.authService.registerJobSeeker(dto, files);
-}
+  async jobSeekerVerification(
+    @UploadedFiles() files: {
+      idCardFront?: Express.Multer.File[];
+      idCardBack?: Express.Multer.File[];
+      selfieImage?: Express.Multer.File[];
+    },
+    @Request() req,
+  ) {
+    return this.authService.updateJobSeekerVerification(req.user.id, files);
+  }
 
-  // ============================================
-  // 2. EMPLOYER / COMPANY REGISTRATION
-  // ============================================
-  @Post('register/employer')
+  // ═══════════════════════════════════════════════════
+  // EMPLOYER STEPS
+  // ═══════════════════════════════════════════════════
+
+  @UseGuards(JwtAuthGuard)
+  @Post('profile/employer/basic')
+  @UseInterceptors(FileInterceptor('profilePic', { storage }))
+  async employerBasic(
+    @Body() dto: EmployerBasicDto,
+    @UploadedFile() profilePic: Express.Multer.File,
+    @Request() req,
+  ) {
+    return this.authService.updateEmployerBasic(req.user.id, dto, profilePic);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('profile/employer/verification')
   @UseInterceptors(
     FileFieldsInterceptor([
-      { name: 'profilePic', maxCount: 1 }, // Company Logo
-      { name: 'licenseFile', maxCount: 1 }, // Trade License
-      { name: 'idCardFront', maxCount: 1 }, // Contact Person ID
+      { name: 'idCardFront', maxCount: 1 },
       { name: 'idCardBack', maxCount: 1 },
-    ]),
+      { name: 'selfieImage', maxCount: 1 },
+    ], { storage }),
   )
-async registerEmployer(
-  @Body() dto: RegisterEmployerDto,
-  @UploadedFiles() files: { 
-    profilePic?: Express.Multer.File[], 
-    licenseFile?: Express.Multer.File[],
-    idCardFront?: Express.Multer.File[],
-    idCardBack?: Express.Multer.File[]
-  },
-) {
-  return this.authService.registerEmployer(dto, files);
-}
+  async employerVerification(
+    @UploadedFiles() files: {
+      idCardFront?: Express.Multer.File[];
+      idCardBack?: Express.Multer.File[];
+      selfieImage?: Express.Multer.File[];
+    },
+    @Request() req,
+  ) {
+    return this.authService.updateEmployerVerification(req.user.id, files);
+  }
 
+  // ═══════════════════════════════════════════════════
+  // COMPANY STEPS
+  // ═══════════════════════════════════════════════════
 
-    @Post('login')
-  @HttpCode(HttpStatus.OK) // 200 OK 
+  @UseGuards(JwtAuthGuard)
+  @Post('profile/company/basic')
+  @UseInterceptors(FileInterceptor('profilePic', { storage }))
+  async companyBasic(
+    @Body() dto: CompanyBasicDto,
+    @UploadedFile() profilePic: Express.Multer.File,
+    @Request() req,
+  ) {
+    return this.authService.updateCompanyBasic(req.user.id, dto, profilePic);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('profile/company/verification')
+  @UseInterceptors(FileInterceptor('licenseFile', { storage }))
+  async companyVerification(
+    @UploadedFile() licenseFile: Express.Multer.File,
+    @Request() req,
+  ) {
+    return this.authService.updateCompanyVerification(
+      req.user.id, { licenseFile: licenseFile ? [licenseFile] : [] }
+    );
+  }
+
+  // ═══════════════════════════════════════════════════
+  // AUTH
+  // ═══════════════════════════════════════════════════
+
+  @Post('login')
+  @HttpCode(HttpStatus.OK)
   async login(@Body() dto: LoginDto) {
     return this.authService.login(dto);
   }
 
-  // ==========================================
-  // ✅ LOGOUT ROUTE (Protected)
-  // ==========================================
   @UseGuards(JwtAuthGuard)
   @Post('logout')
   @HttpCode(HttpStatus.OK)
   async logout(@Request() req) {
-    
-    return this.authService.logout(req.user.id); 
+    return this.authService.logout(req.user.id);
   }
 
+  // ═══════════════════════════════════════════════════
+  // FORGOT PASSWORD
+  // ═══════════════════════════════════════════════════
 
-
-
-
-    // ==========================================
-  // 🔑 FORGOT PASSWORD & RESET
-  // ==========================================
-  
+  // Step 1 — email দাও → tempToken পাবে
   @Post('forgot-password')
   async forgotPassword(@Body() dto: ForgotPasswordDto) {
     return this.authService.forgotPassword(dto);
   }
 
-  @Post('reset-password')
-  async resetPassword(@Body() dto: ResetPasswordDto) {
-    return this.authService.resetPassword(dto);
+  // Step 2 — OTP verify → resetToken পাবে
+  // Authorization: Bearer {{tempToken}}
+  @UseGuards(JwtAuthGuard)
+  @Post('forgot-password/verify-otp')
+  @HttpCode(HttpStatus.OK)
+  async verifyForgotPasswordOtp(@Body() body: { otp: string }, @Request() req) {
+    return this.authService.verifyForgotPasswordOtp(req.user.id, body.otp);
   }
+
+  // Step 3 — নতুন password set করো
+  // Authorization: Bearer {{tempToken}}
+  @UseGuards(JwtAuthGuard)
+  @Post('reset-password')
+  @HttpCode(HttpStatus.OK)
+  async resetPassword(@Body() body: { newPassword: string }, @Request() req) {
+    return this.authService.resetPassword(req.user.id, body.newPassword);
+  }
+
+
+
+  @UseGuards(JwtAuthGuard)
+@Post('forgot-password/resend-otp')
+@HttpCode(HttpStatus.OK)
+async resendForgotPasswordOtp(@Request() req) {
+  return this.authService.resendForgotPasswordOtp(req.user.id);
 }
+
+}
+
+
