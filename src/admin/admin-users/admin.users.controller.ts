@@ -63,6 +63,14 @@ export class AdminUsersController {
   }
 
   // ─────────────────────────────────────────────────────
+  // PATCH /admin/users/:id/pending (Unblock user)
+  // ─────────────────────────────────────────────────────
+  @Patch(':id/pending')
+  pendingUser(@Param('id') id: string) {
+    return this.adminUsersService.pendingUser(id);
+  }
+
+  // ─────────────────────────────────────────────────────
   // DELETE /admin/users/:id
   // ─────────────────────────────────────────────────────
   @Delete(':id')

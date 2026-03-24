@@ -231,6 +231,30 @@ export class AdminUsersService {
     return { success: true, message: 'User blocked successfully' };
   }
 
+
+
+  // ─────────────────────────────────────────────────────
+  // MOVE USER TO PENDING (Unblock)
+  // ─────────────────────────────────────────────────────
+  async pendingUser(id: string) {
+    const user = await this.prisma.user.findUnique({ where: { id } });
+    if (!user) throw new NotFoundException('User not found');
+
+    if (user.role === UserRole.ADMIN) {
+      throw new BadRequestException('Cannot modify an admin user status');
+    }
+
+    await this.prisma.user.update({
+      where: { id },
+      data: {
+        status: UserStatus.PENDING,
+        rejectionReason: null,
+      },
+    });
+
+    return { success: true, message: 'User unblocked and moved to Pending successfully' };
+  }
+
   // ─────────────────────────────────────────────────────
   // DELETE USER
   // ─────────────────────────────────────────────────────
