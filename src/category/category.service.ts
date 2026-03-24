@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { UpdateCategoryDto } from './dto/category.dto';
+import { CreateCategoryDto, UpdateCategoryDto } from './dto/category.dto';
 
 @Injectable()
 export class CategoryService {
@@ -24,23 +24,26 @@ export class CategoryService {
   // ─────────────────────────────────────────────────────
   // CREATE — Admin
   // ─────────────────────────────────────────────────────
-  async createCategory(name: string, description?: string, image?: string) {
-    const existing = await this.prisma.category.findUnique({ where: { name } });
+  async createCategory(dto: CreateCategoryDto, imageFile?: Express.Multer.File) {
+    const existing = await this.prisma.category.findUnique({ where: { name: dto.name } });
     if (existing) throw new ConflictException('Category name already exists');
+    const imageUrl = imageFile ? `/uploads/${imageFile.filename}` : undefined;
 
     return this.prisma.category.create({
-      data: { name, description, image },
+      data: { 
+        name: dto.name, 
+        description: dto.description, 
+        image: imageUrl 
+      },
     });
   }
 
   // ─────────────────────────────────────────────────────
   // UPDATE — Admin
   // ─────────────────────────────────────────────────────
-  async updateCategory(id: string, dto: UpdateCategoryDto) {
+  async updateCategory(id: string, dto: UpdateCategoryDto, imageFile?: Express.Multer.File) {
     const category = await this.prisma.category.findUnique({ where: { id } });
     if (!category) throw new NotFoundException('Category not found');
-
-    // Same name অন্য category তে আছে কিনা check
     if (dto.name && dto.name !== category.name) {
       const existing = await this.prisma.category.findUnique({
         where: { name: dto.name },
@@ -48,12 +51,14 @@ export class CategoryService {
       if (existing) throw new ConflictException('Category name already exists');
     }
 
+    const imageUrl = imageFile ? `/uploads/${imageFile.filename}` : undefined;
+
     return this.prisma.category.update({
       where: { id },
       data: {
         name: dto.name ?? category.name,
         description: dto.description ?? category.description,
-        image: dto.image ?? category.image,
+        ...(imageUrl && { image: imageUrl }),
       },
     });
   }
@@ -67,8 +72,7 @@ export class CategoryService {
       include: { _count: { select: { jobs: true } } },
     });
     if (!category) throw new NotFoundException('Category not found');
-
-    if (category._count.jobs > 0) {
+    if (category._count?.jobs > 0) {
       throw new ConflictException(
         `Cannot delete. ${category._count.jobs} job(s) are using this category`,
       );
