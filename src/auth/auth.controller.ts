@@ -1,6 +1,14 @@
 import {
-  Body, Controller, Post, HttpCode, HttpStatus,
-  UseGuards, Request, UseInterceptors, UploadedFiles, UploadedFile,
+  Body,
+  Controller,
+  Post,
+  HttpCode,
+  HttpStatus,
+  UseGuards,
+  Request,
+  UseInterceptors,
+  UploadedFiles,
+  UploadedFile,
   BadRequestException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -10,9 +18,14 @@ import { extname } from 'path';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import {
-  RegisterDto, LoginDto, ForgotPasswordDto,
-  JobSeekerBasicDto, JobSeekerEducationDto, JobSeekerProfessionalDto,
-  EmployerBasicDto, CompanyBasicDto,
+  RegisterDto,
+  LoginDto,
+  ForgotPasswordDto,
+  JobSeekerBasicDto,
+  JobSeekerEducationDto,
+  JobSeekerProfessionalDto,
+  EmployerBasicDto,
+  CompanyBasicDto,
 } from './dto/auth.dto';
 
 const storage = diskStorage({
@@ -28,10 +41,10 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly jwtService: JwtService,
-  ) { }
+  ) {}
 
   // ─────────────────────────────────────────────────────
-  // 1. REGISTER → tempToken পাবে
+  // 1. REGISTER -> tempToken
   // POST /auth/register
   // ─────────────────────────────────────────────────────
   @Post('register')
@@ -40,10 +53,9 @@ export class AuthController {
   }
 
   // ─────────────────────────────────────────────────────
-  // 2. VERIFY OTP → main token পাবে
+  // 2. VERIFY OTP -> main token
   // POST /auth/verify-otp
   // Authorization: Bearer {{tempToken}}
-  // Body: { otp }
   // ─────────────────────────────────────────────────────
   @UseGuards(JwtAuthGuard)
   @Post('verify-otp')
@@ -51,7 +63,6 @@ export class AuthController {
   async verifyOtp(@Body() body: { otp: string }, @Request() req) {
     return this.authService.verifyOtp(req.user.id, body.otp);
   }
-
 
   // ═══════════════════════════════════════════════════
   // JOB SEEKER STEPS — Authorization: Bearer {{token}}
@@ -82,22 +93,25 @@ export class AuthController {
     @UploadedFile() resume: Express.Multer.File,
     @Request() req,
   ) {
-    return this.authService.updateJobSeekerProfessional(
-      req.user.id, dto, { resume: resume ? [resume] : [] }
-    );
+    return this.authService.updateJobSeekerProfessional(req.user.id, dto, {
+      resume: resume ? [resume] :[],
+    });
   }
 
   @UseGuards(JwtAuthGuard)
   @Post('profile/job-seeker/verification')
   @UseInterceptors(
     FileFieldsInterceptor([
-      { name: 'idCardFront', maxCount: 1 },
-      { name: 'idCardBack', maxCount: 1 },
-      { name: 'selfieImage', maxCount: 1 },
-    ], { storage }),
+        { name: 'idCardFront', maxCount: 1 },
+        { name: 'idCardBack', maxCount: 1 },
+        { name: 'selfieImage', maxCount: 1 },
+      ],
+      { storage },
+    ),
   )
   async jobSeekerVerification(
-    @UploadedFiles() files: {
+    @UploadedFiles()
+    files: {
       idCardFront?: Express.Multer.File[];
       idCardBack?: Express.Multer.File[];
       selfieImage?: Express.Multer.File[];
@@ -126,13 +140,16 @@ export class AuthController {
   @Post('profile/employer/verification')
   @UseInterceptors(
     FileFieldsInterceptor([
-      { name: 'idCardFront', maxCount: 1 },
-      { name: 'idCardBack', maxCount: 1 },
-      { name: 'selfieImage', maxCount: 1 },
-    ], { storage }),
+        { name: 'idCardFront', maxCount: 1 },
+        { name: 'idCardBack', maxCount: 1 },
+        { name: 'selfieImage', maxCount: 1 },
+      ],
+      { storage },
+    ),
   )
   async employerVerification(
-    @UploadedFiles() files: {
+    @UploadedFiles()
+    files: {
       idCardFront?: Express.Multer.File[];
       idCardBack?: Express.Multer.File[];
       selfieImage?: Express.Multer.File[];
@@ -164,9 +181,9 @@ export class AuthController {
     @UploadedFile() licenseFile: Express.Multer.File,
     @Request() req,
   ) {
-    return this.authService.updateCompanyVerification(
-      req.user.id, { licenseFile: licenseFile ? [licenseFile] : [] }
-    );
+    return this.authService.updateCompanyVerification(req.user.id, {
+      licenseFile: licenseFile ? [licenseFile] :[],
+    });
   }
 
   // ═══════════════════════════════════════════════════
@@ -190,13 +207,13 @@ export class AuthController {
   // FORGOT PASSWORD
   // ═══════════════════════════════════════════════════
 
-  // Step 1 — email দাও → tempToken পাবে
+  // Step 1 — Provide email -> receive tempToken
   @Post('forgot-password')
   async forgotPassword(@Body() dto: ForgotPasswordDto) {
     return this.authService.forgotPassword(dto);
   }
 
-  // Step 2 — OTP verify → resetToken পাবে
+  // Step 2 — Verify OTP -> receive resetToken
   // Authorization: Bearer {{tempToken}}
   @UseGuards(JwtAuthGuard)
   @Post('forgot-password/verify-otp')
@@ -205,7 +222,7 @@ export class AuthController {
     return this.authService.verifyForgotPasswordOtp(req.user.id, body.otp);
   }
 
-  // Step 3 — নতুন password set করো
+  // Step 3 — Set new password
   // Authorization: Bearer {{tempToken}}
   @UseGuards(JwtAuthGuard)
   @Post('reset-password')
@@ -214,32 +231,24 @@ export class AuthController {
     return this.authService.resetPassword(req.user.id, body.newPassword);
   }
 
+  // Forgot Password Resend OTP — Token or Email
+  @Post('resend-otp')
+  @HttpCode(HttpStatus.OK)
+  async resendOtp(@Body() body: { email?: string }, @Request() req) {
+    const authHeader = req.headers?.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      try {
+        const token = authHeader.split(' ')[1];
+        const decoded = this.jwtService.decode(token) as any;
+        if (decoded?.email) {
+          return this.authService.resendOtp(decoded.email);
+        }
+      } catch {}
+    }
+    if (body.email) {
+      return this.authService.resendOtp(body.email);
+    }
 
-
-// Forgot Password Resend OTP — token or email
-@Post('resend-otp')
-@HttpCode(HttpStatus.OK)
-async resendOtp(
-  @Body() body: { email?: string },
-  @Request() req,
-) {
-  const authHeader = req.headers?.authorization;
-  if (authHeader && authHeader.startsWith('Bearer ')) {
-    try {
-      const token = authHeader.split(' ')[1];
-      const decoded = this.jwtService.decode(token) as any;
-      if (decoded?.email) {
-        return this.authService.resendOtp(decoded.email);
-      }
-    } catch {}
+    throw new BadRequestException('Token or email required');
   }
-  if (body.email) {
-    return this.authService.resendOtp(body.email);
-  }
-
-  throw new BadRequestException('Token or email required');
 }
-
-}
-
-

@@ -12,10 +12,14 @@ import { UserRole } from '../generated/prisma/client';
 import { JwtService } from '@nestjs/jwt';
 import { MailerService } from '@nestjs-modules/mailer';
 import {
-  RegisterDto, LoginDto,
+  RegisterDto,
+  LoginDto,
   ForgotPasswordDto,
-  JobSeekerBasicDto, JobSeekerEducationDto, JobSeekerProfessionalDto,
-  EmployerBasicDto, CompanyBasicDto,
+  JobSeekerBasicDto,
+  JobSeekerEducationDto,
+  JobSeekerProfessionalDto,
+  EmployerBasicDto,
+  CompanyBasicDto,
 } from './dto/auth.dto';
 
 @Injectable()
@@ -24,7 +28,7 @@ export class AuthService {
     private prisma: PrismaService,
     private jwtService: JwtService,
     private readonly mailService: MailerService,
-  ) { }
+  ) {}
 
   // ─────────────────────────────────────────────────────
   // HELPER — Temp Token (short lived 15 min)
@@ -47,10 +51,12 @@ export class AuthService {
   }
 
   // ─────────────────────────────────────────────────────
-  // 1. REGISTER → tempToken দেবে
+  // 1. REGISTER -> Returns tempToken
   // ─────────────────────────────────────────────────────
   async register(dto: RegisterDto) {
-    const existingUser = await this.prisma.user.findUnique({ where: { email: dto.email } });
+    const existingUser = await this.prisma.user.findUnique({
+      where: { email: dto.email },
+    });
     if (existingUser) throw new BadRequestException('Email already exists!');
 
     const hashedPassword = await bcrypt.hash(dto.password, 10);
@@ -83,7 +89,7 @@ export class AuthService {
       },
     });
 
-    // OTP email পাঠাও
+    // Send OTP email
     try {
       await this.mailService.sendMail({
         to: dto.email,
@@ -94,7 +100,7 @@ export class AuthService {
             <p>Hello ${dto.fullName},</p>
             <p>Please verify your email using the OTP below:</p>
             <h1 style="color: #3FAE2A; letter-spacing: 5px;">${otp}</h1>
-            <p>This code will expire in <b>1 minutes</b>.</p>
+            <p>This code will expire in <b>1 minute</b>.</p>
             <br>
             <p>Best Regards,<br>HireHubJA Team</p>
           </div>
@@ -104,21 +110,20 @@ export class AuthService {
       throw new BadRequestException('Failed to send OTP email');
     }
 
-    // Temp token — OTP verify এর জন্য
+    // Temp token - for OTP verification
     const tempToken = await this.generateTempToken(user.id, user.email, user.role);
 
     return {
       success: true,
       message: 'Registration successful. Please verify your email.',
-      tempToken, // ← এই token দিয়ে OTP verify করবে
+      tempToken,
       role: user.role,
     };
   }
 
   // ─────────────────────────────────────────────────────
-  // 2. VERIFY OTP → main token দেবে
+  // 2. VERIFY OTP -> Returns main token
   // Header: Authorization: Bearer {{tempToken}}
-  // Body: { otp }
   // ─────────────────────────────────────────────────────
   async verifyOtp(userId: string, otp: string) {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
@@ -137,20 +142,20 @@ export class AuthService {
       data: { isVerified: true, otpCode: null, otpExpiry: null },
     });
 
-    // Main token — profile update এর জন্য
+    // Main token - for subsequent profile updates
     const token = await this.generateMainToken(user.id, user.email, user.role);
 
     return {
       success: true,
       message: 'Email verified. Please complete your profile.',
-      token, // ← এই token দিয়ে profile steps করবে
+      token,
       role: user.role,
     };
   }
 
   // ─────────────────────────────────────────────────────
   // 3. RESEND OTP
-  // Header: Authorization: Bearer {{tempToken}} 
+  // Header: Authorization: Bearer {{tempToken}}
   // ─────────────────────────────────────────────────────
   async resendOtp(email: string) {
     const user = await this.prisma.user.findUnique({ where: { email } });
@@ -190,36 +195,58 @@ export class AuthService {
       tempToken,
     };
   }
+
   // ─────────────────────────────────────────────────────
   // 4. JOB SEEKER — Step 3: Basic Info
   // ─────────────────────────────────────────────────────
   async updateJobSeekerBasic(userId: string, dto: JobSeekerBasicDto, profilePicFile?: Express.Multer.File) {
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      include: { jobSeekerProfile: true },
+    });
     if (!user) throw new NotFoundException('User not found');
     if (user.role !== UserRole.JOB_SEEKER) throw new BadRequestException('Not a job seeker account');
 
-    const categories = dto.preferredJobCategoryIds ? JSON.parse(dto.preferredJobCategoryIds) : [];
-    const employmentType = dto.employmentType ? JSON.parse(dto.employmentType) : [];
+    const categories = dto.preferredJobCategoryIds ? JSON.parse(dto.preferredJobCategoryIds) :[];
+    const employmentType = dto.employmentType ? JSON.parse(dto.employmentType) :[];
     const profilePic = profilePicFile ? `/uploads/${profilePicFile.filename}` : undefined;
 
-    await this.prisma.jobSeekerProfile.update({
-      where: { userId },
-      data: {
-        phone: dto.phone,
-        location: dto.location,
-        about: dto.about,
-        gender: dto.gender,
-        dob: dto.dob ? (() => {
-          const date = new Date(dto.dob);
-          return isNaN(date.getTime()) ? null : date;
-        })() : null,
-        employmentType,
-        ...(profilePic && { profilePic }),
-        ...(categories.length > 0 && {
-          preferredJobCategories: { set: categories.map((id: string) => ({ id })) },
-        }),
-      },
-    });
+    try {
+      await this.prisma.jobSeekerProfile.upsert({
+        where: { userId },
+        update: {
+          phone: dto.phone,
+          location: dto.location,
+          about: dto.about,
+          gender: dto.gender,
+          dob: dto.dob ? new Date(dto.dob) : null,
+          employmentType,
+          ...(profilePic && { profilePic }),
+          ...(categories.length > 0 && {
+            preferredJobCategories: { set: categories.map((id: string) => ({ id })) },
+          }),
+        },
+        create: {
+          userId,
+          fullName: user.jobSeekerProfile?.fullName || 'User',
+          phone: dto.phone,
+          location: dto.location,
+          about: dto.about,
+          gender: dto.gender,
+          dob: dto.dob ? new Date(dto.dob) : null,
+          employmentType,
+          ...(profilePic && { profilePic }),
+          ...(categories.length > 0 && {
+            preferredJobCategories: { connect: categories.map((id: string) => ({ id })) },
+          }),
+        },
+      });
+    } catch (error: any) {
+      if (error.code === 'P2025') {
+        throw new BadRequestException('One or more Preferred Job Category IDs are invalid or do not exist.');
+      }
+      throw error;
+    }
 
     return { success: true, message: 'Basic info saved.' };
   }
@@ -231,7 +258,7 @@ export class AuthService {
     const profile = await this.prisma.jobSeekerProfile.findUnique({ where: { userId } });
     if (!profile) throw new NotFoundException('Profile not found');
 
-    const education = dto.education ? JSON.parse(dto.education) : [];
+    const education = dto.education ? JSON.parse(dto.education) :[];
 
     await this.prisma.jobSeekerProfile.update({
       where: { userId },
@@ -256,7 +283,10 @@ export class AuthService {
   // 6. JOB SEEKER — Step 5: Professional
   // ─────────────────────────────────────────────────────
   async updateJobSeekerProfessional(userId: string, dto: JobSeekerProfessionalDto, files: any) {
-    const skills = dto.skills ? JSON.parse(dto.skills) : [];
+    const profile = await this.prisma.jobSeekerProfile.findUnique({ where: { userId } });
+    if (!profile) throw new NotFoundException('Profile not found');
+
+    const skills = dto.skills ? JSON.parse(dto.skills) :[];
     const experience = dto.experience ? JSON.parse(dto.experience) : [];
     const resumeUrl = files?.resume?.[0] ? `/uploads/${files.resume[0].filename}` : undefined;
 
@@ -287,6 +317,9 @@ export class AuthService {
   // 7. JOB SEEKER — Step 6: Verification
   // ─────────────────────────────────────────────────────
   async updateJobSeekerVerification(userId: string, files: any) {
+    const profile = await this.prisma.jobSeekerProfile.findUnique({ where: { userId } });
+    if (!profile) throw new NotFoundException('Profile not found');
+
     const idCardFront = files?.idCardFront?.[0] ? `/uploads/${files.idCardFront[0].filename}` : undefined;
     const idCardBack = files?.idCardBack?.[0] ? `/uploads/${files.idCardBack[0].filename}` : undefined;
     const selfieImage = files?.selfieImage?.[0] ? `/uploads/${files.selfieImage[0].filename}` : undefined;
@@ -307,15 +340,27 @@ export class AuthService {
   // 8. EMPLOYER — Step 3: Basic Info
   // ─────────────────────────────────────────────────────
   async updateEmployerBasic(userId: string, dto: EmployerBasicDto, profilePicFile?: Express.Multer.File) {
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      include: { employerProfile: true },
+    });
     if (!user) throw new NotFoundException('User not found');
     if (user.role !== UserRole.EMPLOYER) throw new BadRequestException('Not an employer account');
 
     const profilePic = profilePicFile ? `/uploads/${profilePicFile.filename}` : undefined;
 
-    await this.prisma.employerProfile.update({
+    await this.prisma.employerProfile.upsert({
       where: { userId },
-      data: {
+      update: {
+        phone: dto.phone,
+        location: dto.location,
+        about: dto.about,
+        website: dto.website,
+        ...(profilePic && { profilePic }),
+      },
+      create: {
+        userId,
+        fullName: user.employerProfile?.fullName || 'Employer',
         phone: dto.phone,
         location: dto.location,
         about: dto.about,
@@ -331,6 +376,9 @@ export class AuthService {
   // 9. EMPLOYER — Step 4: Verification
   // ─────────────────────────────────────────────────────
   async updateEmployerVerification(userId: string, files: any) {
+    const profile = await this.prisma.employerProfile.findUnique({ where: { userId } });
+    if (!profile) throw new NotFoundException('Profile not found');
+
     const idCardFront = files?.idCardFront?.[0] ? `/uploads/${files.idCardFront[0].filename}` : undefined;
     const idCardBack = files?.idCardBack?.[0] ? `/uploads/${files.idCardBack[0].filename}` : undefined;
 
@@ -349,15 +397,31 @@ export class AuthService {
   // 10. COMPANY — Step 3: Basic Info
   // ─────────────────────────────────────────────────────
   async updateCompanyBasic(userId: string, dto: CompanyBasicDto, profilePicFile?: Express.Multer.File) {
-    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      include: { employerProfile: true },
+    });
     if (!user) throw new NotFoundException('User not found');
     if (user.role !== UserRole.COMPANY) throw new BadRequestException('Not a company account');
 
     const profilePic = profilePicFile ? `/uploads/${profilePicFile.filename}` : undefined;
 
-    await this.prisma.employerProfile.update({
+    await this.prisma.employerProfile.upsert({
       where: { userId },
-      data: {
+      update: {
+        phone: dto.phone,
+        location: dto.location,
+        about: dto.about,
+        website: dto.website,
+        businessRegCertId: dto.businessRegCertId,
+        taxId: dto.taxId,
+        authorizedRepId: dto.authorizedRepId,
+        ...(profilePic && { profilePic }),
+      },
+      create: {
+        userId,
+        fullName: user.employerProfile?.fullName || 'Company Name',
+        companyName: user.employerProfile?.companyName || 'Company Name',
         phone: dto.phone,
         location: dto.location,
         about: dto.about,
@@ -376,6 +440,9 @@ export class AuthService {
   // 11. COMPANY — Step 4: Verification
   // ─────────────────────────────────────────────────────
   async updateCompanyVerification(userId: string, files: any) {
+    const profile = await this.prisma.employerProfile.findUnique({ where: { userId } });
+    if (!profile) throw new NotFoundException('Profile not found');
+
     const licenseFile = files?.licenseFile?.[0] ? `/uploads/${files.licenseFile[0].filename}` : undefined;
 
     await this.prisma.employerProfile.update({
@@ -442,7 +509,7 @@ export class AuthService {
   }
 
   // ─────────────────────────────────────────────────────
-  // 14. FORGOT PASSWORD → tempToken দেবে
+  // 14. FORGOT PASSWORD -> Returns tempToken
   // ─────────────────────────────────────────────────────
   async forgotPassword(dto: ForgotPasswordDto) {
     const user = await this.prisma.user.findUnique({ where: { email: dto.email } });
@@ -474,20 +541,19 @@ export class AuthService {
       throw new BadRequestException('Failed to send OTP');
     }
 
-    // Temp token — OTP verify এর জন্য
+    // Temp token - for OTP verification
     const tempToken = await this.generateTempToken(user.id, user.email, user.role);
 
     return {
       success: true,
       message: 'OTP sent to your email.',
-      tempToken, // ← এই token দিয়ে OTP verify করবে
+      tempToken,
     };
   }
 
   // ─────────────────────────────────────────────────────
-  // 15. VERIFY FORGOT PASSWORD OTP → resetToken দেবে
+  // 15. VERIFY FORGOT PASSWORD OTP -> Returns resetToken
   // Header: Authorization: Bearer {{tempToken}}
-  // Body: { otp }
   // ─────────────────────────────────────────────────────
   async verifyForgotPasswordOtp(userId: string, otp: string) {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
@@ -503,20 +569,19 @@ export class AuthService {
       data: { otpCode: null, otpExpiry: null, resetToken },
     });
 
-    // Reset token — password set এর জন্য
+    // Reset token - to set new password
     const token = await this.generateMainToken(user.id, user.email, user.role);
 
     return {
       success: true,
       message: 'OTP verified. Use reset token to set new password.',
-      resetToken, // ← এই token দিয়ে password reset করবে
+      resetToken,
     };
   }
 
   // ─────────────────────────────────────────────────────
   // 16. RESET PASSWORD
   // Header: Authorization: Bearer {{tempToken}}
-  // Body: { newPassword }
   // ─────────────────────────────────────────────────────
   async resetPassword(userId: string, newPassword: string) {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
@@ -533,44 +598,44 @@ export class AuthService {
     return { success: true, message: 'Password reset successfully. You can now login.' };
   }
 
+  // ─────────────────────────────────────────────────────
+  // 17. RESEND FORGOT PASSWORD OTP
+  // ─────────────────────────────────────────────────────
+  async resendForgotPasswordOtpByEmail(email: string) {
+    const user = await this.prisma.user.findUnique({ where: { email } });
+    if (!user) throw new NotFoundException('User not found');
 
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpiry = new Date();
+    otpExpiry.setMinutes(otpExpiry.getMinutes() + 1);
 
-
-async resendForgotPasswordOtpByEmail(email: string) {
-  const user = await this.prisma.user.findUnique({ where: { email } });
-  if (!user) throw new NotFoundException('User not found');
-
-  const otp = Math.floor(100000 + Math.random() * 900000).toString();
-  const otpExpiry = new Date();
-  otpExpiry.setMinutes(otpExpiry.getMinutes() + 1);
-
-  await this.prisma.user.update({
-    where: { id: user.id },
-    data: { otpCode: otp, otpExpiry },
-  });
-
-  try {
-    await this.mailService.sendMail({
-      to: user.email,
-      subject: 'New OTP - HireHubJA',
-      html: `
-        <div style="font-family: Arial, sans-serif; padding: 20px;">
-          <h2 style="color: #3FAE2A;">New OTP Code</h2>
-          <h1 style="color: #3FAE2A; letter-spacing: 5px;">${otp}</h1>
-          <p>Expires in <b>1 minute</b>.</p>
-        </div>
-      `,
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: { otpCode: otp, otpExpiry },
     });
-  } catch {
-    throw new BadRequestException('Failed to send OTP');
+
+    try {
+      await this.mailService.sendMail({
+        to: user.email,
+        subject: 'New OTP - HireHubJA',
+        html: `
+          <div style="font-family: Arial, sans-serif; padding: 20px;">
+            <h2 style="color: #3FAE2A;">New OTP Code</h2>
+            <h1 style="color: #3FAE2A; letter-spacing: 5px;">${otp}</h1>
+            <p>Expires in <b>1 minute</b>.</p>
+          </div>
+        `,
+      });
+    } catch {
+      throw new BadRequestException('Failed to send OTP');
+    }
+
+    const tempToken = await this.generateTempToken(user.id, user.email, user.role);
+
+    return {
+      success: true,
+      message: 'OTP resent successfully.',
+      tempToken,
+    };
   }
-
-  const tempToken = await this.generateTempToken(user.id, user.email, user.role);
-
-  return {
-    success: true,
-    message: 'OTP resent successfully.',
-    tempToken,
-  };
-}
 }
