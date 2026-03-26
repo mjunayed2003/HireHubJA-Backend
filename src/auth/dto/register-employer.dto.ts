@@ -3,10 +3,10 @@ import { UserRole } from '../../generated/prisma/client'; // পাথ ঠিক
 
 export class RegisterEmployerDto {
   @IsEmail()
-  email: string;
+  email!: string;
 
   @IsNotEmpty()
-  password: string;
+  password!: string;
 
 
   @IsOptional()
@@ -14,10 +14,10 @@ export class RegisterEmployerDto {
   role?: UserRole = UserRole.EMPLOYER; 
 
   @IsNotEmpty()
-  fullName: string; // Contact Person
+  fullName!: string; // Contact Person
 
   @IsNotEmpty()
-  companyName: string;
+  companyName!: string;
 
   @IsOptional()
   phone?: string;

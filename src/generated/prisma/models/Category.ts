@@ -192,6 +192,7 @@ export type CategoryWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Category"> | Date | string
   jobs?: Prisma.JobListRelationFilter
   jobSeekers?: Prisma.JobSeekerProfileListRelationFilter
+  employers?: Prisma.EmployerProfileListRelationFilter
 }
 
 export type CategoryOrderByWithRelationInput = {
@@ -203,6 +204,7 @@ export type CategoryOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   jobs?: Prisma.JobOrderByRelationAggregateInput
   jobSeekers?: Prisma.JobSeekerProfileOrderByRelationAggregateInput
+  employers?: Prisma.EmployerProfileOrderByRelationAggregateInput
 }
 
 export type CategoryWhereUniqueInput = Prisma.AtLeast<{
@@ -217,6 +219,7 @@ export type CategoryWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Category"> | Date | string
   jobs?: Prisma.JobListRelationFilter
   jobSeekers?: Prisma.JobSeekerProfileListRelationFilter
+  employers?: Prisma.EmployerProfileListRelationFilter
 }, "id" | "name">
 
 export type CategoryOrderByWithAggregationInput = {
@@ -252,6 +255,7 @@ export type CategoryCreateInput = {
   updatedAt?: Date | string
   jobs?: Prisma.JobCreateNestedManyWithoutCategoryInput
   jobSeekers?: Prisma.JobSeekerProfileCreateNestedManyWithoutPreferredJobCategoriesInput
+  employers?: Prisma.EmployerProfileCreateNestedManyWithoutPreferredCategoriesInput
 }
 
 export type CategoryUncheckedCreateInput = {
@@ -263,6 +267,7 @@ export type CategoryUncheckedCreateInput = {
   updatedAt?: Date | string
   jobs?: Prisma.JobUncheckedCreateNestedManyWithoutCategoryInput
   jobSeekers?: Prisma.JobSeekerProfileUncheckedCreateNestedManyWithoutPreferredJobCategoriesInput
+  employers?: Prisma.EmployerProfileUncheckedCreateNestedManyWithoutPreferredCategoriesInput
 }
 
 export type CategoryUpdateInput = {
@@ -274,6 +279,7 @@ export type CategoryUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   jobs?: Prisma.JobUpdateManyWithoutCategoryNestedInput
   jobSeekers?: Prisma.JobSeekerProfileUpdateManyWithoutPreferredJobCategoriesNestedInput
+  employers?: Prisma.EmployerProfileUpdateManyWithoutPreferredCategoriesNestedInput
 }
 
 export type CategoryUncheckedUpdateInput = {
@@ -285,6 +291,7 @@ export type CategoryUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   jobs?: Prisma.JobUncheckedUpdateManyWithoutCategoryNestedInput
   jobSeekers?: Prisma.JobSeekerProfileUncheckedUpdateManyWithoutPreferredJobCategoriesNestedInput
+  employers?: Prisma.EmployerProfileUncheckedUpdateManyWithoutPreferredCategoriesNestedInput
 }
 
 export type CategoryCreateManyInput = {
@@ -394,6 +401,44 @@ export type CategoryUncheckedUpdateManyWithoutJobSeekersNestedInput = {
   deleteMany?: Prisma.CategoryScalarWhereInput | Prisma.CategoryScalarWhereInput[]
 }
 
+export type CategoryCreateNestedManyWithoutEmployersInput = {
+  create?: Prisma.XOR<Prisma.CategoryCreateWithoutEmployersInput, Prisma.CategoryUncheckedCreateWithoutEmployersInput> | Prisma.CategoryCreateWithoutEmployersInput[] | Prisma.CategoryUncheckedCreateWithoutEmployersInput[]
+  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutEmployersInput | Prisma.CategoryCreateOrConnectWithoutEmployersInput[]
+  connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+}
+
+export type CategoryUncheckedCreateNestedManyWithoutEmployersInput = {
+  create?: Prisma.XOR<Prisma.CategoryCreateWithoutEmployersInput, Prisma.CategoryUncheckedCreateWithoutEmployersInput> | Prisma.CategoryCreateWithoutEmployersInput[] | Prisma.CategoryUncheckedCreateWithoutEmployersInput[]
+  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutEmployersInput | Prisma.CategoryCreateOrConnectWithoutEmployersInput[]
+  connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+}
+
+export type CategoryUpdateManyWithoutEmployersNestedInput = {
+  create?: Prisma.XOR<Prisma.CategoryCreateWithoutEmployersInput, Prisma.CategoryUncheckedCreateWithoutEmployersInput> | Prisma.CategoryCreateWithoutEmployersInput[] | Prisma.CategoryUncheckedCreateWithoutEmployersInput[]
+  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutEmployersInput | Prisma.CategoryCreateOrConnectWithoutEmployersInput[]
+  upsert?: Prisma.CategoryUpsertWithWhereUniqueWithoutEmployersInput | Prisma.CategoryUpsertWithWhereUniqueWithoutEmployersInput[]
+  set?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  disconnect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  delete?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  update?: Prisma.CategoryUpdateWithWhereUniqueWithoutEmployersInput | Prisma.CategoryUpdateWithWhereUniqueWithoutEmployersInput[]
+  updateMany?: Prisma.CategoryUpdateManyWithWhereWithoutEmployersInput | Prisma.CategoryUpdateManyWithWhereWithoutEmployersInput[]
+  deleteMany?: Prisma.CategoryScalarWhereInput | Prisma.CategoryScalarWhereInput[]
+}
+
+export type CategoryUncheckedUpdateManyWithoutEmployersNestedInput = {
+  create?: Prisma.XOR<Prisma.CategoryCreateWithoutEmployersInput, Prisma.CategoryUncheckedCreateWithoutEmployersInput> | Prisma.CategoryCreateWithoutEmployersInput[] | Prisma.CategoryUncheckedCreateWithoutEmployersInput[]
+  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutEmployersInput | Prisma.CategoryCreateOrConnectWithoutEmployersInput[]
+  upsert?: Prisma.CategoryUpsertWithWhereUniqueWithoutEmployersInput | Prisma.CategoryUpsertWithWhereUniqueWithoutEmployersInput[]
+  set?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  disconnect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  delete?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  update?: Prisma.CategoryUpdateWithWhereUniqueWithoutEmployersInput | Prisma.CategoryUpdateWithWhereUniqueWithoutEmployersInput[]
+  updateMany?: Prisma.CategoryUpdateManyWithWhereWithoutEmployersInput | Prisma.CategoryUpdateManyWithWhereWithoutEmployersInput[]
+  deleteMany?: Prisma.CategoryScalarWhereInput | Prisma.CategoryScalarWhereInput[]
+}
+
 export type CategoryCreateNestedOneWithoutJobsInput = {
   create?: Prisma.XOR<Prisma.CategoryCreateWithoutJobsInput, Prisma.CategoryUncheckedCreateWithoutJobsInput>
   connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutJobsInput
@@ -416,6 +461,7 @@ export type CategoryCreateWithoutJobSeekersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   jobs?: Prisma.JobCreateNestedManyWithoutCategoryInput
+  employers?: Prisma.EmployerProfileCreateNestedManyWithoutPreferredCategoriesInput
 }
 
 export type CategoryUncheckedCreateWithoutJobSeekersInput = {
@@ -426,6 +472,7 @@ export type CategoryUncheckedCreateWithoutJobSeekersInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   jobs?: Prisma.JobUncheckedCreateNestedManyWithoutCategoryInput
+  employers?: Prisma.EmployerProfileUncheckedCreateNestedManyWithoutPreferredCategoriesInput
 }
 
 export type CategoryCreateOrConnectWithoutJobSeekersInput = {
@@ -461,6 +508,49 @@ export type CategoryScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Category"> | Date | string
 }
 
+export type CategoryCreateWithoutEmployersInput = {
+  id?: string
+  name: string
+  description?: string | null
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  jobs?: Prisma.JobCreateNestedManyWithoutCategoryInput
+  jobSeekers?: Prisma.JobSeekerProfileCreateNestedManyWithoutPreferredJobCategoriesInput
+}
+
+export type CategoryUncheckedCreateWithoutEmployersInput = {
+  id?: string
+  name: string
+  description?: string | null
+  image?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutCategoryInput
+  jobSeekers?: Prisma.JobSeekerProfileUncheckedCreateNestedManyWithoutPreferredJobCategoriesInput
+}
+
+export type CategoryCreateOrConnectWithoutEmployersInput = {
+  where: Prisma.CategoryWhereUniqueInput
+  create: Prisma.XOR<Prisma.CategoryCreateWithoutEmployersInput, Prisma.CategoryUncheckedCreateWithoutEmployersInput>
+}
+
+export type CategoryUpsertWithWhereUniqueWithoutEmployersInput = {
+  where: Prisma.CategoryWhereUniqueInput
+  update: Prisma.XOR<Prisma.CategoryUpdateWithoutEmployersInput, Prisma.CategoryUncheckedUpdateWithoutEmployersInput>
+  create: Prisma.XOR<Prisma.CategoryCreateWithoutEmployersInput, Prisma.CategoryUncheckedCreateWithoutEmployersInput>
+}
+
+export type CategoryUpdateWithWhereUniqueWithoutEmployersInput = {
+  where: Prisma.CategoryWhereUniqueInput
+  data: Prisma.XOR<Prisma.CategoryUpdateWithoutEmployersInput, Prisma.CategoryUncheckedUpdateWithoutEmployersInput>
+}
+
+export type CategoryUpdateManyWithWhereWithoutEmployersInput = {
+  where: Prisma.CategoryScalarWhereInput
+  data: Prisma.XOR<Prisma.CategoryUpdateManyMutationInput, Prisma.CategoryUncheckedUpdateManyWithoutEmployersInput>
+}
+
 export type CategoryCreateWithoutJobsInput = {
   id?: string
   name: string
@@ -469,6 +559,7 @@ export type CategoryCreateWithoutJobsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   jobSeekers?: Prisma.JobSeekerProfileCreateNestedManyWithoutPreferredJobCategoriesInput
+  employers?: Prisma.EmployerProfileCreateNestedManyWithoutPreferredCategoriesInput
 }
 
 export type CategoryUncheckedCreateWithoutJobsInput = {
@@ -479,6 +570,7 @@ export type CategoryUncheckedCreateWithoutJobsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   jobSeekers?: Prisma.JobSeekerProfileUncheckedCreateNestedManyWithoutPreferredJobCategoriesInput
+  employers?: Prisma.EmployerProfileUncheckedCreateNestedManyWithoutPreferredCategoriesInput
 }
 
 export type CategoryCreateOrConnectWithoutJobsInput = {
@@ -505,6 +597,7 @@ export type CategoryUpdateWithoutJobsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   jobSeekers?: Prisma.JobSeekerProfileUpdateManyWithoutPreferredJobCategoriesNestedInput
+  employers?: Prisma.EmployerProfileUpdateManyWithoutPreferredCategoriesNestedInput
 }
 
 export type CategoryUncheckedUpdateWithoutJobsInput = {
@@ -515,6 +608,7 @@ export type CategoryUncheckedUpdateWithoutJobsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   jobSeekers?: Prisma.JobSeekerProfileUncheckedUpdateManyWithoutPreferredJobCategoriesNestedInput
+  employers?: Prisma.EmployerProfileUncheckedUpdateManyWithoutPreferredCategoriesNestedInput
 }
 
 export type CategoryUpdateWithoutJobSeekersInput = {
@@ -525,6 +619,7 @@ export type CategoryUpdateWithoutJobSeekersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   jobs?: Prisma.JobUpdateManyWithoutCategoryNestedInput
+  employers?: Prisma.EmployerProfileUpdateManyWithoutPreferredCategoriesNestedInput
 }
 
 export type CategoryUncheckedUpdateWithoutJobSeekersInput = {
@@ -535,9 +630,41 @@ export type CategoryUncheckedUpdateWithoutJobSeekersInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   jobs?: Prisma.JobUncheckedUpdateManyWithoutCategoryNestedInput
+  employers?: Prisma.EmployerProfileUncheckedUpdateManyWithoutPreferredCategoriesNestedInput
 }
 
 export type CategoryUncheckedUpdateManyWithoutJobSeekersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type CategoryUpdateWithoutEmployersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  jobs?: Prisma.JobUpdateManyWithoutCategoryNestedInput
+  jobSeekers?: Prisma.JobSeekerProfileUpdateManyWithoutPreferredJobCategoriesNestedInput
+}
+
+export type CategoryUncheckedUpdateWithoutEmployersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutCategoryNestedInput
+  jobSeekers?: Prisma.JobSeekerProfileUncheckedUpdateManyWithoutPreferredJobCategoriesNestedInput
+}
+
+export type CategoryUncheckedUpdateManyWithoutEmployersInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -554,11 +681,13 @@ export type CategoryUncheckedUpdateManyWithoutJobSeekersInput = {
 export type CategoryCountOutputType = {
   jobs: number
   jobSeekers: number
+  employers: number
 }
 
 export type CategoryCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   jobs?: boolean | CategoryCountOutputTypeCountJobsArgs
   jobSeekers?: boolean | CategoryCountOutputTypeCountJobSeekersArgs
+  employers?: boolean | CategoryCountOutputTypeCountEmployersArgs
 }
 
 /**
@@ -585,6 +714,13 @@ export type CategoryCountOutputTypeCountJobSeekersArgs<ExtArgs extends runtime.T
   where?: Prisma.JobSeekerProfileWhereInput
 }
 
+/**
+ * CategoryCountOutputType without action
+ */
+export type CategoryCountOutputTypeCountEmployersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.EmployerProfileWhereInput
+}
+
 
 export type CategorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -595,6 +731,7 @@ export type CategorySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   updatedAt?: boolean
   jobs?: boolean | Prisma.Category$jobsArgs<ExtArgs>
   jobSeekers?: boolean | Prisma.Category$jobSeekersArgs<ExtArgs>
+  employers?: boolean | Prisma.Category$employersArgs<ExtArgs>
   _count?: boolean | Prisma.CategoryCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["category"]>
 
@@ -629,6 +766,7 @@ export type CategoryOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs =
 export type CategoryInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   jobs?: boolean | Prisma.Category$jobsArgs<ExtArgs>
   jobSeekers?: boolean | Prisma.Category$jobSeekersArgs<ExtArgs>
+  employers?: boolean | Prisma.Category$employersArgs<ExtArgs>
   _count?: boolean | Prisma.CategoryCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type CategoryIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -639,6 +777,7 @@ export type $CategoryPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
   objects: {
     jobs: Prisma.$JobPayload<ExtArgs>[]
     jobSeekers: Prisma.$JobSeekerProfilePayload<ExtArgs>[]
+    employers: Prisma.$EmployerProfilePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1043,6 +1182,7 @@ export interface Prisma__CategoryClient<T, Null = never, ExtArgs extends runtime
   readonly [Symbol.toStringTag]: "PrismaPromise"
   jobs<T extends Prisma.Category$jobsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Category$jobsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   jobSeekers<T extends Prisma.Category$jobSeekersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Category$jobSeekersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobSeekerProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  employers<T extends Prisma.Category$employersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Category$employersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EmployerProfilePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1511,6 +1651,30 @@ export type Category$jobSeekersArgs<ExtArgs extends runtime.Types.Extensions.Int
   take?: number
   skip?: number
   distinct?: Prisma.JobSeekerProfileScalarFieldEnum | Prisma.JobSeekerProfileScalarFieldEnum[]
+}
+
+/**
+ * Category.employers
+ */
+export type Category$employersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the EmployerProfile
+   */
+  select?: Prisma.EmployerProfileSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the EmployerProfile
+   */
+  omit?: Prisma.EmployerProfileOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.EmployerProfileInclude<ExtArgs> | null
+  where?: Prisma.EmployerProfileWhereInput
+  orderBy?: Prisma.EmployerProfileOrderByWithRelationInput | Prisma.EmployerProfileOrderByWithRelationInput[]
+  cursor?: Prisma.EmployerProfileWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.EmployerProfileScalarFieldEnum | Prisma.EmployerProfileScalarFieldEnum[]
 }
 
 /**

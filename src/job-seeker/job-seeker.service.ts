@@ -9,22 +9,45 @@ import { NotificationService } from 'src/notification/notification.service';
 export class JobSeekerService {
   constructor(
     private prisma: PrismaService,
-    private notificationService: NotificationService, // ✅
-  ) {}
+    private notificationService: NotificationService,
+  ) { }
+
 
   // ==================================================
-  // 1. HOME & SEARCH
+  // 1. HOME & SEARCH (With Advanced Filters)
   // ==================================================
   async getAllJobs(query: any) {
-    const { search, location, categoryId } = query;
+    const {
+      search,
+      location,
+      categoryId,
+      workplaceType,   // e.g. "On-Site", "Hybrid", "Remote", "Contract"
+      employmentType,  // e.g. "Full-Time", "Part-Time"
+      minSalary,       // e.g. "500"
+      maxSalary        // e.g. "700"
+    } = query;
 
-    return this.prisma.job.findMany({
+    const jobTypesToSearch: string[] = [];
+
+    if (workplaceType) {
+      // "On-Site" -> "ON_SITE", "Remote" -> "REMOTE"
+      jobTypesToSearch.push(workplaceType.toUpperCase().replace('-', '_'));
+    }
+    if (employmentType) {
+      // "Full-Time" -> "FULL_TIME", "Part-Time" -> "PART_TIME"
+      jobTypesToSearch.push(employmentType.toUpperCase().replace('-', '_'));
+    }
+    let jobs = await this.prisma.job.findMany({
       where: {
         status: 'OPEN',
         AND: [
           search ? { title: { contains: search, mode: 'insensitive' } } : {},
           location ? { location: { contains: location, mode: 'insensitive' } } : {},
           categoryId ? { categoryId } : {},
+
+          jobTypesToSearch.length > 0 ? {
+            jobType: { hasEvery: jobTypesToSearch as any }
+          } : {},
         ],
       },
       include: {
@@ -33,8 +56,24 @@ export class JobSeekerService {
       },
       orderBy: { createdAt: 'desc' },
     });
-  }
 
+    if (minSalary || maxSalary) {
+      const filterMin = minSalary ? Number(minSalary) : 0;
+      const filterMax = maxSalary ? Number(maxSalary) : Infinity;
+
+      jobs = jobs.filter((job) => {
+        if (!job.salaryAmount) return false;
+        const extractedNumbers = job.salaryAmount.match(/\d+/g);
+        if (!extractedNumbers) return false;
+
+        const jobMinSalary = Number(extractedNumbers[0]);
+        const jobMaxSalary = extractedNumbers.length > 1 ? Number(extractedNumbers[1]) : jobMinSalary;
+        return jobMaxSalary >= filterMin && jobMinSalary <= filterMax;
+      });
+    }
+
+    return jobs;
+  }
   // ==================================================
   // 2. JOB DETAILS
   // ==================================================
@@ -86,16 +125,38 @@ export class JobSeekerService {
 
     const application = await this.prisma.application.create({
       data: {
-        jobId:         dto.jobId,
-        jobSeekerId:   profileId,
-        status:        'APPLIED',
-        resumeUrl:     resumeUrl,
+        jobId: dto.jobId,
+        jobSeekerId: profileId,
+        status: 'APPLIED',
+        resumeUrl: resumeUrl,
         availableFrom: dto.availableFrom ? new Date(dto.availableFrom) : null,
-        shortMessage:  dto.shortMessage ?? null,
+        shortMessage: dto.shortMessage ?? null,
+
+        // --- References ---
+        refJobName: dto.refJobName,
+        refJobCompany: dto.refJobCompany,
+        refJobTitle: dto.refJobTitle,
+        refJobRelationship: dto.refJobRelationship,
+        refJobPhone: dto.refJobPhone,
+        refJobEmail: dto.refJobEmail,
+
+        refJpName: dto.refJpName,
+        refJpContact: dto.refJpContact,
+        refJpJurisdiction: dto.refJpJurisdiction,
+        refJpRelationship: dto.refJpRelationship,
+
+        refPastorName: dto.refPastorName,
+        refPastorChurch: dto.refPastorChurch,
+        refPastorContact: dto.refPastorContact,
+        refPastorRelationship: dto.refPastorRelationship,
+
+        refRelativeName: dto.refRelativeName,
+        refRelativeContact: dto.refRelativeContact,
+        refRelativeRelationship: dto.refRelativeRelationship,
       },
     });
 
-    // ✅ Employer কে notification পাঠান
+    // send notification for employer
     const job = await this.prisma.job.findUnique({
       where: { id: dto.jobId },
       include: { employer: true },
@@ -112,7 +173,6 @@ export class JobSeekerService {
 
     return application;
   }
-
   // ==================================================
   // 4. BOOKMARK / SAVE JOB (Toggle)
   // ==================================================
@@ -176,10 +236,10 @@ export class JobSeekerService {
     return this.prisma.report.create({
       data: {
         reporterId: userId,
-        jobId:      dto.jobId,
-        reason:     dto.reason,
-        details:    dto.details,
-        status:     'PENDING',
+        jobId: dto.jobId,
+        reason: dto.reason,
+        details: dto.details,
+        status: 'PENDING',
       },
     });
   }
@@ -252,24 +312,24 @@ export class JobSeekerService {
     return this.prisma.jobSeekerProfile.update({
       where: { userId },
       data: {
-        fullName:        dto.fullName,
-        phone:           dto.phone,
-        location:        dto.location,
-        about:           dto.about,
+        fullName: dto.fullName,
+        phone: dto.phone,
+        location: dto.location,
+        about: dto.about,
         experienceLevel: dto.experienceLevel,
-        skills:          skills,
-        profilePic:      profilePic ?? undefined,
-        resumeUrl:       resumeUrl ?? undefined,
+        skills: skills,
+        profilePic: profilePic ?? undefined,
+        resumeUrl: resumeUrl ?? undefined,
 
         education: education ? {
           create: education.map((edu) => ({
-            degreeName:     edu.degreeName,
-            institution:    edu.institution,
-            startDate:      new Date(edu.startDate),
+            degreeName: edu.degreeName,
+            institution: edu.institution,
+            startDate: new Date(edu.startDate),
             completionYear: edu.completionYear
-                            ? new Date(edu.completionYear)
-                            : null,
-            isCurrent:      edu.isCurrent ?? false,
+              ? new Date(edu.completionYear)
+              : null,
+            isCurrent: edu.isCurrent ?? false,
           })),
         } : undefined,
 
@@ -277,9 +337,9 @@ export class JobSeekerService {
           create: experience.map((exp) => ({
             designation: exp.designation,
             companyName: exp.companyName,
-            startDate:   new Date(exp.startDate),
-            endDate:     exp.endDate ? new Date(exp.endDate) : null,
-            isCurrent:   exp.isCurrent ?? false,
+            startDate: new Date(exp.startDate),
+            endDate: exp.endDate ? new Date(exp.endDate) : null,
+            isCurrent: exp.isCurrent ?? false,
             description: exp.description,
           })),
         } : undefined,

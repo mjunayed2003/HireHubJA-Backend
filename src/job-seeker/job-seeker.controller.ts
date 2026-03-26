@@ -15,7 +15,7 @@ import { ChangePasswordDto, UpdateProfileDto } from './dto/profile.dto';
 export class JobSeekerController {
   constructor(private readonly jobSeekerService: JobSeekerService) {}
 
-  // ✅ Static routes আগে
+  // Static routes
   @UseGuards(JwtAuthGuard)
   @Get('my-bookmarks')
   async getBookmarkedJobs(@Request() req) {
@@ -28,7 +28,7 @@ export class JobSeekerController {
     return this.jobSeekerService.getMyApplications(req.user.id);
   }
 
-  // ✅ Dynamic routes পরে
+  // Dynamic routes
   @Get()
   async getAllJobs(@Query() query) {
     return this.jobSeekerService.getAllJobs(query);

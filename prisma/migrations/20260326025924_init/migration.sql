@@ -25,7 +25,7 @@ CREATE TABLE "User" (
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "role" "UserRole" NOT NULL,
-    "status" "UserStatus" NOT NULL DEFAULT 'PENDING',
+    "status" "UserStatus" NOT NULL DEFAULT 'ACTIVE',
     "rejectionReason" TEXT,
     "isVerified" BOOLEAN NOT NULL DEFAULT false,
     "otpCode" TEXT,
@@ -43,6 +43,8 @@ CREATE TABLE "AdminProfile" (
     "userId" TEXT NOT NULL,
     "fullName" TEXT NOT NULL,
     "profilePic" TEXT,
+    "phone" TEXT,
+    "location" TEXT,
 
     CONSTRAINT "AdminProfile_pkey" PRIMARY KEY ("id")
 );
@@ -100,6 +102,7 @@ CREATE TABLE "EmployerProfile" (
     "licenseFile" TEXT,
     "idCardFront" TEXT,
     "idCardBack" TEXT,
+    "categoryId" TEXT,
     "isVerified" BOOLEAN NOT NULL DEFAULT false,
     "status" "UserStatus" NOT NULL DEFAULT 'PENDING',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -308,11 +311,34 @@ CREATE TABLE "WebhookLog" (
 );
 
 -- CreateTable
+CREATE TABLE "SubscriptionPlan" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "price" DOUBLE PRECISION NOT NULL,
+    "duration" INTEGER NOT NULL,
+    "slotsAvailable" INTEGER NOT NULL,
+    "features" TEXT[],
+    "isActive" BOOLEAN NOT NULL DEFAULT true,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
+
+    CONSTRAINT "SubscriptionPlan_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
 CREATE TABLE "_CategoryToJobSeekerProfile" (
     "A" TEXT NOT NULL,
     "B" TEXT NOT NULL,
 
     CONSTRAINT "_CategoryToJobSeekerProfile_AB_pkey" PRIMARY KEY ("A","B")
+);
+
+-- CreateTable
+CREATE TABLE "_CategoryToEmployerProfile" (
+    "A" TEXT NOT NULL,
+    "B" TEXT NOT NULL,
+
+    CONSTRAINT "_CategoryToEmployerProfile_AB_pkey" PRIMARY KEY ("A","B")
 );
 
 -- CreateIndex
@@ -365,6 +391,9 @@ CREATE UNIQUE INDEX "WebhookLog_transactionId_key" ON "WebhookLog"("transactionI
 
 -- CreateIndex
 CREATE INDEX "_CategoryToJobSeekerProfile_B_index" ON "_CategoryToJobSeekerProfile"("B");
+
+-- CreateIndex
+CREATE INDEX "_CategoryToEmployerProfile_B_index" ON "_CategoryToEmployerProfile"("B");
 
 -- AddForeignKey
 ALTER TABLE "AdminProfile" ADD CONSTRAINT "AdminProfile_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -440,3 +469,9 @@ ALTER TABLE "_CategoryToJobSeekerProfile" ADD CONSTRAINT "_CategoryToJobSeekerPr
 
 -- AddForeignKey
 ALTER TABLE "_CategoryToJobSeekerProfile" ADD CONSTRAINT "_CategoryToJobSeekerProfile_B_fkey" FOREIGN KEY ("B") REFERENCES "JobSeekerProfile"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_CategoryToEmployerProfile" ADD CONSTRAINT "_CategoryToEmployerProfile_A_fkey" FOREIGN KEY ("A") REFERENCES "Category"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "_CategoryToEmployerProfile" ADD CONSTRAINT "_CategoryToEmployerProfile_B_fkey" FOREIGN KEY ("B") REFERENCES "EmployerProfile"("id") ON DELETE CASCADE ON UPDATE CASCADE;

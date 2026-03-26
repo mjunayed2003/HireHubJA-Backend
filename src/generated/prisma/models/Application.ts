@@ -32,6 +32,23 @@ export type ApplicationMinAggregateOutputType = {
   resumeUrl: string | null
   availableFrom: Date | null
   shortMessage: string | null
+  refJobName: string | null
+  refJobCompany: string | null
+  refJobTitle: string | null
+  refJobRelationship: string | null
+  refJobPhone: string | null
+  refJobEmail: string | null
+  refJpName: string | null
+  refJpContact: string | null
+  refJpJurisdiction: string | null
+  refJpRelationship: string | null
+  refPastorName: string | null
+  refPastorChurch: string | null
+  refPastorContact: string | null
+  refPastorRelationship: string | null
+  refRelativeName: string | null
+  refRelativeContact: string | null
+  refRelativeRelationship: string | null
   createdAt: Date | null
   editedAt: Date | null
 }
@@ -44,6 +61,23 @@ export type ApplicationMaxAggregateOutputType = {
   resumeUrl: string | null
   availableFrom: Date | null
   shortMessage: string | null
+  refJobName: string | null
+  refJobCompany: string | null
+  refJobTitle: string | null
+  refJobRelationship: string | null
+  refJobPhone: string | null
+  refJobEmail: string | null
+  refJpName: string | null
+  refJpContact: string | null
+  refJpJurisdiction: string | null
+  refJpRelationship: string | null
+  refPastorName: string | null
+  refPastorChurch: string | null
+  refPastorContact: string | null
+  refPastorRelationship: string | null
+  refRelativeName: string | null
+  refRelativeContact: string | null
+  refRelativeRelationship: string | null
   createdAt: Date | null
   editedAt: Date | null
 }
@@ -56,6 +90,23 @@ export type ApplicationCountAggregateOutputType = {
   resumeUrl: number
   availableFrom: number
   shortMessage: number
+  refJobName: number
+  refJobCompany: number
+  refJobTitle: number
+  refJobRelationship: number
+  refJobPhone: number
+  refJobEmail: number
+  refJpName: number
+  refJpContact: number
+  refJpJurisdiction: number
+  refJpRelationship: number
+  refPastorName: number
+  refPastorChurch: number
+  refPastorContact: number
+  refPastorRelationship: number
+  refRelativeName: number
+  refRelativeContact: number
+  refRelativeRelationship: number
   createdAt: number
   editedAt: number
   _all: number
@@ -70,6 +121,23 @@ export type ApplicationMinAggregateInputType = {
   resumeUrl?: true
   availableFrom?: true
   shortMessage?: true
+  refJobName?: true
+  refJobCompany?: true
+  refJobTitle?: true
+  refJobRelationship?: true
+  refJobPhone?: true
+  refJobEmail?: true
+  refJpName?: true
+  refJpContact?: true
+  refJpJurisdiction?: true
+  refJpRelationship?: true
+  refPastorName?: true
+  refPastorChurch?: true
+  refPastorContact?: true
+  refPastorRelationship?: true
+  refRelativeName?: true
+  refRelativeContact?: true
+  refRelativeRelationship?: true
   createdAt?: true
   editedAt?: true
 }
@@ -82,6 +150,23 @@ export type ApplicationMaxAggregateInputType = {
   resumeUrl?: true
   availableFrom?: true
   shortMessage?: true
+  refJobName?: true
+  refJobCompany?: true
+  refJobTitle?: true
+  refJobRelationship?: true
+  refJobPhone?: true
+  refJobEmail?: true
+  refJpName?: true
+  refJpContact?: true
+  refJpJurisdiction?: true
+  refJpRelationship?: true
+  refPastorName?: true
+  refPastorChurch?: true
+  refPastorContact?: true
+  refPastorRelationship?: true
+  refRelativeName?: true
+  refRelativeContact?: true
+  refRelativeRelationship?: true
   createdAt?: true
   editedAt?: true
 }
@@ -94,6 +179,23 @@ export type ApplicationCountAggregateInputType = {
   resumeUrl?: true
   availableFrom?: true
   shortMessage?: true
+  refJobName?: true
+  refJobCompany?: true
+  refJobTitle?: true
+  refJobRelationship?: true
+  refJobPhone?: true
+  refJobEmail?: true
+  refJpName?: true
+  refJpContact?: true
+  refJpJurisdiction?: true
+  refJpRelationship?: true
+  refPastorName?: true
+  refPastorChurch?: true
+  refPastorContact?: true
+  refPastorRelationship?: true
+  refRelativeName?: true
+  refRelativeContact?: true
+  refRelativeRelationship?: true
   createdAt?: true
   editedAt?: true
   _all?: true
@@ -179,6 +281,23 @@ export type ApplicationGroupByOutputType = {
   resumeUrl: string | null
   availableFrom: Date | null
   shortMessage: string | null
+  refJobName: string | null
+  refJobCompany: string | null
+  refJobTitle: string | null
+  refJobRelationship: string | null
+  refJobPhone: string | null
+  refJobEmail: string | null
+  refJpName: string | null
+  refJpContact: string | null
+  refJpJurisdiction: string | null
+  refJpRelationship: string | null
+  refPastorName: string | null
+  refPastorChurch: string | null
+  refPastorContact: string | null
+  refPastorRelationship: string | null
+  refRelativeName: string | null
+  refRelativeContact: string | null
+  refRelativeRelationship: string | null
   createdAt: Date
   editedAt: Date | null
   _count: ApplicationCountAggregateOutputType | null
@@ -212,6 +331,23 @@ export type ApplicationWhereInput = {
   resumeUrl?: Prisma.StringNullableFilter<"Application"> | string | null
   availableFrom?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
   shortMessage?: Prisma.StringNullableFilter<"Application"> | string | null
+  refJobName?: Prisma.StringNullableFilter<"Application"> | string | null
+  refJobCompany?: Prisma.StringNullableFilter<"Application"> | string | null
+  refJobTitle?: Prisma.StringNullableFilter<"Application"> | string | null
+  refJobRelationship?: Prisma.StringNullableFilter<"Application"> | string | null
+  refJobPhone?: Prisma.StringNullableFilter<"Application"> | string | null
+  refJobEmail?: Prisma.StringNullableFilter<"Application"> | string | null
+  refJpName?: Prisma.StringNullableFilter<"Application"> | string | null
+  refJpContact?: Prisma.StringNullableFilter<"Application"> | string | null
+  refJpJurisdiction?: Prisma.StringNullableFilter<"Application"> | string | null
+  refJpRelationship?: Prisma.StringNullableFilter<"Application"> | string | null
+  refPastorName?: Prisma.StringNullableFilter<"Application"> | string | null
+  refPastorChurch?: Prisma.StringNullableFilter<"Application"> | string | null
+  refPastorContact?: Prisma.StringNullableFilter<"Application"> | string | null
+  refPastorRelationship?: Prisma.StringNullableFilter<"Application"> | string | null
+  refRelativeName?: Prisma.StringNullableFilter<"Application"> | string | null
+  refRelativeContact?: Prisma.StringNullableFilter<"Application"> | string | null
+  refRelativeRelationship?: Prisma.StringNullableFilter<"Application"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Application"> | Date | string
   editedAt?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
   job?: Prisma.XOR<Prisma.JobScalarRelationFilter, Prisma.JobWhereInput>
@@ -227,6 +363,23 @@ export type ApplicationOrderByWithRelationInput = {
   resumeUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   availableFrom?: Prisma.SortOrderInput | Prisma.SortOrder
   shortMessage?: Prisma.SortOrderInput | Prisma.SortOrder
+  refJobName?: Prisma.SortOrderInput | Prisma.SortOrder
+  refJobCompany?: Prisma.SortOrderInput | Prisma.SortOrder
+  refJobTitle?: Prisma.SortOrderInput | Prisma.SortOrder
+  refJobRelationship?: Prisma.SortOrderInput | Prisma.SortOrder
+  refJobPhone?: Prisma.SortOrderInput | Prisma.SortOrder
+  refJobEmail?: Prisma.SortOrderInput | Prisma.SortOrder
+  refJpName?: Prisma.SortOrderInput | Prisma.SortOrder
+  refJpContact?: Prisma.SortOrderInput | Prisma.SortOrder
+  refJpJurisdiction?: Prisma.SortOrderInput | Prisma.SortOrder
+  refJpRelationship?: Prisma.SortOrderInput | Prisma.SortOrder
+  refPastorName?: Prisma.SortOrderInput | Prisma.SortOrder
+  refPastorChurch?: Prisma.SortOrderInput | Prisma.SortOrder
+  refPastorContact?: Prisma.SortOrderInput | Prisma.SortOrder
+  refPastorRelationship?: Prisma.SortOrderInput | Prisma.SortOrder
+  refRelativeName?: Prisma.SortOrderInput | Prisma.SortOrder
+  refRelativeContact?: Prisma.SortOrderInput | Prisma.SortOrder
+  refRelativeRelationship?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   editedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   job?: Prisma.JobOrderByWithRelationInput
@@ -246,6 +399,23 @@ export type ApplicationWhereUniqueInput = Prisma.AtLeast<{
   resumeUrl?: Prisma.StringNullableFilter<"Application"> | string | null
   availableFrom?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
   shortMessage?: Prisma.StringNullableFilter<"Application"> | string | null
+  refJobName?: Prisma.StringNullableFilter<"Application"> | string | null
+  refJobCompany?: Prisma.StringNullableFilter<"Application"> | string | null
+  refJobTitle?: Prisma.StringNullableFilter<"Application"> | string | null
+  refJobRelationship?: Prisma.StringNullableFilter<"Application"> | string | null
+  refJobPhone?: Prisma.StringNullableFilter<"Application"> | string | null
+  refJobEmail?: Prisma.StringNullableFilter<"Application"> | string | null
+  refJpName?: Prisma.StringNullableFilter<"Application"> | string | null
+  refJpContact?: Prisma.StringNullableFilter<"Application"> | string | null
+  refJpJurisdiction?: Prisma.StringNullableFilter<"Application"> | string | null
+  refJpRelationship?: Prisma.StringNullableFilter<"Application"> | string | null
+  refPastorName?: Prisma.StringNullableFilter<"Application"> | string | null
+  refPastorChurch?: Prisma.StringNullableFilter<"Application"> | string | null
+  refPastorContact?: Prisma.StringNullableFilter<"Application"> | string | null
+  refPastorRelationship?: Prisma.StringNullableFilter<"Application"> | string | null
+  refRelativeName?: Prisma.StringNullableFilter<"Application"> | string | null
+  refRelativeContact?: Prisma.StringNullableFilter<"Application"> | string | null
+  refRelativeRelationship?: Prisma.StringNullableFilter<"Application"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Application"> | Date | string
   editedAt?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
   job?: Prisma.XOR<Prisma.JobScalarRelationFilter, Prisma.JobWhereInput>
@@ -261,6 +431,23 @@ export type ApplicationOrderByWithAggregationInput = {
   resumeUrl?: Prisma.SortOrderInput | Prisma.SortOrder
   availableFrom?: Prisma.SortOrderInput | Prisma.SortOrder
   shortMessage?: Prisma.SortOrderInput | Prisma.SortOrder
+  refJobName?: Prisma.SortOrderInput | Prisma.SortOrder
+  refJobCompany?: Prisma.SortOrderInput | Prisma.SortOrder
+  refJobTitle?: Prisma.SortOrderInput | Prisma.SortOrder
+  refJobRelationship?: Prisma.SortOrderInput | Prisma.SortOrder
+  refJobPhone?: Prisma.SortOrderInput | Prisma.SortOrder
+  refJobEmail?: Prisma.SortOrderInput | Prisma.SortOrder
+  refJpName?: Prisma.SortOrderInput | Prisma.SortOrder
+  refJpContact?: Prisma.SortOrderInput | Prisma.SortOrder
+  refJpJurisdiction?: Prisma.SortOrderInput | Prisma.SortOrder
+  refJpRelationship?: Prisma.SortOrderInput | Prisma.SortOrder
+  refPastorName?: Prisma.SortOrderInput | Prisma.SortOrder
+  refPastorChurch?: Prisma.SortOrderInput | Prisma.SortOrder
+  refPastorContact?: Prisma.SortOrderInput | Prisma.SortOrder
+  refPastorRelationship?: Prisma.SortOrderInput | Prisma.SortOrder
+  refRelativeName?: Prisma.SortOrderInput | Prisma.SortOrder
+  refRelativeContact?: Prisma.SortOrderInput | Prisma.SortOrder
+  refRelativeRelationship?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   editedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.ApplicationCountOrderByAggregateInput
@@ -279,6 +466,23 @@ export type ApplicationScalarWhereWithAggregatesInput = {
   resumeUrl?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
   availableFrom?: Prisma.DateTimeNullableWithAggregatesFilter<"Application"> | Date | string | null
   shortMessage?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  refJobName?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  refJobCompany?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  refJobTitle?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  refJobRelationship?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  refJobPhone?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  refJobEmail?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  refJpName?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  refJpContact?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  refJpJurisdiction?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  refJpRelationship?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  refPastorName?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  refPastorChurch?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  refPastorContact?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  refPastorRelationship?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  refRelativeName?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  refRelativeContact?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
+  refRelativeRelationship?: Prisma.StringNullableWithAggregatesFilter<"Application"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Application"> | Date | string
   editedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Application"> | Date | string | null
 }
@@ -289,6 +493,23 @@ export type ApplicationCreateInput = {
   resumeUrl?: string | null
   availableFrom?: Date | string | null
   shortMessage?: string | null
+  refJobName?: string | null
+  refJobCompany?: string | null
+  refJobTitle?: string | null
+  refJobRelationship?: string | null
+  refJobPhone?: string | null
+  refJobEmail?: string | null
+  refJpName?: string | null
+  refJpContact?: string | null
+  refJpJurisdiction?: string | null
+  refJpRelationship?: string | null
+  refPastorName?: string | null
+  refPastorChurch?: string | null
+  refPastorContact?: string | null
+  refPastorRelationship?: string | null
+  refRelativeName?: string | null
+  refRelativeContact?: string | null
+  refRelativeRelationship?: string | null
   createdAt?: Date | string
   editedAt?: Date | string | null
   job: Prisma.JobCreateNestedOneWithoutApplicationsInput
@@ -304,6 +525,23 @@ export type ApplicationUncheckedCreateInput = {
   resumeUrl?: string | null
   availableFrom?: Date | string | null
   shortMessage?: string | null
+  refJobName?: string | null
+  refJobCompany?: string | null
+  refJobTitle?: string | null
+  refJobRelationship?: string | null
+  refJobPhone?: string | null
+  refJobEmail?: string | null
+  refJpName?: string | null
+  refJpContact?: string | null
+  refJpJurisdiction?: string | null
+  refJpRelationship?: string | null
+  refPastorName?: string | null
+  refPastorChurch?: string | null
+  refPastorContact?: string | null
+  refPastorRelationship?: string | null
+  refRelativeName?: string | null
+  refRelativeContact?: string | null
+  refRelativeRelationship?: string | null
   createdAt?: Date | string
   editedAt?: Date | string | null
   interview?: Prisma.InterviewUncheckedCreateNestedOneWithoutApplicationInput
@@ -315,6 +553,23 @@ export type ApplicationUpdateInput = {
   resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availableFrom?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   shortMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobCompany?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpJurisdiction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorChurch?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   job?: Prisma.JobUpdateOneRequiredWithoutApplicationsNestedInput
@@ -330,6 +585,23 @@ export type ApplicationUncheckedUpdateInput = {
   resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availableFrom?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   shortMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobCompany?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpJurisdiction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorChurch?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   interview?: Prisma.InterviewUncheckedUpdateOneWithoutApplicationNestedInput
@@ -343,6 +615,23 @@ export type ApplicationCreateManyInput = {
   resumeUrl?: string | null
   availableFrom?: Date | string | null
   shortMessage?: string | null
+  refJobName?: string | null
+  refJobCompany?: string | null
+  refJobTitle?: string | null
+  refJobRelationship?: string | null
+  refJobPhone?: string | null
+  refJobEmail?: string | null
+  refJpName?: string | null
+  refJpContact?: string | null
+  refJpJurisdiction?: string | null
+  refJpRelationship?: string | null
+  refPastorName?: string | null
+  refPastorChurch?: string | null
+  refPastorContact?: string | null
+  refPastorRelationship?: string | null
+  refRelativeName?: string | null
+  refRelativeContact?: string | null
+  refRelativeRelationship?: string | null
   createdAt?: Date | string
   editedAt?: Date | string | null
 }
@@ -353,6 +642,23 @@ export type ApplicationUpdateManyMutationInput = {
   resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availableFrom?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   shortMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobCompany?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpJurisdiction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorChurch?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -365,6 +671,23 @@ export type ApplicationUncheckedUpdateManyInput = {
   resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availableFrom?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   shortMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobCompany?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpJurisdiction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorChurch?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -392,6 +715,23 @@ export type ApplicationCountOrderByAggregateInput = {
   resumeUrl?: Prisma.SortOrder
   availableFrom?: Prisma.SortOrder
   shortMessage?: Prisma.SortOrder
+  refJobName?: Prisma.SortOrder
+  refJobCompany?: Prisma.SortOrder
+  refJobTitle?: Prisma.SortOrder
+  refJobRelationship?: Prisma.SortOrder
+  refJobPhone?: Prisma.SortOrder
+  refJobEmail?: Prisma.SortOrder
+  refJpName?: Prisma.SortOrder
+  refJpContact?: Prisma.SortOrder
+  refJpJurisdiction?: Prisma.SortOrder
+  refJpRelationship?: Prisma.SortOrder
+  refPastorName?: Prisma.SortOrder
+  refPastorChurch?: Prisma.SortOrder
+  refPastorContact?: Prisma.SortOrder
+  refPastorRelationship?: Prisma.SortOrder
+  refRelativeName?: Prisma.SortOrder
+  refRelativeContact?: Prisma.SortOrder
+  refRelativeRelationship?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   editedAt?: Prisma.SortOrder
 }
@@ -404,6 +744,23 @@ export type ApplicationMaxOrderByAggregateInput = {
   resumeUrl?: Prisma.SortOrder
   availableFrom?: Prisma.SortOrder
   shortMessage?: Prisma.SortOrder
+  refJobName?: Prisma.SortOrder
+  refJobCompany?: Prisma.SortOrder
+  refJobTitle?: Prisma.SortOrder
+  refJobRelationship?: Prisma.SortOrder
+  refJobPhone?: Prisma.SortOrder
+  refJobEmail?: Prisma.SortOrder
+  refJpName?: Prisma.SortOrder
+  refJpContact?: Prisma.SortOrder
+  refJpJurisdiction?: Prisma.SortOrder
+  refJpRelationship?: Prisma.SortOrder
+  refPastorName?: Prisma.SortOrder
+  refPastorChurch?: Prisma.SortOrder
+  refPastorContact?: Prisma.SortOrder
+  refPastorRelationship?: Prisma.SortOrder
+  refRelativeName?: Prisma.SortOrder
+  refRelativeContact?: Prisma.SortOrder
+  refRelativeRelationship?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   editedAt?: Prisma.SortOrder
 }
@@ -416,6 +773,23 @@ export type ApplicationMinOrderByAggregateInput = {
   resumeUrl?: Prisma.SortOrder
   availableFrom?: Prisma.SortOrder
   shortMessage?: Prisma.SortOrder
+  refJobName?: Prisma.SortOrder
+  refJobCompany?: Prisma.SortOrder
+  refJobTitle?: Prisma.SortOrder
+  refJobRelationship?: Prisma.SortOrder
+  refJobPhone?: Prisma.SortOrder
+  refJobEmail?: Prisma.SortOrder
+  refJpName?: Prisma.SortOrder
+  refJpContact?: Prisma.SortOrder
+  refJpJurisdiction?: Prisma.SortOrder
+  refJpRelationship?: Prisma.SortOrder
+  refPastorName?: Prisma.SortOrder
+  refPastorChurch?: Prisma.SortOrder
+  refPastorContact?: Prisma.SortOrder
+  refPastorRelationship?: Prisma.SortOrder
+  refRelativeName?: Prisma.SortOrder
+  refRelativeContact?: Prisma.SortOrder
+  refRelativeRelationship?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   editedAt?: Prisma.SortOrder
 }
@@ -533,6 +907,23 @@ export type ApplicationCreateWithoutJobSeekerInput = {
   resumeUrl?: string | null
   availableFrom?: Date | string | null
   shortMessage?: string | null
+  refJobName?: string | null
+  refJobCompany?: string | null
+  refJobTitle?: string | null
+  refJobRelationship?: string | null
+  refJobPhone?: string | null
+  refJobEmail?: string | null
+  refJpName?: string | null
+  refJpContact?: string | null
+  refJpJurisdiction?: string | null
+  refJpRelationship?: string | null
+  refPastorName?: string | null
+  refPastorChurch?: string | null
+  refPastorContact?: string | null
+  refPastorRelationship?: string | null
+  refRelativeName?: string | null
+  refRelativeContact?: string | null
+  refRelativeRelationship?: string | null
   createdAt?: Date | string
   editedAt?: Date | string | null
   job: Prisma.JobCreateNestedOneWithoutApplicationsInput
@@ -546,6 +937,23 @@ export type ApplicationUncheckedCreateWithoutJobSeekerInput = {
   resumeUrl?: string | null
   availableFrom?: Date | string | null
   shortMessage?: string | null
+  refJobName?: string | null
+  refJobCompany?: string | null
+  refJobTitle?: string | null
+  refJobRelationship?: string | null
+  refJobPhone?: string | null
+  refJobEmail?: string | null
+  refJpName?: string | null
+  refJpContact?: string | null
+  refJpJurisdiction?: string | null
+  refJpRelationship?: string | null
+  refPastorName?: string | null
+  refPastorChurch?: string | null
+  refPastorContact?: string | null
+  refPastorRelationship?: string | null
+  refRelativeName?: string | null
+  refRelativeContact?: string | null
+  refRelativeRelationship?: string | null
   createdAt?: Date | string
   editedAt?: Date | string | null
   interview?: Prisma.InterviewUncheckedCreateNestedOneWithoutApplicationInput
@@ -588,6 +996,23 @@ export type ApplicationScalarWhereInput = {
   resumeUrl?: Prisma.StringNullableFilter<"Application"> | string | null
   availableFrom?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
   shortMessage?: Prisma.StringNullableFilter<"Application"> | string | null
+  refJobName?: Prisma.StringNullableFilter<"Application"> | string | null
+  refJobCompany?: Prisma.StringNullableFilter<"Application"> | string | null
+  refJobTitle?: Prisma.StringNullableFilter<"Application"> | string | null
+  refJobRelationship?: Prisma.StringNullableFilter<"Application"> | string | null
+  refJobPhone?: Prisma.StringNullableFilter<"Application"> | string | null
+  refJobEmail?: Prisma.StringNullableFilter<"Application"> | string | null
+  refJpName?: Prisma.StringNullableFilter<"Application"> | string | null
+  refJpContact?: Prisma.StringNullableFilter<"Application"> | string | null
+  refJpJurisdiction?: Prisma.StringNullableFilter<"Application"> | string | null
+  refJpRelationship?: Prisma.StringNullableFilter<"Application"> | string | null
+  refPastorName?: Prisma.StringNullableFilter<"Application"> | string | null
+  refPastorChurch?: Prisma.StringNullableFilter<"Application"> | string | null
+  refPastorContact?: Prisma.StringNullableFilter<"Application"> | string | null
+  refPastorRelationship?: Prisma.StringNullableFilter<"Application"> | string | null
+  refRelativeName?: Prisma.StringNullableFilter<"Application"> | string | null
+  refRelativeContact?: Prisma.StringNullableFilter<"Application"> | string | null
+  refRelativeRelationship?: Prisma.StringNullableFilter<"Application"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Application"> | Date | string
   editedAt?: Prisma.DateTimeNullableFilter<"Application"> | Date | string | null
 }
@@ -598,6 +1023,23 @@ export type ApplicationCreateWithoutJobInput = {
   resumeUrl?: string | null
   availableFrom?: Date | string | null
   shortMessage?: string | null
+  refJobName?: string | null
+  refJobCompany?: string | null
+  refJobTitle?: string | null
+  refJobRelationship?: string | null
+  refJobPhone?: string | null
+  refJobEmail?: string | null
+  refJpName?: string | null
+  refJpContact?: string | null
+  refJpJurisdiction?: string | null
+  refJpRelationship?: string | null
+  refPastorName?: string | null
+  refPastorChurch?: string | null
+  refPastorContact?: string | null
+  refPastorRelationship?: string | null
+  refRelativeName?: string | null
+  refRelativeContact?: string | null
+  refRelativeRelationship?: string | null
   createdAt?: Date | string
   editedAt?: Date | string | null
   jobSeeker: Prisma.JobSeekerProfileCreateNestedOneWithoutApplicationsInput
@@ -611,6 +1053,23 @@ export type ApplicationUncheckedCreateWithoutJobInput = {
   resumeUrl?: string | null
   availableFrom?: Date | string | null
   shortMessage?: string | null
+  refJobName?: string | null
+  refJobCompany?: string | null
+  refJobTitle?: string | null
+  refJobRelationship?: string | null
+  refJobPhone?: string | null
+  refJobEmail?: string | null
+  refJpName?: string | null
+  refJpContact?: string | null
+  refJpJurisdiction?: string | null
+  refJpRelationship?: string | null
+  refPastorName?: string | null
+  refPastorChurch?: string | null
+  refPastorContact?: string | null
+  refPastorRelationship?: string | null
+  refRelativeName?: string | null
+  refRelativeContact?: string | null
+  refRelativeRelationship?: string | null
   createdAt?: Date | string
   editedAt?: Date | string | null
   interview?: Prisma.InterviewUncheckedCreateNestedOneWithoutApplicationInput
@@ -648,6 +1107,23 @@ export type ApplicationCreateWithoutInterviewInput = {
   resumeUrl?: string | null
   availableFrom?: Date | string | null
   shortMessage?: string | null
+  refJobName?: string | null
+  refJobCompany?: string | null
+  refJobTitle?: string | null
+  refJobRelationship?: string | null
+  refJobPhone?: string | null
+  refJobEmail?: string | null
+  refJpName?: string | null
+  refJpContact?: string | null
+  refJpJurisdiction?: string | null
+  refJpRelationship?: string | null
+  refPastorName?: string | null
+  refPastorChurch?: string | null
+  refPastorContact?: string | null
+  refPastorRelationship?: string | null
+  refRelativeName?: string | null
+  refRelativeContact?: string | null
+  refRelativeRelationship?: string | null
   createdAt?: Date | string
   editedAt?: Date | string | null
   job: Prisma.JobCreateNestedOneWithoutApplicationsInput
@@ -662,6 +1138,23 @@ export type ApplicationUncheckedCreateWithoutInterviewInput = {
   resumeUrl?: string | null
   availableFrom?: Date | string | null
   shortMessage?: string | null
+  refJobName?: string | null
+  refJobCompany?: string | null
+  refJobTitle?: string | null
+  refJobRelationship?: string | null
+  refJobPhone?: string | null
+  refJobEmail?: string | null
+  refJpName?: string | null
+  refJpContact?: string | null
+  refJpJurisdiction?: string | null
+  refJpRelationship?: string | null
+  refPastorName?: string | null
+  refPastorChurch?: string | null
+  refPastorContact?: string | null
+  refPastorRelationship?: string | null
+  refRelativeName?: string | null
+  refRelativeContact?: string | null
+  refRelativeRelationship?: string | null
   createdAt?: Date | string
   editedAt?: Date | string | null
 }
@@ -688,6 +1181,23 @@ export type ApplicationUpdateWithoutInterviewInput = {
   resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availableFrom?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   shortMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobCompany?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpJurisdiction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorChurch?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   job?: Prisma.JobUpdateOneRequiredWithoutApplicationsNestedInput
@@ -702,6 +1212,23 @@ export type ApplicationUncheckedUpdateWithoutInterviewInput = {
   resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availableFrom?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   shortMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobCompany?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpJurisdiction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorChurch?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -713,6 +1240,23 @@ export type ApplicationCreateManyJobSeekerInput = {
   resumeUrl?: string | null
   availableFrom?: Date | string | null
   shortMessage?: string | null
+  refJobName?: string | null
+  refJobCompany?: string | null
+  refJobTitle?: string | null
+  refJobRelationship?: string | null
+  refJobPhone?: string | null
+  refJobEmail?: string | null
+  refJpName?: string | null
+  refJpContact?: string | null
+  refJpJurisdiction?: string | null
+  refJpRelationship?: string | null
+  refPastorName?: string | null
+  refPastorChurch?: string | null
+  refPastorContact?: string | null
+  refPastorRelationship?: string | null
+  refRelativeName?: string | null
+  refRelativeContact?: string | null
+  refRelativeRelationship?: string | null
   createdAt?: Date | string
   editedAt?: Date | string | null
 }
@@ -723,6 +1267,23 @@ export type ApplicationUpdateWithoutJobSeekerInput = {
   resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availableFrom?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   shortMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobCompany?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpJurisdiction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorChurch?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   job?: Prisma.JobUpdateOneRequiredWithoutApplicationsNestedInput
@@ -736,6 +1297,23 @@ export type ApplicationUncheckedUpdateWithoutJobSeekerInput = {
   resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availableFrom?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   shortMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobCompany?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpJurisdiction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorChurch?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   interview?: Prisma.InterviewUncheckedUpdateOneWithoutApplicationNestedInput
@@ -748,6 +1326,23 @@ export type ApplicationUncheckedUpdateManyWithoutJobSeekerInput = {
   resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availableFrom?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   shortMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobCompany?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpJurisdiction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorChurch?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -759,6 +1354,23 @@ export type ApplicationCreateManyJobInput = {
   resumeUrl?: string | null
   availableFrom?: Date | string | null
   shortMessage?: string | null
+  refJobName?: string | null
+  refJobCompany?: string | null
+  refJobTitle?: string | null
+  refJobRelationship?: string | null
+  refJobPhone?: string | null
+  refJobEmail?: string | null
+  refJpName?: string | null
+  refJpContact?: string | null
+  refJpJurisdiction?: string | null
+  refJpRelationship?: string | null
+  refPastorName?: string | null
+  refPastorChurch?: string | null
+  refPastorContact?: string | null
+  refPastorRelationship?: string | null
+  refRelativeName?: string | null
+  refRelativeContact?: string | null
+  refRelativeRelationship?: string | null
   createdAt?: Date | string
   editedAt?: Date | string | null
 }
@@ -769,6 +1381,23 @@ export type ApplicationUpdateWithoutJobInput = {
   resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availableFrom?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   shortMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobCompany?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpJurisdiction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorChurch?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   jobSeeker?: Prisma.JobSeekerProfileUpdateOneRequiredWithoutApplicationsNestedInput
@@ -782,6 +1411,23 @@ export type ApplicationUncheckedUpdateWithoutJobInput = {
   resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availableFrom?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   shortMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobCompany?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpJurisdiction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorChurch?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   interview?: Prisma.InterviewUncheckedUpdateOneWithoutApplicationNestedInput
@@ -794,6 +1440,23 @@ export type ApplicationUncheckedUpdateManyWithoutJobInput = {
   resumeUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   availableFrom?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   shortMessage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobCompany?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobTitle?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobPhone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJobEmail?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpJurisdiction?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refJpRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorChurch?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refPastorRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeContact?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  refRelativeRelationship?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   editedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
@@ -808,6 +1471,23 @@ export type ApplicationSelect<ExtArgs extends runtime.Types.Extensions.InternalA
   resumeUrl?: boolean
   availableFrom?: boolean
   shortMessage?: boolean
+  refJobName?: boolean
+  refJobCompany?: boolean
+  refJobTitle?: boolean
+  refJobRelationship?: boolean
+  refJobPhone?: boolean
+  refJobEmail?: boolean
+  refJpName?: boolean
+  refJpContact?: boolean
+  refJpJurisdiction?: boolean
+  refJpRelationship?: boolean
+  refPastorName?: boolean
+  refPastorChurch?: boolean
+  refPastorContact?: boolean
+  refPastorRelationship?: boolean
+  refRelativeName?: boolean
+  refRelativeContact?: boolean
+  refRelativeRelationship?: boolean
   createdAt?: boolean
   editedAt?: boolean
   job?: boolean | Prisma.JobDefaultArgs<ExtArgs>
@@ -823,6 +1503,23 @@ export type ApplicationSelectCreateManyAndReturn<ExtArgs extends runtime.Types.E
   resumeUrl?: boolean
   availableFrom?: boolean
   shortMessage?: boolean
+  refJobName?: boolean
+  refJobCompany?: boolean
+  refJobTitle?: boolean
+  refJobRelationship?: boolean
+  refJobPhone?: boolean
+  refJobEmail?: boolean
+  refJpName?: boolean
+  refJpContact?: boolean
+  refJpJurisdiction?: boolean
+  refJpRelationship?: boolean
+  refPastorName?: boolean
+  refPastorChurch?: boolean
+  refPastorContact?: boolean
+  refPastorRelationship?: boolean
+  refRelativeName?: boolean
+  refRelativeContact?: boolean
+  refRelativeRelationship?: boolean
   createdAt?: boolean
   editedAt?: boolean
   job?: boolean | Prisma.JobDefaultArgs<ExtArgs>
@@ -837,6 +1534,23 @@ export type ApplicationSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.E
   resumeUrl?: boolean
   availableFrom?: boolean
   shortMessage?: boolean
+  refJobName?: boolean
+  refJobCompany?: boolean
+  refJobTitle?: boolean
+  refJobRelationship?: boolean
+  refJobPhone?: boolean
+  refJobEmail?: boolean
+  refJpName?: boolean
+  refJpContact?: boolean
+  refJpJurisdiction?: boolean
+  refJpRelationship?: boolean
+  refPastorName?: boolean
+  refPastorChurch?: boolean
+  refPastorContact?: boolean
+  refPastorRelationship?: boolean
+  refRelativeName?: boolean
+  refRelativeContact?: boolean
+  refRelativeRelationship?: boolean
   createdAt?: boolean
   editedAt?: boolean
   job?: boolean | Prisma.JobDefaultArgs<ExtArgs>
@@ -851,11 +1565,28 @@ export type ApplicationSelectScalar = {
   resumeUrl?: boolean
   availableFrom?: boolean
   shortMessage?: boolean
+  refJobName?: boolean
+  refJobCompany?: boolean
+  refJobTitle?: boolean
+  refJobRelationship?: boolean
+  refJobPhone?: boolean
+  refJobEmail?: boolean
+  refJpName?: boolean
+  refJpContact?: boolean
+  refJpJurisdiction?: boolean
+  refJpRelationship?: boolean
+  refPastorName?: boolean
+  refPastorChurch?: boolean
+  refPastorContact?: boolean
+  refPastorRelationship?: boolean
+  refRelativeName?: boolean
+  refRelativeContact?: boolean
+  refRelativeRelationship?: boolean
   createdAt?: boolean
   editedAt?: boolean
 }
 
-export type ApplicationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "jobId" | "jobSeekerId" | "status" | "resumeUrl" | "availableFrom" | "shortMessage" | "createdAt" | "editedAt", ExtArgs["result"]["application"]>
+export type ApplicationOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "jobId" | "jobSeekerId" | "status" | "resumeUrl" | "availableFrom" | "shortMessage" | "refJobName" | "refJobCompany" | "refJobTitle" | "refJobRelationship" | "refJobPhone" | "refJobEmail" | "refJpName" | "refJpContact" | "refJpJurisdiction" | "refJpRelationship" | "refPastorName" | "refPastorChurch" | "refPastorContact" | "refPastorRelationship" | "refRelativeName" | "refRelativeContact" | "refRelativeRelationship" | "createdAt" | "editedAt", ExtArgs["result"]["application"]>
 export type ApplicationInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   job?: boolean | Prisma.JobDefaultArgs<ExtArgs>
   jobSeeker?: boolean | Prisma.JobSeekerProfileDefaultArgs<ExtArgs>
@@ -885,6 +1616,23 @@ export type $ApplicationPayload<ExtArgs extends runtime.Types.Extensions.Interna
     resumeUrl: string | null
     availableFrom: Date | null
     shortMessage: string | null
+    refJobName: string | null
+    refJobCompany: string | null
+    refJobTitle: string | null
+    refJobRelationship: string | null
+    refJobPhone: string | null
+    refJobEmail: string | null
+    refJpName: string | null
+    refJpContact: string | null
+    refJpJurisdiction: string | null
+    refJpRelationship: string | null
+    refPastorName: string | null
+    refPastorChurch: string | null
+    refPastorContact: string | null
+    refPastorRelationship: string | null
+    refRelativeName: string | null
+    refRelativeContact: string | null
+    refRelativeRelationship: string | null
     createdAt: Date
     editedAt: Date | null
   }, ExtArgs["result"]["application"]>
@@ -1320,6 +2068,23 @@ export interface ApplicationFieldRefs {
   readonly resumeUrl: Prisma.FieldRef<"Application", 'String'>
   readonly availableFrom: Prisma.FieldRef<"Application", 'DateTime'>
   readonly shortMessage: Prisma.FieldRef<"Application", 'String'>
+  readonly refJobName: Prisma.FieldRef<"Application", 'String'>
+  readonly refJobCompany: Prisma.FieldRef<"Application", 'String'>
+  readonly refJobTitle: Prisma.FieldRef<"Application", 'String'>
+  readonly refJobRelationship: Prisma.FieldRef<"Application", 'String'>
+  readonly refJobPhone: Prisma.FieldRef<"Application", 'String'>
+  readonly refJobEmail: Prisma.FieldRef<"Application", 'String'>
+  readonly refJpName: Prisma.FieldRef<"Application", 'String'>
+  readonly refJpContact: Prisma.FieldRef<"Application", 'String'>
+  readonly refJpJurisdiction: Prisma.FieldRef<"Application", 'String'>
+  readonly refJpRelationship: Prisma.FieldRef<"Application", 'String'>
+  readonly refPastorName: Prisma.FieldRef<"Application", 'String'>
+  readonly refPastorChurch: Prisma.FieldRef<"Application", 'String'>
+  readonly refPastorContact: Prisma.FieldRef<"Application", 'String'>
+  readonly refPastorRelationship: Prisma.FieldRef<"Application", 'String'>
+  readonly refRelativeName: Prisma.FieldRef<"Application", 'String'>
+  readonly refRelativeContact: Prisma.FieldRef<"Application", 'String'>
+  readonly refRelativeRelationship: Prisma.FieldRef<"Application", 'String'>
   readonly createdAt: Prisma.FieldRef<"Application", 'DateTime'>
   readonly editedAt: Prisma.FieldRef<"Application", 'DateTime'>
 }

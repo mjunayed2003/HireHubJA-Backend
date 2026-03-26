@@ -1,16 +1,16 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString, IsArray } from 'class-validator';
 
 export class RegisterJobSeekerDto {
   // --- User Credentials ---
   @IsEmail()
-  email: string;
+  email!: string;
 
   @IsNotEmpty()
-  password: string;
+  password!: string;
 
   // --- Basic Profile Info ---
   @IsNotEmpty()
-  fullName: string;
+  fullName!: string;
 
   @IsOptional()
   phone?: string;
@@ -29,7 +29,8 @@ export class RegisterJobSeekerDto {
   skills?: string; // e.g. '["Java", "Python"]'
 
   @IsOptional()
-  education?: string; // e.g. '[{"degreeName": "BSc", ...}]'
+  @IsArray()
+  education?: any[]; 
 
   @IsOptional()
   experience?: string; // e.g. '[{"companyName": "ABC", ...}]'

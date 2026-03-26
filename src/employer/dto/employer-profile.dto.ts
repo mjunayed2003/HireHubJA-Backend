@@ -31,11 +31,11 @@ export class UpdateEmployerProfileDto {
 
 export class ChangePasswordDto {
   @IsString() @IsNotEmpty()
-  currentPassword: string;
+  currentPassword!: string;
 
   @IsString() @MinLength(6)
-  newPassword: string;
+  newPassword!: string;
 
   @IsString() @IsNotEmpty()
-  confirmPassword: string;
+  confirmPassword!: string;
 }

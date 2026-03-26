@@ -1,0 +1,18 @@
+-- AlterTable
+ALTER TABLE "Application" ADD COLUMN     "refJobCompany" TEXT,
+ADD COLUMN     "refJobEmail" TEXT,
+ADD COLUMN     "refJobName" TEXT,
+ADD COLUMN     "refJobPhone" TEXT,
+ADD COLUMN     "refJobRelationship" TEXT,
+ADD COLUMN     "refJobTitle" TEXT,
+ADD COLUMN     "refJpContact" TEXT,
+ADD COLUMN     "refJpJurisdiction" TEXT,
+ADD COLUMN     "refJpName" TEXT,
+ADD COLUMN     "refJpRelationship" TEXT,
+ADD COLUMN     "refPastorChurch" TEXT,
+ADD COLUMN     "refPastorContact" TEXT,
+ADD COLUMN     "refPastorName" TEXT,
+ADD COLUMN     "refPastorRelationship" TEXT,
+ADD COLUMN     "refRelativeContact" TEXT,
+ADD COLUMN     "refRelativeName" TEXT,
+ADD COLUMN     "refRelativeRelationship" TEXT;

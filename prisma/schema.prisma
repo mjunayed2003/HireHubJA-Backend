@@ -300,6 +300,39 @@ model Application {
   availableFrom DateTime?
   shortMessage  String?
 
+  // ------------------------------------------------
+  // 1. Previous/Current Job Reference
+  // ------------------------------------------------
+  refJobName         String?
+  refJobCompany      String?
+  refJobTitle        String?
+  refJobRelationship String?
+  refJobPhone        String?
+  refJobEmail        String?
+
+  // ------------------------------------------------
+  // 2. Justice of the Peace (JP)
+  // ------------------------------------------------
+  refJpName         String?
+  refJpContact      String?
+  refJpJurisdiction String?
+  refJpRelationship String?
+
+  // ------------------------------------------------
+  // 3. Pastor / Religious Leader
+  // ------------------------------------------------
+  refPastorName         String?
+  refPastorChurch       String?
+  refPastorContact      String?
+  refPastorRelationship String?
+
+  // ------------------------------------------------
+  // 4. Relative
+  // ------------------------------------------------
+  refRelativeName         String?
+  refRelativeContact      String?
+  refRelativeRelationship String?
+
   interview Interview?
   createdAt DateTime   @default(now())
   editedAt  DateTime?

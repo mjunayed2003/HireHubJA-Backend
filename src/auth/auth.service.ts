@@ -207,8 +207,8 @@ export class AuthService {
     if (!user) throw new NotFoundException('User not found');
     if (user.role !== UserRole.JOB_SEEKER) throw new BadRequestException('Not a job seeker account');
 
-    const categories = dto.preferredJobCategoryIds ? JSON.parse(dto.preferredJobCategoryIds) :[];
-    const employmentType = dto.employmentType ? JSON.parse(dto.employmentType) :[];
+    const categories = typeof dto.preferredJobCategoryIds === 'string' ? JSON.parse(dto.preferredJobCategoryIds) : (dto.preferredJobCategoryIds || []);
+    const employmentType = typeof dto.employmentType === 'string' ? JSON.parse(dto.employmentType) : (dto.employmentType || []);
     const profilePic = profilePicFile ? `/uploads/${profilePicFile.filename}` : undefined;
 
     try {
@@ -258,7 +258,7 @@ export class AuthService {
     const profile = await this.prisma.jobSeekerProfile.findUnique({ where: { userId } });
     if (!profile) throw new NotFoundException('Profile not found');
 
-    const education = dto.education ? JSON.parse(dto.education) :[];
+    const education = typeof dto.education === 'string' ? JSON.parse(dto.education) : (dto.education || []);
 
     await this.prisma.jobSeekerProfile.update({
       where: { userId },
@@ -286,8 +286,8 @@ export class AuthService {
     const profile = await this.prisma.jobSeekerProfile.findUnique({ where: { userId } });
     if (!profile) throw new NotFoundException('Profile not found');
 
-    const skills = dto.skills ? JSON.parse(dto.skills) :[];
-    const experience = dto.experience ? JSON.parse(dto.experience) : [];
+    const skills = typeof dto.skills === 'string' ? JSON.parse(dto.skills) : (dto.skills || []);
+    const experience = typeof dto.experience === 'string' ? JSON.parse(dto.experience) : (dto.experience || []);
     const resumeUrl = files?.resume?.[0] ? `/uploads/${files.resume[0].filename}` : undefined;
 
     await this.prisma.jobSeekerProfile.update({
@@ -355,7 +355,6 @@ export class AuthService {
         phone: dto.phone,
         location: dto.location,
         about: dto.about,
-        website: dto.website,
         ...(profilePic && { profilePic }),
       },
       create: {
@@ -364,7 +363,6 @@ export class AuthService {
         phone: dto.phone,
         location: dto.location,
         about: dto.about,
-        website: dto.website,
         ...(profilePic && { profilePic }),
       },
     });
@@ -412,7 +410,6 @@ export class AuthService {
         phone: dto.phone,
         location: dto.location,
         about: dto.about,
-        website: dto.website,
         businessRegCertId: dto.businessRegCertId,
         taxId: dto.taxId,
         authorizedRepId: dto.authorizedRepId,
@@ -425,7 +422,6 @@ export class AuthService {
         phone: dto.phone,
         location: dto.location,
         about: dto.about,
-        website: dto.website,
         businessRegCertId: dto.businessRegCertId,
         taxId: dto.taxId,
         authorizedRepId: dto.authorizedRepId,

@@ -3,22 +3,22 @@ import { IsNotEmpty, IsString, IsNumber, IsArray, ArrayMinSize } from 'class-val
 export class CreateSubscriptionPlanDto {
   @IsNotEmpty()
   @IsString()
-  name: string;
+  name!: string;
 
   @IsNotEmpty()
   @IsNumber()
-  price: number;
+  price!: number;
 
   @IsNotEmpty()
   @IsNumber()
-  duration: number; // days
+  duration!: number; // days
 
   @IsNotEmpty()
   @IsNumber()
-  slotsAvailable: number;
+  slotsAvailable!: number;
 
   @IsArray()
   @ArrayMinSize(1)
   @IsString({ each: true })
-  features: string[];
+  features!: string[];
 }

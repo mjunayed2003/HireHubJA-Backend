@@ -1,4 +1,4 @@
-import { IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
+import { IsArray, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
 
 export class RegisterDto {
   @IsNotEmpty() @IsString() fullName!: string;
@@ -28,7 +28,9 @@ export class JobSeekerBasicDto {
 }
 
 export class JobSeekerEducationDto {
-  @IsOptional() @IsString() education?: string;
+  @IsOptional()
+    @IsArray()
+    education?: any[]; 
 }
 
 export class JobSeekerProfessionalDto {
@@ -41,14 +43,12 @@ export class EmployerBasicDto {
   @IsOptional() @IsString() phone?: string;
   @IsOptional() @IsString() location?: string;
   @IsOptional() @IsString() about?: string;
-  @IsOptional() @IsString() website?: string;
 }
 
 export class CompanyBasicDto {
   @IsOptional() @IsString() phone?: string;
   @IsOptional() @IsString() location?: string;
   @IsOptional() @IsString() about?: string;
-  @IsOptional() @IsString() website?: string;
   @IsOptional() @IsString() businessRegCertId?: string;
   @IsOptional() @IsString() taxId?: string;
   @IsOptional() @IsString() authorizedRepId?: string;

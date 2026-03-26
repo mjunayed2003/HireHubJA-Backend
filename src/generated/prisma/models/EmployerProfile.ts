@@ -40,6 +40,7 @@ export type EmployerProfileMinAggregateOutputType = {
   licenseFile: string | null
   idCardFront: string | null
   idCardBack: string | null
+  categoryId: string | null
   isVerified: boolean | null
   status: $Enums.UserStatus | null
   createdAt: Date | null
@@ -62,6 +63,7 @@ export type EmployerProfileMaxAggregateOutputType = {
   licenseFile: string | null
   idCardFront: string | null
   idCardBack: string | null
+  categoryId: string | null
   isVerified: boolean | null
   status: $Enums.UserStatus | null
   createdAt: Date | null
@@ -84,6 +86,7 @@ export type EmployerProfileCountAggregateOutputType = {
   licenseFile: number
   idCardFront: number
   idCardBack: number
+  categoryId: number
   isVerified: number
   status: number
   createdAt: number
@@ -108,6 +111,7 @@ export type EmployerProfileMinAggregateInputType = {
   licenseFile?: true
   idCardFront?: true
   idCardBack?: true
+  categoryId?: true
   isVerified?: true
   status?: true
   createdAt?: true
@@ -130,6 +134,7 @@ export type EmployerProfileMaxAggregateInputType = {
   licenseFile?: true
   idCardFront?: true
   idCardBack?: true
+  categoryId?: true
   isVerified?: true
   status?: true
   createdAt?: true
@@ -152,6 +157,7 @@ export type EmployerProfileCountAggregateInputType = {
   licenseFile?: true
   idCardFront?: true
   idCardBack?: true
+  categoryId?: true
   isVerified?: true
   status?: true
   createdAt?: true
@@ -247,6 +253,7 @@ export type EmployerProfileGroupByOutputType = {
   licenseFile: string | null
   idCardFront: string | null
   idCardBack: string | null
+  categoryId: string | null
   isVerified: boolean
   status: $Enums.UserStatus
   createdAt: Date
@@ -290,6 +297,7 @@ export type EmployerProfileWhereInput = {
   licenseFile?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
   idCardFront?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
   idCardBack?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
+  categoryId?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
   isVerified?: Prisma.BoolFilter<"EmployerProfile"> | boolean
   status?: Prisma.EnumUserStatusFilter<"EmployerProfile"> | $Enums.UserStatus
   createdAt?: Prisma.DateTimeFilter<"EmployerProfile"> | Date | string
@@ -297,6 +305,7 @@ export type EmployerProfileWhereInput = {
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   jobsPosted?: Prisma.JobListRelationFilter
   payments?: Prisma.PaymentListRelationFilter
+  preferredCategories?: Prisma.CategoryListRelationFilter
 }
 
 export type EmployerProfileOrderByWithRelationInput = {
@@ -315,6 +324,7 @@ export type EmployerProfileOrderByWithRelationInput = {
   licenseFile?: Prisma.SortOrderInput | Prisma.SortOrder
   idCardFront?: Prisma.SortOrderInput | Prisma.SortOrder
   idCardBack?: Prisma.SortOrderInput | Prisma.SortOrder
+  categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
   isVerified?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -322,6 +332,7 @@ export type EmployerProfileOrderByWithRelationInput = {
   user?: Prisma.UserOrderByWithRelationInput
   jobsPosted?: Prisma.JobOrderByRelationAggregateInput
   payments?: Prisma.PaymentOrderByRelationAggregateInput
+  preferredCategories?: Prisma.CategoryOrderByRelationAggregateInput
 }
 
 export type EmployerProfileWhereUniqueInput = Prisma.AtLeast<{
@@ -343,6 +354,7 @@ export type EmployerProfileWhereUniqueInput = Prisma.AtLeast<{
   licenseFile?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
   idCardFront?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
   idCardBack?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
+  categoryId?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
   isVerified?: Prisma.BoolFilter<"EmployerProfile"> | boolean
   status?: Prisma.EnumUserStatusFilter<"EmployerProfile"> | $Enums.UserStatus
   createdAt?: Prisma.DateTimeFilter<"EmployerProfile"> | Date | string
@@ -350,6 +362,7 @@ export type EmployerProfileWhereUniqueInput = Prisma.AtLeast<{
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   jobsPosted?: Prisma.JobListRelationFilter
   payments?: Prisma.PaymentListRelationFilter
+  preferredCategories?: Prisma.CategoryListRelationFilter
 }, "id" | "userId">
 
 export type EmployerProfileOrderByWithAggregationInput = {
@@ -368,6 +381,7 @@ export type EmployerProfileOrderByWithAggregationInput = {
   licenseFile?: Prisma.SortOrderInput | Prisma.SortOrder
   idCardFront?: Prisma.SortOrderInput | Prisma.SortOrder
   idCardBack?: Prisma.SortOrderInput | Prisma.SortOrder
+  categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
   isVerified?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -396,6 +410,7 @@ export type EmployerProfileScalarWhereWithAggregatesInput = {
   licenseFile?: Prisma.StringNullableWithAggregatesFilter<"EmployerProfile"> | string | null
   idCardFront?: Prisma.StringNullableWithAggregatesFilter<"EmployerProfile"> | string | null
   idCardBack?: Prisma.StringNullableWithAggregatesFilter<"EmployerProfile"> | string | null
+  categoryId?: Prisma.StringNullableWithAggregatesFilter<"EmployerProfile"> | string | null
   isVerified?: Prisma.BoolWithAggregatesFilter<"EmployerProfile"> | boolean
   status?: Prisma.EnumUserStatusWithAggregatesFilter<"EmployerProfile"> | $Enums.UserStatus
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"EmployerProfile"> | Date | string
@@ -417,6 +432,7 @@ export type EmployerProfileCreateInput = {
   licenseFile?: string | null
   idCardFront?: string | null
   idCardBack?: string | null
+  categoryId?: string | null
   isVerified?: boolean
   status?: $Enums.UserStatus
   createdAt?: Date | string
@@ -424,6 +440,7 @@ export type EmployerProfileCreateInput = {
   user: Prisma.UserCreateNestedOneWithoutEmployerProfileInput
   jobsPosted?: Prisma.JobCreateNestedManyWithoutEmployerInput
   payments?: Prisma.PaymentCreateNestedManyWithoutEmployerInput
+  preferredCategories?: Prisma.CategoryCreateNestedManyWithoutEmployersInput
 }
 
 export type EmployerProfileUncheckedCreateInput = {
@@ -442,12 +459,14 @@ export type EmployerProfileUncheckedCreateInput = {
   licenseFile?: string | null
   idCardFront?: string | null
   idCardBack?: string | null
+  categoryId?: string | null
   isVerified?: boolean
   status?: $Enums.UserStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   jobsPosted?: Prisma.JobUncheckedCreateNestedManyWithoutEmployerInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutEmployerInput
+  preferredCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutEmployersInput
 }
 
 export type EmployerProfileUpdateInput = {
@@ -465,6 +484,7 @@ export type EmployerProfileUpdateInput = {
   licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -472,6 +492,7 @@ export type EmployerProfileUpdateInput = {
   user?: Prisma.UserUpdateOneRequiredWithoutEmployerProfileNestedInput
   jobsPosted?: Prisma.JobUpdateManyWithoutEmployerNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutEmployerNestedInput
+  preferredCategories?: Prisma.CategoryUpdateManyWithoutEmployersNestedInput
 }
 
 export type EmployerProfileUncheckedUpdateInput = {
@@ -490,12 +511,14 @@ export type EmployerProfileUncheckedUpdateInput = {
   licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   jobsPosted?: Prisma.JobUncheckedUpdateManyWithoutEmployerNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutEmployerNestedInput
+  preferredCategories?: Prisma.CategoryUncheckedUpdateManyWithoutEmployersNestedInput
 }
 
 export type EmployerProfileCreateManyInput = {
@@ -514,6 +537,7 @@ export type EmployerProfileCreateManyInput = {
   licenseFile?: string | null
   idCardFront?: string | null
   idCardBack?: string | null
+  categoryId?: string | null
   isVerified?: boolean
   status?: $Enums.UserStatus
   createdAt?: Date | string
@@ -535,6 +559,7 @@ export type EmployerProfileUpdateManyMutationInput = {
   licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -557,6 +582,7 @@ export type EmployerProfileUncheckedUpdateManyInput = {
   licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -566,6 +592,16 @@ export type EmployerProfileUncheckedUpdateManyInput = {
 export type EmployerProfileNullableScalarRelationFilter = {
   is?: Prisma.EmployerProfileWhereInput | null
   isNot?: Prisma.EmployerProfileWhereInput | null
+}
+
+export type EmployerProfileListRelationFilter = {
+  every?: Prisma.EmployerProfileWhereInput
+  some?: Prisma.EmployerProfileWhereInput
+  none?: Prisma.EmployerProfileWhereInput
+}
+
+export type EmployerProfileOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type EmployerProfileCountOrderByAggregateInput = {
@@ -584,6 +620,7 @@ export type EmployerProfileCountOrderByAggregateInput = {
   licenseFile?: Prisma.SortOrder
   idCardFront?: Prisma.SortOrder
   idCardBack?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -606,6 +643,7 @@ export type EmployerProfileMaxOrderByAggregateInput = {
   licenseFile?: Prisma.SortOrder
   idCardFront?: Prisma.SortOrder
   idCardBack?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -628,6 +666,7 @@ export type EmployerProfileMinOrderByAggregateInput = {
   licenseFile?: Prisma.SortOrder
   idCardFront?: Prisma.SortOrder
   idCardBack?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
   status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
@@ -669,6 +708,44 @@ export type EmployerProfileUncheckedUpdateOneWithoutUserNestedInput = {
   delete?: Prisma.EmployerProfileWhereInput | boolean
   connect?: Prisma.EmployerProfileWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.EmployerProfileUpdateToOneWithWhereWithoutUserInput, Prisma.EmployerProfileUpdateWithoutUserInput>, Prisma.EmployerProfileUncheckedUpdateWithoutUserInput>
+}
+
+export type EmployerProfileCreateNestedManyWithoutPreferredCategoriesInput = {
+  create?: Prisma.XOR<Prisma.EmployerProfileCreateWithoutPreferredCategoriesInput, Prisma.EmployerProfileUncheckedCreateWithoutPreferredCategoriesInput> | Prisma.EmployerProfileCreateWithoutPreferredCategoriesInput[] | Prisma.EmployerProfileUncheckedCreateWithoutPreferredCategoriesInput[]
+  connectOrCreate?: Prisma.EmployerProfileCreateOrConnectWithoutPreferredCategoriesInput | Prisma.EmployerProfileCreateOrConnectWithoutPreferredCategoriesInput[]
+  connect?: Prisma.EmployerProfileWhereUniqueInput | Prisma.EmployerProfileWhereUniqueInput[]
+}
+
+export type EmployerProfileUncheckedCreateNestedManyWithoutPreferredCategoriesInput = {
+  create?: Prisma.XOR<Prisma.EmployerProfileCreateWithoutPreferredCategoriesInput, Prisma.EmployerProfileUncheckedCreateWithoutPreferredCategoriesInput> | Prisma.EmployerProfileCreateWithoutPreferredCategoriesInput[] | Prisma.EmployerProfileUncheckedCreateWithoutPreferredCategoriesInput[]
+  connectOrCreate?: Prisma.EmployerProfileCreateOrConnectWithoutPreferredCategoriesInput | Prisma.EmployerProfileCreateOrConnectWithoutPreferredCategoriesInput[]
+  connect?: Prisma.EmployerProfileWhereUniqueInput | Prisma.EmployerProfileWhereUniqueInput[]
+}
+
+export type EmployerProfileUpdateManyWithoutPreferredCategoriesNestedInput = {
+  create?: Prisma.XOR<Prisma.EmployerProfileCreateWithoutPreferredCategoriesInput, Prisma.EmployerProfileUncheckedCreateWithoutPreferredCategoriesInput> | Prisma.EmployerProfileCreateWithoutPreferredCategoriesInput[] | Prisma.EmployerProfileUncheckedCreateWithoutPreferredCategoriesInput[]
+  connectOrCreate?: Prisma.EmployerProfileCreateOrConnectWithoutPreferredCategoriesInput | Prisma.EmployerProfileCreateOrConnectWithoutPreferredCategoriesInput[]
+  upsert?: Prisma.EmployerProfileUpsertWithWhereUniqueWithoutPreferredCategoriesInput | Prisma.EmployerProfileUpsertWithWhereUniqueWithoutPreferredCategoriesInput[]
+  set?: Prisma.EmployerProfileWhereUniqueInput | Prisma.EmployerProfileWhereUniqueInput[]
+  disconnect?: Prisma.EmployerProfileWhereUniqueInput | Prisma.EmployerProfileWhereUniqueInput[]
+  delete?: Prisma.EmployerProfileWhereUniqueInput | Prisma.EmployerProfileWhereUniqueInput[]
+  connect?: Prisma.EmployerProfileWhereUniqueInput | Prisma.EmployerProfileWhereUniqueInput[]
+  update?: Prisma.EmployerProfileUpdateWithWhereUniqueWithoutPreferredCategoriesInput | Prisma.EmployerProfileUpdateWithWhereUniqueWithoutPreferredCategoriesInput[]
+  updateMany?: Prisma.EmployerProfileUpdateManyWithWhereWithoutPreferredCategoriesInput | Prisma.EmployerProfileUpdateManyWithWhereWithoutPreferredCategoriesInput[]
+  deleteMany?: Prisma.EmployerProfileScalarWhereInput | Prisma.EmployerProfileScalarWhereInput[]
+}
+
+export type EmployerProfileUncheckedUpdateManyWithoutPreferredCategoriesNestedInput = {
+  create?: Prisma.XOR<Prisma.EmployerProfileCreateWithoutPreferredCategoriesInput, Prisma.EmployerProfileUncheckedCreateWithoutPreferredCategoriesInput> | Prisma.EmployerProfileCreateWithoutPreferredCategoriesInput[] | Prisma.EmployerProfileUncheckedCreateWithoutPreferredCategoriesInput[]
+  connectOrCreate?: Prisma.EmployerProfileCreateOrConnectWithoutPreferredCategoriesInput | Prisma.EmployerProfileCreateOrConnectWithoutPreferredCategoriesInput[]
+  upsert?: Prisma.EmployerProfileUpsertWithWhereUniqueWithoutPreferredCategoriesInput | Prisma.EmployerProfileUpsertWithWhereUniqueWithoutPreferredCategoriesInput[]
+  set?: Prisma.EmployerProfileWhereUniqueInput | Prisma.EmployerProfileWhereUniqueInput[]
+  disconnect?: Prisma.EmployerProfileWhereUniqueInput | Prisma.EmployerProfileWhereUniqueInput[]
+  delete?: Prisma.EmployerProfileWhereUniqueInput | Prisma.EmployerProfileWhereUniqueInput[]
+  connect?: Prisma.EmployerProfileWhereUniqueInput | Prisma.EmployerProfileWhereUniqueInput[]
+  update?: Prisma.EmployerProfileUpdateWithWhereUniqueWithoutPreferredCategoriesInput | Prisma.EmployerProfileUpdateWithWhereUniqueWithoutPreferredCategoriesInput[]
+  updateMany?: Prisma.EmployerProfileUpdateManyWithWhereWithoutPreferredCategoriesInput | Prisma.EmployerProfileUpdateManyWithWhereWithoutPreferredCategoriesInput[]
+  deleteMany?: Prisma.EmployerProfileScalarWhereInput | Prisma.EmployerProfileScalarWhereInput[]
 }
 
 export type EmployerProfileCreateNestedOneWithoutJobsPostedInput = {
@@ -714,12 +791,14 @@ export type EmployerProfileCreateWithoutUserInput = {
   licenseFile?: string | null
   idCardFront?: string | null
   idCardBack?: string | null
+  categoryId?: string | null
   isVerified?: boolean
   status?: $Enums.UserStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   jobsPosted?: Prisma.JobCreateNestedManyWithoutEmployerInput
   payments?: Prisma.PaymentCreateNestedManyWithoutEmployerInput
+  preferredCategories?: Prisma.CategoryCreateNestedManyWithoutEmployersInput
 }
 
 export type EmployerProfileUncheckedCreateWithoutUserInput = {
@@ -737,12 +816,14 @@ export type EmployerProfileUncheckedCreateWithoutUserInput = {
   licenseFile?: string | null
   idCardFront?: string | null
   idCardBack?: string | null
+  categoryId?: string | null
   isVerified?: boolean
   status?: $Enums.UserStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   jobsPosted?: Prisma.JobUncheckedCreateNestedManyWithoutEmployerInput
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutEmployerInput
+  preferredCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutEmployersInput
 }
 
 export type EmployerProfileCreateOrConnectWithoutUserInput = {
@@ -776,12 +857,14 @@ export type EmployerProfileUpdateWithoutUserInput = {
   licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   jobsPosted?: Prisma.JobUpdateManyWithoutEmployerNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutEmployerNestedInput
+  preferredCategories?: Prisma.CategoryUpdateManyWithoutEmployersNestedInput
 }
 
 export type EmployerProfileUncheckedUpdateWithoutUserInput = {
@@ -799,12 +882,111 @@ export type EmployerProfileUncheckedUpdateWithoutUserInput = {
   licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   jobsPosted?: Prisma.JobUncheckedUpdateManyWithoutEmployerNestedInput
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutEmployerNestedInput
+  preferredCategories?: Prisma.CategoryUncheckedUpdateManyWithoutEmployersNestedInput
+}
+
+export type EmployerProfileCreateWithoutPreferredCategoriesInput = {
+  id?: string
+  companyName?: string | null
+  fullName: string
+  phone?: string | null
+  profilePic?: string | null
+  location?: string | null
+  about?: string | null
+  website?: string | null
+  businessRegCertId?: string | null
+  taxId?: string | null
+  authorizedRepId?: string | null
+  licenseFile?: string | null
+  idCardFront?: string | null
+  idCardBack?: string | null
+  categoryId?: string | null
+  isVerified?: boolean
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutEmployerProfileInput
+  jobsPosted?: Prisma.JobCreateNestedManyWithoutEmployerInput
+  payments?: Prisma.PaymentCreateNestedManyWithoutEmployerInput
+}
+
+export type EmployerProfileUncheckedCreateWithoutPreferredCategoriesInput = {
+  id?: string
+  userId: string
+  companyName?: string | null
+  fullName: string
+  phone?: string | null
+  profilePic?: string | null
+  location?: string | null
+  about?: string | null
+  website?: string | null
+  businessRegCertId?: string | null
+  taxId?: string | null
+  authorizedRepId?: string | null
+  licenseFile?: string | null
+  idCardFront?: string | null
+  idCardBack?: string | null
+  categoryId?: string | null
+  isVerified?: boolean
+  status?: $Enums.UserStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  jobsPosted?: Prisma.JobUncheckedCreateNestedManyWithoutEmployerInput
+  payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutEmployerInput
+}
+
+export type EmployerProfileCreateOrConnectWithoutPreferredCategoriesInput = {
+  where: Prisma.EmployerProfileWhereUniqueInput
+  create: Prisma.XOR<Prisma.EmployerProfileCreateWithoutPreferredCategoriesInput, Prisma.EmployerProfileUncheckedCreateWithoutPreferredCategoriesInput>
+}
+
+export type EmployerProfileUpsertWithWhereUniqueWithoutPreferredCategoriesInput = {
+  where: Prisma.EmployerProfileWhereUniqueInput
+  update: Prisma.XOR<Prisma.EmployerProfileUpdateWithoutPreferredCategoriesInput, Prisma.EmployerProfileUncheckedUpdateWithoutPreferredCategoriesInput>
+  create: Prisma.XOR<Prisma.EmployerProfileCreateWithoutPreferredCategoriesInput, Prisma.EmployerProfileUncheckedCreateWithoutPreferredCategoriesInput>
+}
+
+export type EmployerProfileUpdateWithWhereUniqueWithoutPreferredCategoriesInput = {
+  where: Prisma.EmployerProfileWhereUniqueInput
+  data: Prisma.XOR<Prisma.EmployerProfileUpdateWithoutPreferredCategoriesInput, Prisma.EmployerProfileUncheckedUpdateWithoutPreferredCategoriesInput>
+}
+
+export type EmployerProfileUpdateManyWithWhereWithoutPreferredCategoriesInput = {
+  where: Prisma.EmployerProfileScalarWhereInput
+  data: Prisma.XOR<Prisma.EmployerProfileUpdateManyMutationInput, Prisma.EmployerProfileUncheckedUpdateManyWithoutPreferredCategoriesInput>
+}
+
+export type EmployerProfileScalarWhereInput = {
+  AND?: Prisma.EmployerProfileScalarWhereInput | Prisma.EmployerProfileScalarWhereInput[]
+  OR?: Prisma.EmployerProfileScalarWhereInput[]
+  NOT?: Prisma.EmployerProfileScalarWhereInput | Prisma.EmployerProfileScalarWhereInput[]
+  id?: Prisma.StringFilter<"EmployerProfile"> | string
+  userId?: Prisma.StringFilter<"EmployerProfile"> | string
+  companyName?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
+  fullName?: Prisma.StringFilter<"EmployerProfile"> | string
+  phone?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
+  profilePic?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
+  location?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
+  about?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
+  website?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
+  businessRegCertId?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
+  taxId?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
+  authorizedRepId?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
+  licenseFile?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
+  idCardFront?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
+  idCardBack?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
+  categoryId?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
+  isVerified?: Prisma.BoolFilter<"EmployerProfile"> | boolean
+  status?: Prisma.EnumUserStatusFilter<"EmployerProfile"> | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFilter<"EmployerProfile"> | Date | string
+  updatedAt?: Prisma.DateTimeFilter<"EmployerProfile"> | Date | string
 }
 
 export type EmployerProfileCreateWithoutJobsPostedInput = {
@@ -822,12 +1004,14 @@ export type EmployerProfileCreateWithoutJobsPostedInput = {
   licenseFile?: string | null
   idCardFront?: string | null
   idCardBack?: string | null
+  categoryId?: string | null
   isVerified?: boolean
   status?: $Enums.UserStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutEmployerProfileInput
   payments?: Prisma.PaymentCreateNestedManyWithoutEmployerInput
+  preferredCategories?: Prisma.CategoryCreateNestedManyWithoutEmployersInput
 }
 
 export type EmployerProfileUncheckedCreateWithoutJobsPostedInput = {
@@ -846,11 +1030,13 @@ export type EmployerProfileUncheckedCreateWithoutJobsPostedInput = {
   licenseFile?: string | null
   idCardFront?: string | null
   idCardBack?: string | null
+  categoryId?: string | null
   isVerified?: boolean
   status?: $Enums.UserStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   payments?: Prisma.PaymentUncheckedCreateNestedManyWithoutEmployerInput
+  preferredCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutEmployersInput
 }
 
 export type EmployerProfileCreateOrConnectWithoutJobsPostedInput = {
@@ -884,12 +1070,14 @@ export type EmployerProfileUpdateWithoutJobsPostedInput = {
   licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutEmployerProfileNestedInput
   payments?: Prisma.PaymentUpdateManyWithoutEmployerNestedInput
+  preferredCategories?: Prisma.CategoryUpdateManyWithoutEmployersNestedInput
 }
 
 export type EmployerProfileUncheckedUpdateWithoutJobsPostedInput = {
@@ -908,11 +1096,13 @@ export type EmployerProfileUncheckedUpdateWithoutJobsPostedInput = {
   licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   payments?: Prisma.PaymentUncheckedUpdateManyWithoutEmployerNestedInput
+  preferredCategories?: Prisma.CategoryUncheckedUpdateManyWithoutEmployersNestedInput
 }
 
 export type EmployerProfileCreateWithoutPaymentsInput = {
@@ -930,12 +1120,14 @@ export type EmployerProfileCreateWithoutPaymentsInput = {
   licenseFile?: string | null
   idCardFront?: string | null
   idCardBack?: string | null
+  categoryId?: string | null
   isVerified?: boolean
   status?: $Enums.UserStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutEmployerProfileInput
   jobsPosted?: Prisma.JobCreateNestedManyWithoutEmployerInput
+  preferredCategories?: Prisma.CategoryCreateNestedManyWithoutEmployersInput
 }
 
 export type EmployerProfileUncheckedCreateWithoutPaymentsInput = {
@@ -954,11 +1146,13 @@ export type EmployerProfileUncheckedCreateWithoutPaymentsInput = {
   licenseFile?: string | null
   idCardFront?: string | null
   idCardBack?: string | null
+  categoryId?: string | null
   isVerified?: boolean
   status?: $Enums.UserStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   jobsPosted?: Prisma.JobUncheckedCreateNestedManyWithoutEmployerInput
+  preferredCategories?: Prisma.CategoryUncheckedCreateNestedManyWithoutEmployersInput
 }
 
 export type EmployerProfileCreateOrConnectWithoutPaymentsInput = {
@@ -992,12 +1186,14 @@ export type EmployerProfileUpdateWithoutPaymentsInput = {
   licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutEmployerProfileNestedInput
   jobsPosted?: Prisma.JobUpdateManyWithoutEmployerNestedInput
+  preferredCategories?: Prisma.CategoryUpdateManyWithoutEmployersNestedInput
 }
 
 export type EmployerProfileUncheckedUpdateWithoutPaymentsInput = {
@@ -1016,11 +1212,86 @@ export type EmployerProfileUncheckedUpdateWithoutPaymentsInput = {
   licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   jobsPosted?: Prisma.JobUncheckedUpdateManyWithoutEmployerNestedInput
+  preferredCategories?: Prisma.CategoryUncheckedUpdateManyWithoutEmployersNestedInput
+}
+
+export type EmployerProfileUpdateWithoutPreferredCategoriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessRegCertId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authorizedRepId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutEmployerProfileNestedInput
+  jobsPosted?: Prisma.JobUpdateManyWithoutEmployerNestedInput
+  payments?: Prisma.PaymentUpdateManyWithoutEmployerNestedInput
+}
+
+export type EmployerProfileUncheckedUpdateWithoutPreferredCategoriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessRegCertId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authorizedRepId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  jobsPosted?: Prisma.JobUncheckedUpdateManyWithoutEmployerNestedInput
+  payments?: Prisma.PaymentUncheckedUpdateManyWithoutEmployerNestedInput
+}
+
+export type EmployerProfileUncheckedUpdateManyWithoutPreferredCategoriesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  companyName?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  fullName?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  profilePic?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  location?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  about?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  businessRegCertId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  taxId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authorizedRepId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 
@@ -1031,11 +1302,13 @@ export type EmployerProfileUncheckedUpdateWithoutPaymentsInput = {
 export type EmployerProfileCountOutputType = {
   jobsPosted: number
   payments: number
+  preferredCategories: number
 }
 
 export type EmployerProfileCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   jobsPosted?: boolean | EmployerProfileCountOutputTypeCountJobsPostedArgs
   payments?: boolean | EmployerProfileCountOutputTypeCountPaymentsArgs
+  preferredCategories?: boolean | EmployerProfileCountOutputTypeCountPreferredCategoriesArgs
 }
 
 /**
@@ -1062,6 +1335,13 @@ export type EmployerProfileCountOutputTypeCountPaymentsArgs<ExtArgs extends runt
   where?: Prisma.PaymentWhereInput
 }
 
+/**
+ * EmployerProfileCountOutputType without action
+ */
+export type EmployerProfileCountOutputTypeCountPreferredCategoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.CategoryWhereInput
+}
+
 
 export type EmployerProfileSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1079,6 +1359,7 @@ export type EmployerProfileSelect<ExtArgs extends runtime.Types.Extensions.Inter
   licenseFile?: boolean
   idCardFront?: boolean
   idCardBack?: boolean
+  categoryId?: boolean
   isVerified?: boolean
   status?: boolean
   createdAt?: boolean
@@ -1086,6 +1367,7 @@ export type EmployerProfileSelect<ExtArgs extends runtime.Types.Extensions.Inter
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   jobsPosted?: boolean | Prisma.EmployerProfile$jobsPostedArgs<ExtArgs>
   payments?: boolean | Prisma.EmployerProfile$paymentsArgs<ExtArgs>
+  preferredCategories?: boolean | Prisma.EmployerProfile$preferredCategoriesArgs<ExtArgs>
   _count?: boolean | Prisma.EmployerProfileCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["employerProfile"]>
 
@@ -1105,6 +1387,7 @@ export type EmployerProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   licenseFile?: boolean
   idCardFront?: boolean
   idCardBack?: boolean
+  categoryId?: boolean
   isVerified?: boolean
   status?: boolean
   createdAt?: boolean
@@ -1128,6 +1411,7 @@ export type EmployerProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   licenseFile?: boolean
   idCardFront?: boolean
   idCardBack?: boolean
+  categoryId?: boolean
   isVerified?: boolean
   status?: boolean
   createdAt?: boolean
@@ -1151,17 +1435,19 @@ export type EmployerProfileSelectScalar = {
   licenseFile?: boolean
   idCardFront?: boolean
   idCardBack?: boolean
+  categoryId?: boolean
   isVerified?: boolean
   status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type EmployerProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "companyName" | "fullName" | "phone" | "profilePic" | "location" | "about" | "website" | "businessRegCertId" | "taxId" | "authorizedRepId" | "licenseFile" | "idCardFront" | "idCardBack" | "isVerified" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["employerProfile"]>
+export type EmployerProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "companyName" | "fullName" | "phone" | "profilePic" | "location" | "about" | "website" | "businessRegCertId" | "taxId" | "authorizedRepId" | "licenseFile" | "idCardFront" | "idCardBack" | "categoryId" | "isVerified" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["employerProfile"]>
 export type EmployerProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   jobsPosted?: boolean | Prisma.EmployerProfile$jobsPostedArgs<ExtArgs>
   payments?: boolean | Prisma.EmployerProfile$paymentsArgs<ExtArgs>
+  preferredCategories?: boolean | Prisma.EmployerProfile$preferredCategoriesArgs<ExtArgs>
   _count?: boolean | Prisma.EmployerProfileCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type EmployerProfileIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1177,6 +1463,7 @@ export type $EmployerProfilePayload<ExtArgs extends runtime.Types.Extensions.Int
     user: Prisma.$UserPayload<ExtArgs>
     jobsPosted: Prisma.$JobPayload<ExtArgs>[]
     payments: Prisma.$PaymentPayload<ExtArgs>[]
+    preferredCategories: Prisma.$CategoryPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1194,6 +1481,7 @@ export type $EmployerProfilePayload<ExtArgs extends runtime.Types.Extensions.Int
     licenseFile: string | null
     idCardFront: string | null
     idCardBack: string | null
+    categoryId: string | null
     isVerified: boolean
     status: $Enums.UserStatus
     createdAt: Date
@@ -1595,6 +1883,7 @@ export interface Prisma__EmployerProfileClient<T, Null = never, ExtArgs extends 
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   jobsPosted<T extends Prisma.EmployerProfile$jobsPostedArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EmployerProfile$jobsPostedArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$JobPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   payments<T extends Prisma.EmployerProfile$paymentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EmployerProfile$paymentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  preferredCategories<T extends Prisma.EmployerProfile$preferredCategoriesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.EmployerProfile$preferredCategoriesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1639,6 +1928,7 @@ export interface EmployerProfileFieldRefs {
   readonly licenseFile: Prisma.FieldRef<"EmployerProfile", 'String'>
   readonly idCardFront: Prisma.FieldRef<"EmployerProfile", 'String'>
   readonly idCardBack: Prisma.FieldRef<"EmployerProfile", 'String'>
+  readonly categoryId: Prisma.FieldRef<"EmployerProfile", 'String'>
   readonly isVerified: Prisma.FieldRef<"EmployerProfile", 'Boolean'>
   readonly status: Prisma.FieldRef<"EmployerProfile", 'UserStatus'>
   readonly createdAt: Prisma.FieldRef<"EmployerProfile", 'DateTime'>
@@ -2084,6 +2374,30 @@ export type EmployerProfile$paymentsArgs<ExtArgs extends runtime.Types.Extension
   take?: number
   skip?: number
   distinct?: Prisma.PaymentScalarFieldEnum | Prisma.PaymentScalarFieldEnum[]
+}
+
+/**
+ * EmployerProfile.preferredCategories
+ */
+export type EmployerProfile$preferredCategoriesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Category
+   */
+  select?: Prisma.CategorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Category
+   */
+  omit?: Prisma.CategoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CategoryInclude<ExtArgs> | null
+  where?: Prisma.CategoryWhereInput
+  orderBy?: Prisma.CategoryOrderByWithRelationInput | Prisma.CategoryOrderByWithRelationInput[]
+  cursor?: Prisma.CategoryWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.CategoryScalarFieldEnum | Prisma.CategoryScalarFieldEnum[]
 }
 
 /**

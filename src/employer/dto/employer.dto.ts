@@ -7,7 +7,7 @@ export class CreateJobDto {
   // ── Step 1: Job Basics ──────────────────────────────
   @IsString()
   @IsNotEmpty()
-  title: string;
+  title!: string;
 
   @IsInt()
   @Min(1)
@@ -16,15 +16,15 @@ export class CreateJobDto {
 
   @IsString()
   @IsNotEmpty()
-  categoryId: string;
+  categoryId!: string;
 
   @IsArray()
   @IsEnum(JobType, { each: true })
-  jobType: JobType[]; // ["FULL_TIME", "PART_TIME"]
+  jobType!: JobType[]; // ["FULL_TIME", "PART_TIME"]
 
   @IsString()
   @IsNotEmpty()
-  location: string;
+  location!: string;
 
   @IsBoolean()
   @IsOptional()
@@ -37,7 +37,7 @@ export class CreateJobDto {
   // ── Step 2: Job Details ──────────────────────────────
   @IsString()
   @IsNotEmpty()
-  description: string;
+  description!: string;
 
   @IsArray()
   @IsString({ each: true })
@@ -90,7 +90,7 @@ export class CreateJobDto {
 export class ScheduleInterviewDto {
   @IsDateString()
   @IsNotEmpty()
-  scheduleDate: string;
+  scheduleDate!: string;
 
   @IsString()
   @IsOptional()
@@ -117,5 +117,5 @@ export class ScheduleInterviewDto {
 export class UpdateApplicationStatusDto {
   @IsEnum(ApplicationStatus)
   @IsNotEmpty()
-  status: ApplicationStatus; // 'HIRED' or 'REJECTED'
+  status!: ApplicationStatus; // 'HIRED' or 'REJECTED'
 }

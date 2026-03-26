@@ -14,7 +14,7 @@ import { JwtService } from '@nestjs/jwt';
 })
 export class MessagesGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
-  server: Server;
+  server!: Server;
 
   private connectedUsers = new Map<string, string>(); // userId → socketId
 
