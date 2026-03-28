@@ -83,7 +83,7 @@ model User {
   role     UserRole
 
   // Admin approval & verification
-  status          UserStatus @default(ACTIVE) // Admin approves the account
+  status          UserStatus @default(PENDING) // Admin approves the account
   rejectionReason String?
   isVerified      Boolean    @default(false) // Email verification status
 
@@ -91,6 +91,7 @@ model User {
   otpCode    String? // 4-6 digit code
   otpExpiry  DateTime?
   resetToken String?
+  tokenVersion  Int  @default(0)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

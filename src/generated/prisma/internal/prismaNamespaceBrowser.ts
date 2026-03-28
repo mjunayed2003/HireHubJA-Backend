@@ -100,6 +100,7 @@ export const UserScalarFieldEnum = {
   otpCode: 'otpCode',
   otpExpiry: 'otpExpiry',
   resetToken: 'resetToken',
+  tokenVersion: 'tokenVersion',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

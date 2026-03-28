@@ -20,8 +20,18 @@ export type UserModel = runtime.Types.Result.DefaultSelection<Prisma.$UserPayloa
 
 export type AggregateUser = {
   _count: UserCountAggregateOutputType | null
+  _avg: UserAvgAggregateOutputType | null
+  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
+}
+
+export type UserAvgAggregateOutputType = {
+  tokenVersion: number | null
+}
+
+export type UserSumAggregateOutputType = {
+  tokenVersion: number | null
 }
 
 export type UserMinAggregateOutputType = {
@@ -35,6 +45,7 @@ export type UserMinAggregateOutputType = {
   otpCode: string | null
   otpExpiry: Date | null
   resetToken: string | null
+  tokenVersion: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -50,6 +61,7 @@ export type UserMaxAggregateOutputType = {
   otpCode: string | null
   otpExpiry: Date | null
   resetToken: string | null
+  tokenVersion: number | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -65,11 +77,20 @@ export type UserCountAggregateOutputType = {
   otpCode: number
   otpExpiry: number
   resetToken: number
+  tokenVersion: number
   createdAt: number
   updatedAt: number
   _all: number
 }
 
+
+export type UserAvgAggregateInputType = {
+  tokenVersion?: true
+}
+
+export type UserSumAggregateInputType = {
+  tokenVersion?: true
+}
 
 export type UserMinAggregateInputType = {
   id?: true
@@ -82,6 +103,7 @@ export type UserMinAggregateInputType = {
   otpCode?: true
   otpExpiry?: true
   resetToken?: true
+  tokenVersion?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -97,6 +119,7 @@ export type UserMaxAggregateInputType = {
   otpCode?: true
   otpExpiry?: true
   resetToken?: true
+  tokenVersion?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -112,6 +135,7 @@ export type UserCountAggregateInputType = {
   otpCode?: true
   otpExpiry?: true
   resetToken?: true
+  tokenVersion?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -155,6 +179,18 @@ export type UserAggregateArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    * 
+   * Select which fields to average
+  **/
+  _avg?: UserAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
+   * Select which fields to sum
+  **/
+  _sum?: UserSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   * 
    * Select which fields to find the minimum value
   **/
   _min?: UserMinAggregateInputType
@@ -185,6 +221,8 @@ export type UserGroupByArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
   take?: number
   skip?: number
   _count?: UserCountAggregateInputType | true
+  _avg?: UserAvgAggregateInputType
+  _sum?: UserSumAggregateInputType
   _min?: UserMinAggregateInputType
   _max?: UserMaxAggregateInputType
 }
@@ -200,9 +238,12 @@ export type UserGroupByOutputType = {
   otpCode: string | null
   otpExpiry: Date | null
   resetToken: string | null
+  tokenVersion: number
   createdAt: Date
   updatedAt: Date
   _count: UserCountAggregateOutputType | null
+  _avg: UserAvgAggregateOutputType | null
+  _sum: UserSumAggregateOutputType | null
   _min: UserMinAggregateOutputType | null
   _max: UserMaxAggregateOutputType | null
 }
@@ -236,6 +277,7 @@ export type UserWhereInput = {
   otpCode?: Prisma.StringNullableFilter<"User"> | string | null
   otpExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   resetToken?: Prisma.StringNullableFilter<"User"> | string | null
+  tokenVersion?: Prisma.IntFilter<"User"> | number
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   adminProfile?: Prisma.XOR<Prisma.AdminProfileNullableScalarRelationFilter, Prisma.AdminProfileWhereInput> | null
@@ -258,6 +300,7 @@ export type UserOrderByWithRelationInput = {
   otpCode?: Prisma.SortOrderInput | Prisma.SortOrder
   otpExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
   resetToken?: Prisma.SortOrderInput | Prisma.SortOrder
+  tokenVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   adminProfile?: Prisma.AdminProfileOrderByWithRelationInput
@@ -283,6 +326,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   otpCode?: Prisma.StringNullableFilter<"User"> | string | null
   otpExpiry?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   resetToken?: Prisma.StringNullableFilter<"User"> | string | null
+  tokenVersion?: Prisma.IntFilter<"User"> | number
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
   adminProfile?: Prisma.XOR<Prisma.AdminProfileNullableScalarRelationFilter, Prisma.AdminProfileWhereInput> | null
@@ -305,11 +349,14 @@ export type UserOrderByWithAggregationInput = {
   otpCode?: Prisma.SortOrderInput | Prisma.SortOrder
   otpExpiry?: Prisma.SortOrderInput | Prisma.SortOrder
   resetToken?: Prisma.SortOrderInput | Prisma.SortOrder
+  tokenVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.UserCountOrderByAggregateInput
+  _avg?: Prisma.UserAvgOrderByAggregateInput
   _max?: Prisma.UserMaxOrderByAggregateInput
   _min?: Prisma.UserMinOrderByAggregateInput
+  _sum?: Prisma.UserSumOrderByAggregateInput
 }
 
 export type UserScalarWhereWithAggregatesInput = {
@@ -326,6 +373,7 @@ export type UserScalarWhereWithAggregatesInput = {
   otpCode?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   otpExpiry?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   resetToken?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
+  tokenVersion?: Prisma.IntWithAggregatesFilter<"User"> | number
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
 }
@@ -341,6 +389,7 @@ export type UserCreateInput = {
   otpCode?: string | null
   otpExpiry?: Date | string | null
   resetToken?: string | null
+  tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   adminProfile?: Prisma.AdminProfileCreateNestedOneWithoutUserInput
@@ -363,6 +412,7 @@ export type UserUncheckedCreateInput = {
   otpCode?: string | null
   otpExpiry?: Date | string | null
   resetToken?: string | null
+  tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   adminProfile?: Prisma.AdminProfileUncheckedCreateNestedOneWithoutUserInput
@@ -385,6 +435,7 @@ export type UserUpdateInput = {
   otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminProfile?: Prisma.AdminProfileUpdateOneWithoutUserNestedInput
@@ -407,6 +458,7 @@ export type UserUncheckedUpdateInput = {
   otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminProfile?: Prisma.AdminProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -429,6 +481,7 @@ export type UserCreateManyInput = {
   otpCode?: string | null
   otpExpiry?: Date | string | null
   resetToken?: string | null
+  tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -444,6 +497,7 @@ export type UserUpdateManyMutationInput = {
   otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -459,6 +513,7 @@ export type UserUncheckedUpdateManyInput = {
   otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -474,8 +529,13 @@ export type UserCountOrderByAggregateInput = {
   otpCode?: Prisma.SortOrder
   otpExpiry?: Prisma.SortOrder
   resetToken?: Prisma.SortOrder
+  tokenVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type UserAvgOrderByAggregateInput = {
+  tokenVersion?: Prisma.SortOrder
 }
 
 export type UserMaxOrderByAggregateInput = {
@@ -489,6 +549,7 @@ export type UserMaxOrderByAggregateInput = {
   otpCode?: Prisma.SortOrder
   otpExpiry?: Prisma.SortOrder
   resetToken?: Prisma.SortOrder
+  tokenVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -504,8 +565,13 @@ export type UserMinOrderByAggregateInput = {
   otpCode?: Prisma.SortOrder
   otpExpiry?: Prisma.SortOrder
   resetToken?: Prisma.SortOrder
+  tokenVersion?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+}
+
+export type UserSumOrderByAggregateInput = {
+  tokenVersion?: Prisma.SortOrder
 }
 
 export type UserScalarRelationFilter = {
@@ -535,6 +601,14 @@ export type BoolFieldUpdateOperationsInput = {
 
 export type NullableDateTimeFieldUpdateOperationsInput = {
   set?: Date | string | null
+}
+
+export type IntFieldUpdateOperationsInput = {
+  set?: number
+  increment?: number
+  decrement?: number
+  multiply?: number
+  divide?: number
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -650,6 +724,7 @@ export type UserCreateWithoutAdminProfileInput = {
   otpCode?: string | null
   otpExpiry?: Date | string | null
   resetToken?: string | null
+  tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   jobSeekerProfile?: Prisma.JobSeekerProfileCreateNestedOneWithoutUserInput
@@ -671,6 +746,7 @@ export type UserUncheckedCreateWithoutAdminProfileInput = {
   otpCode?: string | null
   otpExpiry?: Date | string | null
   resetToken?: string | null
+  tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   jobSeekerProfile?: Prisma.JobSeekerProfileUncheckedCreateNestedOneWithoutUserInput
@@ -708,6 +784,7 @@ export type UserUpdateWithoutAdminProfileInput = {
   otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   jobSeekerProfile?: Prisma.JobSeekerProfileUpdateOneWithoutUserNestedInput
@@ -729,6 +806,7 @@ export type UserUncheckedUpdateWithoutAdminProfileInput = {
   otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   jobSeekerProfile?: Prisma.JobSeekerProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -750,6 +828,7 @@ export type UserCreateWithoutJobSeekerProfileInput = {
   otpCode?: string | null
   otpExpiry?: Date | string | null
   resetToken?: string | null
+  tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   adminProfile?: Prisma.AdminProfileCreateNestedOneWithoutUserInput
@@ -771,6 +850,7 @@ export type UserUncheckedCreateWithoutJobSeekerProfileInput = {
   otpCode?: string | null
   otpExpiry?: Date | string | null
   resetToken?: string | null
+  tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   adminProfile?: Prisma.AdminProfileUncheckedCreateNestedOneWithoutUserInput
@@ -808,6 +888,7 @@ export type UserUpdateWithoutJobSeekerProfileInput = {
   otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminProfile?: Prisma.AdminProfileUpdateOneWithoutUserNestedInput
@@ -829,6 +910,7 @@ export type UserUncheckedUpdateWithoutJobSeekerProfileInput = {
   otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminProfile?: Prisma.AdminProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -850,6 +932,7 @@ export type UserCreateWithoutEmployerProfileInput = {
   otpCode?: string | null
   otpExpiry?: Date | string | null
   resetToken?: string | null
+  tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   adminProfile?: Prisma.AdminProfileCreateNestedOneWithoutUserInput
@@ -871,6 +954,7 @@ export type UserUncheckedCreateWithoutEmployerProfileInput = {
   otpCode?: string | null
   otpExpiry?: Date | string | null
   resetToken?: string | null
+  tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   adminProfile?: Prisma.AdminProfileUncheckedCreateNestedOneWithoutUserInput
@@ -908,6 +992,7 @@ export type UserUpdateWithoutEmployerProfileInput = {
   otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminProfile?: Prisma.AdminProfileUpdateOneWithoutUserNestedInput
@@ -929,6 +1014,7 @@ export type UserUncheckedUpdateWithoutEmployerProfileInput = {
   otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminProfile?: Prisma.AdminProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -950,6 +1036,7 @@ export type UserCreateWithoutReportsInput = {
   otpCode?: string | null
   otpExpiry?: Date | string | null
   resetToken?: string | null
+  tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   adminProfile?: Prisma.AdminProfileCreateNestedOneWithoutUserInput
@@ -971,6 +1058,7 @@ export type UserUncheckedCreateWithoutReportsInput = {
   otpCode?: string | null
   otpExpiry?: Date | string | null
   resetToken?: string | null
+  tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   adminProfile?: Prisma.AdminProfileUncheckedCreateNestedOneWithoutUserInput
@@ -1008,6 +1096,7 @@ export type UserUpdateWithoutReportsInput = {
   otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminProfile?: Prisma.AdminProfileUpdateOneWithoutUserNestedInput
@@ -1029,6 +1118,7 @@ export type UserUncheckedUpdateWithoutReportsInput = {
   otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminProfile?: Prisma.AdminProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -1050,6 +1140,7 @@ export type UserCreateWithoutConversationsInput = {
   otpCode?: string | null
   otpExpiry?: Date | string | null
   resetToken?: string | null
+  tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   adminProfile?: Prisma.AdminProfileCreateNestedOneWithoutUserInput
@@ -1071,6 +1162,7 @@ export type UserUncheckedCreateWithoutConversationsInput = {
   otpCode?: string | null
   otpExpiry?: Date | string | null
   resetToken?: string | null
+  tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   adminProfile?: Prisma.AdminProfileUncheckedCreateNestedOneWithoutUserInput
@@ -1108,6 +1200,7 @@ export type UserUpdateWithoutConversationsInput = {
   otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminProfile?: Prisma.AdminProfileUpdateOneWithoutUserNestedInput
@@ -1129,6 +1222,7 @@ export type UserUncheckedUpdateWithoutConversationsInput = {
   otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminProfile?: Prisma.AdminProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -1150,6 +1244,7 @@ export type UserCreateWithoutSentMessagesInput = {
   otpCode?: string | null
   otpExpiry?: Date | string | null
   resetToken?: string | null
+  tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   adminProfile?: Prisma.AdminProfileCreateNestedOneWithoutUserInput
@@ -1171,6 +1266,7 @@ export type UserUncheckedCreateWithoutSentMessagesInput = {
   otpCode?: string | null
   otpExpiry?: Date | string | null
   resetToken?: string | null
+  tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   adminProfile?: Prisma.AdminProfileUncheckedCreateNestedOneWithoutUserInput
@@ -1208,6 +1304,7 @@ export type UserUpdateWithoutSentMessagesInput = {
   otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminProfile?: Prisma.AdminProfileUpdateOneWithoutUserNestedInput
@@ -1229,6 +1326,7 @@ export type UserUncheckedUpdateWithoutSentMessagesInput = {
   otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminProfile?: Prisma.AdminProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -1250,6 +1348,7 @@ export type UserCreateWithoutNotificationsInput = {
   otpCode?: string | null
   otpExpiry?: Date | string | null
   resetToken?: string | null
+  tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   adminProfile?: Prisma.AdminProfileCreateNestedOneWithoutUserInput
@@ -1271,6 +1370,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   otpCode?: string | null
   otpExpiry?: Date | string | null
   resetToken?: string | null
+  tokenVersion?: number
   createdAt?: Date | string
   updatedAt?: Date | string
   adminProfile?: Prisma.AdminProfileUncheckedCreateNestedOneWithoutUserInput
@@ -1308,6 +1408,7 @@ export type UserUpdateWithoutNotificationsInput = {
   otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminProfile?: Prisma.AdminProfileUpdateOneWithoutUserNestedInput
@@ -1329,6 +1430,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   otpExpiry?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   resetToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  tokenVersion?: Prisma.IntFieldUpdateOperationsInput | number
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   adminProfile?: Prisma.AdminProfileUncheckedUpdateOneWithoutUserNestedInput
@@ -1408,6 +1510,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   otpCode?: boolean
   otpExpiry?: boolean
   resetToken?: boolean
+  tokenVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   adminProfile?: boolean | Prisma.User$adminProfileArgs<ExtArgs>
@@ -1431,6 +1534,7 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   otpCode?: boolean
   otpExpiry?: boolean
   resetToken?: boolean
+  tokenVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -1446,6 +1550,7 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   otpCode?: boolean
   otpExpiry?: boolean
   resetToken?: boolean
+  tokenVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }, ExtArgs["result"]["user"]>
@@ -1461,11 +1566,12 @@ export type UserSelectScalar = {
   otpCode?: boolean
   otpExpiry?: boolean
   resetToken?: boolean
+  tokenVersion?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "role" | "status" | "rejectionReason" | "isVerified" | "otpCode" | "otpExpiry" | "resetToken" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "email" | "password" | "role" | "status" | "rejectionReason" | "isVerified" | "otpCode" | "otpExpiry" | "resetToken" | "tokenVersion" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   adminProfile?: boolean | Prisma.User$adminProfileArgs<ExtArgs>
   jobSeekerProfile?: boolean | Prisma.User$jobSeekerProfileArgs<ExtArgs>
@@ -1501,6 +1607,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     otpCode: string | null
     otpExpiry: Date | null
     resetToken: string | null
+    tokenVersion: number
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["user"]>
@@ -1943,6 +2050,7 @@ export interface UserFieldRefs {
   readonly otpCode: Prisma.FieldRef<"User", 'String'>
   readonly otpExpiry: Prisma.FieldRef<"User", 'DateTime'>
   readonly resetToken: Prisma.FieldRef<"User", 'String'>
+  readonly tokenVersion: Prisma.FieldRef<"User", 'Int'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>
 }

@@ -158,7 +158,7 @@ export class AuthService {
       dto.fullName,
     );
 
-    // tempToken শুধু developer/Postman এর জন্য — frontend use করবে না
+    // tempToken 
     const tempToken = await this.generateTempToken(user.id, user.email, user.role);
 
     return {
