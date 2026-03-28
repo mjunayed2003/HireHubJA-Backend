@@ -36,7 +36,7 @@ export class AuthService {
   private generateOtp(): { otp: string; otpExpiry: Date } {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const otpExpiry = new Date();
-    otpExpiry.setMinutes(otpExpiry.getMinutes() + 10);
+    otpExpiry.setMinutes(otpExpiry.getMinutes() + 1);
     return { otp, otpExpiry };
   }
 
@@ -132,7 +132,7 @@ export class AuthService {
         email: dto.email,
         password: hashedPassword,
         role,
-        status: 'ACTIVE',
+        status: 'PENDING',
         isVerified: false,
         otpCode: otp,
         otpExpiry,
