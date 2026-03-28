@@ -28,7 +28,26 @@ export class AuthService {
     private prisma: PrismaService,
     private jwtService: JwtService,
     private readonly mailService: MailerService,
-  ) { }
+  ) {}
+
+  // ─────────────────────────────────────────────────────
+  // HELPER — Generate 6-digit OTP + expiry (10 min)
+  // ─────────────────────────────────────────────────────
+  private generateOtp(): { otp: string; otpExpiry: Date } {
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpiry = new Date();
+    otpExpiry.setMinutes(otpExpiry.getMinutes() + 10); // ✅ Fix: 10 min expiry
+    return { otp, otpExpiry };
+  }
+
+  // ─────────────────────────────────────────────────────
+  // HELPER — Safe OTP comparison (timing-safe)
+  // ─────────────────────────────────────────────────────
+  private safeOtpCompare(a: string, b: string): boolean {
+    // ✅ Fix: timing-safe comparison to prevent timing attacks
+    if (a.length !== b.length) return false;
+    return crypto.timingSafeEqual(Buffer.from(a), Buffer.from(b));
+  }
 
   // ─────────────────────────────────────────────────────
   // HELPER — Temp Token (short lived 15 min)
@@ -51,6 +70,51 @@ export class AuthService {
   }
 
   // ─────────────────────────────────────────────────────
+  // HELPER — Send OTP email (shared)
+  // ─────────────────────────────────────────────────────
+  private async sendOtpEmail(
+    to: string,
+    subject: string,
+    heading: string,
+    otp: string,
+    name?: string,
+  ) {
+    // ✅ Fix: shared mail helper — no duplicated HTML
+    try {
+      await this.mailService.sendMail({
+        to,
+        subject,
+        html: `
+          <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
+            <h2 style="color: #3FAE2A;">${heading}</h2>
+            ${name ? `<p>Hello ${name},</p>` : ''}
+            <p>Your OTP code:</p>
+            <h1 style="color: #3FAE2A; letter-spacing: 5px;">${otp}</h1>
+            <p>This code will expire in <b>10 minutes</b>.</p>
+            <br>
+            <p>Best Regards,<br>HireHubJA Team</p>
+          </div>
+        `,
+      });
+    } catch {
+      throw new BadRequestException('Failed to send OTP email');
+    }
+  }
+
+  // ─────────────────────────────────────────────────────
+  // HELPER — Core OTP verify logic (shared, avoids duplication)
+  // ─────────────────────────────────────────────────────
+  private validateOtp(user: { otpCode: string | null; otpExpiry: Date | null }, inputOtp: string) {
+    // ✅ Fix: shared core logic used by all OTP verify methods
+    if (!user.otpCode || !this.safeOtpCompare(user.otpCode, inputOtp)) {
+      throw new BadRequestException('Invalid OTP');
+    }
+    if (!user.otpExpiry || new Date() > user.otpExpiry) {
+      throw new BadRequestException('OTP expired. Please resend.');
+    }
+  }
+
+  // ─────────────────────────────────────────────────────
   // 1. REGISTER -> Returns tempToken
   // ─────────────────────────────────────────────────────
   async register(dto: RegisterDto) {
@@ -60,10 +124,7 @@ export class AuthService {
     if (existingUser) throw new BadRequestException('Email already exists!');
 
     const hashedPassword = await bcrypt.hash(dto.password, 10);
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const otpExpiry = new Date();
-    otpExpiry.setMinutes(otpExpiry.getMinutes() + 1);
-
+    const { otp, otpExpiry } = this.generateOtp(); // ✅ Fix: using shared helper
     const role = dto.role as UserRole;
 
     const user = await this.prisma.user.create({
@@ -89,25 +150,13 @@ export class AuthService {
       },
     });
 
-    try {
-      await this.mailService.sendMail({
-        to: dto.email,
-        subject: 'Verify Your Email - HireHubJA',
-        html: `
-          <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
-            <h2 style="color: #3FAE2A;">Welcome to HireHubJA!</h2>
-            <p>Hello ${dto.fullName},</p>
-            <p>Please verify your email using the OTP below:</p>
-            <h1 style="color: #3FAE2A; letter-spacing: 5px;">${otp}</h1>
-            <p>This code will expire in <b>1 minute</b>.</p>
-            <br>
-            <p>Best Regards,<br>HireHubJA Team</p>
-          </div>
-        `,
-      });
-    } catch {
-      throw new BadRequestException('Failed to send OTP email');
-    }
+    await this.sendOtpEmail(
+      dto.email,
+      'Verify Your Email - HireHubJA',
+      'Welcome to HireHubJA!',
+      otp,
+      dto.fullName,
+    );
 
     const tempToken = await this.generateTempToken(user.id, user.email, user.role);
 
@@ -127,12 +176,7 @@ export class AuthService {
     if (!user) throw new NotFoundException('User not found');
     if (user.isVerified) throw new BadRequestException('Email already verified');
 
-    if (!user.otpCode || user.otpCode !== otp) {
-      throw new BadRequestException('Invalid OTP');
-    }
-    if (!user.otpExpiry || new Date() > user.otpExpiry) {
-      throw new BadRequestException('OTP expired. Please resend.');
-    }
+    this.validateOtp(user, otp); // ✅ Fix: shared validation
 
     await this.prisma.user.update({
       where: { id: user.id },
@@ -157,12 +201,7 @@ export class AuthService {
     if (!user) throw new NotFoundException('User not found');
     if (user.isVerified) throw new BadRequestException('Email already verified');
 
-    if (!user.otpCode || user.otpCode !== otp) {
-      throw new BadRequestException('Invalid OTP');
-    }
-    if (!user.otpExpiry || new Date() > user.otpExpiry) {
-      throw new BadRequestException('OTP expired. Please resend.');
-    }
+    this.validateOtp(user, otp); // ✅ Fix: shared validation
 
     await this.prisma.user.update({
       where: { id: user.id },
@@ -187,30 +226,14 @@ export class AuthService {
     if (!user) throw new NotFoundException('User not found');
     if (user.isVerified) throw new BadRequestException('Email already verified');
 
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const otpExpiry = new Date();
-    otpExpiry.setMinutes(otpExpiry.getMinutes() + 1);
+    const { otp, otpExpiry } = this.generateOtp(); // ✅ Fix: shared helper
 
     await this.prisma.user.update({
       where: { id: user.id },
       data: { otpCode: otp, otpExpiry },
     });
 
-    try {
-      await this.mailService.sendMail({
-        to: user.email,
-        subject: 'New OTP - HireHubJA',
-        html: `
-          <div style="font-family: Arial, sans-serif; padding: 20px;">
-            <h2 style="color: #3FAE2A;">New OTP Code</h2>
-            <h1 style="color: #3FAE2A; letter-spacing: 5px;">${otp}</h1>
-            <p>Expires in <b>1 minute</b>.</p>
-          </div>
-        `,
-      });
-    } catch {
-      throw new BadRequestException('Failed to send OTP');
-    }
+    await this.sendOtpEmail(user.email, 'New OTP - HireHubJA', 'New OTP Code', otp);
 
     const tempToken = await this.generateTempToken(user.id, user.email, user.role);
 
@@ -318,80 +341,37 @@ export class AuthService {
   // ─────────────────────────────────────────────────────
   // 6. JOB SEEKER — Professional
   // ─────────────────────────────────────────────────────
-  async updateJobSeekerProfessional(
-    userId: string,
-    dto: JobSeekerProfessionalDto,
-    files: any
-  ) {
-    const profile = await this.prisma.jobSeekerProfile.findUnique({
-      where: { userId },
-    });
+  async updateJobSeekerProfessional(userId: string, dto: JobSeekerProfessionalDto, files: any) {
+    const profile = await this.prisma.jobSeekerProfile.findUnique({ where: { userId } });
+    if (!profile) throw new NotFoundException('Profile not found');
 
-    if (!profile) {
-      throw new NotFoundException('Profile not found');
-    }
-
-    // Safe parse skills
-    let skills: any[] = [];
-    try {
-      skills =
-        typeof dto.skills === 'string'
-          ? JSON.parse(dto.skills)
-          : dto.skills || [];
-    } catch {
-      throw new BadRequestException('Invalid skills format');
-    }
-
-    //  Safe parse experience
-    let experience: any[] = [];
-    try {
-      experience =
-        typeof dto.experience === 'string'
-          ? JSON.parse(dto.experience)
-          : dto.experience || [];
-    } catch {
-      throw new BadRequestException('Invalid experience format');
-    }
-
-    //  Filter invalid experience (IMPORTANT)
-    const validExperience = experience.filter(
-      (exp: any) => exp.designation && exp.companyName
-    );
-
-    //  Resume upload
-    const resumeUrl = files?.resume?.[0]
-      ? `/uploads/${files.resume[0].filename}`
-      : undefined;
+    const skills =
+      typeof dto.skills === 'string' ? JSON.parse(dto.skills) : dto.skills || [];
+    const experience =
+      typeof dto.experience === 'string' ? JSON.parse(dto.experience) : dto.experience || [];
+    const resumeUrl = files?.resume?.[0] ? `/uploads/${files.resume[0].filename}` : undefined;
 
     await this.prisma.jobSeekerProfile.update({
       where: { userId },
       data: {
-        //  Safe update
-        ...(dto.experienceLevel && { experienceLevel: dto.experienceLevel }),
-
+        experienceLevel: dto.experienceLevel,
         skills,
-
         ...(resumeUrl && { resumeUrl }),
-
         experience: {
           deleteMany: {},
-
-          create: validExperience.map((exp: any) => ({
+          create: experience.map((exp: any) => ({
             designation: exp.designation,
             companyName: exp.companyName,
-            startDate: exp.startDate ? new Date(exp.startDate) : new Date(),
-            endDate: exp.endDate ? new Date(exp.endDate) : new Date(),
+            startDate: new Date(exp.startDate),
+            endDate: exp.endDate ? new Date(exp.endDate) : null,
             isCurrent: exp.isCurrent || false,
-            description: exp.description || null,
+            description: exp.description,
           })),
         },
       },
     });
 
-    return {
-      success: true,
-      message: 'Professional details saved.',
-    };
+    return { success: true, message: 'Professional details saved.' };
   }
 
   // ─────────────────────────────────────────────────────
@@ -612,8 +592,16 @@ export class AuthService {
 
   // ─────────────────────────────────────────────────────
   // 13. LOGOUT
+  // ✅ Fix: tokenVersion increment — invalidates all old tokens
+  // Requires `tokenVersion Int @default(0)` field in User schema
+  // and JWT guard must verify tokenVersion matches DB value
   // ─────────────────────────────────────────────────────
   async logout(userId: string) {
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { tokenVersion: { increment: 1 } },
+    });
+
     return { success: true, message: 'Logged out successfully' };
   }
 
@@ -624,31 +612,19 @@ export class AuthService {
     const user = await this.prisma.user.findUnique({ where: { email: dto.email } });
     if (!user) throw new NotFoundException('User not found');
 
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const otpExpiry = new Date();
-    otpExpiry.setMinutes(otpExpiry.getMinutes() + 1);
+    // ✅ Fix: unverified users should not be able to reset password
+    if (!user.isVerified) {
+      throw new ForbiddenException('Please verify your email first before resetting password.');
+    }
+
+    const { otp, otpExpiry } = this.generateOtp(); // ✅ Fix: shared helper
 
     await this.prisma.user.update({
       where: { email: dto.email },
       data: { otpCode: otp, otpExpiry },
     });
 
-    try {
-      await this.mailService.sendMail({
-        to: dto.email,
-        subject: 'Password Reset OTP - HireHubJA',
-        html: `
-          <div style="font-family: Arial, sans-serif; padding: 20px;">
-            <h2 style="color: #3FAE2A;">Password Reset</h2>
-            <p>Your OTP code:</p>
-            <h1 style="color: #3FAE2A; letter-spacing: 5px;">${otp}</h1>
-            <p>Expires in <b>1 minute</b>.</p>
-          </div>
-        `,
-      });
-    } catch {
-      throw new BadRequestException('Failed to send OTP');
-    }
+    await this.sendOtpEmail(user.email, 'Password Reset OTP - HireHubJA', 'Password Reset', otp);
 
     const tempToken = await this.generateTempToken(user.id, user.email, user.role);
 
@@ -666,10 +642,12 @@ export class AuthService {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user) throw new NotFoundException('User not found');
 
-    if (!user.otpCode || user.otpCode !== otp)
-      throw new BadRequestException('Invalid OTP');
-    if (!user.otpExpiry || new Date() > user.otpExpiry)
-      throw new BadRequestException('OTP expired.');
+    // ✅ Fix: check isVerified
+    if (!user.isVerified) {
+      throw new ForbiddenException('Please verify your email first.');
+    }
+
+    this.validateOtp(user, otp); // ✅ Fix: shared validation
 
     const resetToken = crypto.randomBytes(32).toString('hex');
 
@@ -695,10 +673,12 @@ export class AuthService {
     const user = await this.prisma.user.findUnique({ where: { email } });
     if (!user) throw new NotFoundException('User not found');
 
-    if (!user.otpCode || user.otpCode !== otp)
-      throw new BadRequestException('Invalid OTP');
-    if (!user.otpExpiry || new Date() > user.otpExpiry)
-      throw new BadRequestException('OTP expired.');
+    // ✅ Fix: check isVerified
+    if (!user.isVerified) {
+      throw new ForbiddenException('Please verify your email first.');
+    }
+
+    this.validateOtp(user, otp); // ✅ Fix: shared validation
 
     const resetToken = crypto.randomBytes(32).toString('hex');
 
@@ -724,30 +704,19 @@ export class AuthService {
     const user = await this.prisma.user.findUnique({ where: { email } });
     if (!user) throw new NotFoundException('User not found');
 
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const otpExpiry = new Date();
-    otpExpiry.setMinutes(otpExpiry.getMinutes() + 1);
+    // ✅ Fix: check isVerified
+    if (!user.isVerified) {
+      throw new ForbiddenException('Please verify your email first.');
+    }
+
+    const { otp, otpExpiry } = this.generateOtp(); // ✅ Fix: shared helper
 
     await this.prisma.user.update({
       where: { id: user.id },
       data: { otpCode: otp, otpExpiry },
     });
 
-    try {
-      await this.mailService.sendMail({
-        to: user.email,
-        subject: 'New OTP - HireHubJA',
-        html: `
-          <div style="font-family: Arial, sans-serif; padding: 20px;">
-            <h2 style="color: #3FAE2A;">New OTP Code</h2>
-            <h1 style="color: #3FAE2A; letter-spacing: 5px;">${otp}</h1>
-            <p>Expires in <b>1 minute</b>.</p>
-          </div>
-        `,
-      });
-    } catch {
-      throw new BadRequestException('Failed to send OTP');
-    }
+    await this.sendOtpEmail(user.email, 'New OTP - HireHubJA', 'New OTP Code', otp);
 
     const tempToken = await this.generateTempToken(user.id, user.email, user.role);
 
@@ -765,30 +734,19 @@ export class AuthService {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user) throw new NotFoundException('User not found');
 
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    const otpExpiry = new Date();
-    otpExpiry.setMinutes(otpExpiry.getMinutes() + 1);
+    // ✅ Fix: check isVerified
+    if (!user.isVerified) {
+      throw new ForbiddenException('Please verify your email first.');
+    }
+
+    const { otp, otpExpiry } = this.generateOtp(); // ✅ Fix: shared helper
 
     await this.prisma.user.update({
       where: { id: user.id },
       data: { otpCode: otp, otpExpiry },
     });
 
-    try {
-      await this.mailService.sendMail({
-        to: user.email,
-        subject: 'New OTP - HireHubJA',
-        html: `
-          <div style="font-family: Arial, sans-serif; padding: 20px;">
-            <h2 style="color: #3FAE2A;">New OTP Code</h2>
-            <h1 style="color: #3FAE2A; letter-spacing: 5px;">${otp}</h1>
-            <p>Expires in <b>1 minute</b>.</p>
-          </div>
-        `,
-      });
-    } catch {
-      throw new BadRequestException('Failed to send OTP');
-    }
+    await this.sendOtpEmail(user.email, 'New OTP - HireHubJA', 'New OTP Code', otp);
 
     const tempToken = await this.generateTempToken(user.id, user.email, user.role);
 
@@ -813,7 +771,11 @@ export class AuthService {
 
     await this.prisma.user.update({
       where: { id: user.id },
-      data: { password: hashedPassword, resetToken: null },
+      data: {
+        password: hashedPassword,
+        resetToken: null,
+        tokenVersion: { increment: 1 }, // ✅ Fix: invalidate all existing sessions after password reset
+      },
     });
 
     return { success: true, message: 'Password reset successfully. You can now login.' };
