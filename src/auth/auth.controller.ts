@@ -55,8 +55,9 @@ export class AuthController {
   // ─────────────────────────────────────────────────────
   // 2. VERIFY OTP -> main token
   // POST /auth/verify-otp
-  // Option A: Authorization: Bearer {{tempToken}}
-  // Option B: Body: { email, otp }
+  // ✅ Priority: email body আগে, তারপর tempToken header
+  // Option A: Body: { email, otp }         ← frontend flow
+  // Option B: Bearer tempToken + Body: { otp } ← developer/Postman flow
   // ─────────────────────────────────────────────────────
   @Post('verify-otp')
   @HttpCode(HttpStatus.OK)
@@ -64,6 +65,12 @@ export class AuthController {
     @Body() body: { otp: string; email?: string },
     @Request() req,
   ) {
+    // ✅ email থাকলে সরাসরি email flow — token ignore
+    if (body.email) {
+      return this.authService.verifyOtpByEmail(body.email, body.otp);
+    }
+
+    // ✅ email না থাকলে token flow
     const authHeader = req.headers?.authorization;
     if (authHeader && authHeader.startsWith('Bearer ')) {
       try {
@@ -75,22 +82,25 @@ export class AuthController {
       } catch {}
     }
 
-    if (body.email) {
-      return this.authService.verifyOtpByEmail(body.email, body.otp);
-    }
-
-    throw new BadRequestException('Token or email required');
+    throw new BadRequestException('Email or token required');
   }
 
   // ─────────────────────────────────────────────────────
   // 3. RESEND OTP
   // POST /auth/resend-otp
-  // Option A: Authorization: Bearer {{tempToken}}
-  // Option B: Body: { email }
+  // ✅ Priority: email body আগে, তারপর tempToken header
+  // Option A: Body: { email }              ← frontend flow
+  // Option B: Bearer tempToken             ← developer/Postman flow
   // ─────────────────────────────────────────────────────
   @Post('resend-otp')
   @HttpCode(HttpStatus.OK)
   async resendOtp(@Body() body: { email?: string }, @Request() req) {
+    // ✅ email থাকলে সরাসরি email flow
+    if (body.email) {
+      return this.authService.resendOtp(body.email);
+    }
+
+    // ✅ email না থাকলে token flow
     const authHeader = req.headers?.authorization;
     if (authHeader && authHeader.startsWith('Bearer ')) {
       try {
@@ -102,11 +112,7 @@ export class AuthController {
       } catch {}
     }
 
-    if (body.email) {
-      return this.authService.resendOtp(body.email);
-    }
-
-    throw new BadRequestException('Token or email required');
+    throw new BadRequestException('Email or token required');
   }
 
   // ═══════════════════════════════════════════════════
@@ -254,7 +260,7 @@ export class AuthController {
   // FORGOT PASSWORD
   // ═══════════════════════════════════════════════════
 
-  // Step 1 — Provide email -> receive tempToken
+  // Step 1 — email দাও -> tempToken পাও
   // POST /auth/forgot-password
   // Body: { email }
   @Post('forgot-password')
@@ -262,16 +268,23 @@ export class AuthController {
     return this.authService.forgotPassword(dto);
   }
 
-  // Step 2 — Verify OTP -> receive resetToken
+  // Step 2 — OTP verify -> resetToken পাও
   // POST /auth/forgot-password/verify-otp
-  // Option A: Authorization: Bearer {{tempToken}}  +  Body: { otp }
-  // Option B: Body: { email, otp }
+  // ✅ Priority: email body আগে, তারপর tempToken header
+  // Option A: Body: { email, otp }              ← frontend flow
+  // Option B: Bearer tempToken + Body: { otp }  ← developer/Postman flow
   @Post('forgot-password/verify-otp')
   @HttpCode(HttpStatus.OK)
   async verifyForgotPasswordOtp(
     @Body() body: { otp: string; email?: string },
     @Request() req,
   ) {
+    // ✅ email থাকলে সরাসরি email flow
+    if (body.email) {
+      return this.authService.verifyForgotPasswordOtpByEmail(body.email, body.otp);
+    }
+
+    // ✅ email না থাকলে token flow
     const authHeader = req.headers?.authorization;
     if (authHeader && authHeader.startsWith('Bearer ')) {
       try {
@@ -283,44 +296,41 @@ export class AuthController {
       } catch {}
     }
 
-    if (body.email) {
-      return this.authService.verifyForgotPasswordOtpByEmail(body.email, body.otp);
-    }
-
-    throw new BadRequestException('Token or email required');
+    throw new BadRequestException('Email or token required');
   }
 
-  // Step 2b — Resend OTP
+  // Step 2b — OTP resend
   // POST /auth/forgot-password/resend-otp
-  // Option A: Authorization: Bearer {{tempToken}}
-  // Option B: Body: { email }
+  // ✅ Priority: email body আগে, তারপর tempToken header
+  // Option A: Body: { email }              ← frontend flow
+  // Option B: Bearer tempToken             ← developer/Postman flow
   @Post('forgot-password/resend-otp')
   @HttpCode(HttpStatus.OK)
   async resendForgotPasswordOtp(
     @Body() body: { email?: string },
     @Request() req,
   ) {
+    // ✅ email থাকলে সরাসরি email flow
+    if (body.email) {
+      return this.authService.resendForgotPasswordOtpByEmail(body.email);
+    }
+
+    // ✅ email না থাকলে token flow
     const authHeader = req.headers?.authorization;
     if (authHeader && authHeader.startsWith('Bearer ')) {
       try {
         const token = authHeader.split(' ')[1];
         const decoded = this.jwtService.decode(token) as any;
         if (decoded?.sub) {
-          // ✅ token flow — userId দিয়ে
           return this.authService.resendForgotPasswordOtp(decoded.sub);
         }
       } catch {}
     }
 
-    if (body.email) {
-      // ✅ email flow
-      return this.authService.resendForgotPasswordOtpByEmail(body.email);
-    }
-
-    throw new BadRequestException('Token or email required');
+    throw new BadRequestException('Email or token required');
   }
 
-  // Step 3 — Reset password
+  // Step 3 — Password reset
   // POST /auth/forgot-password/reset
   // Body: { resetToken, newPassword }
   @Post('forgot-password/reset')

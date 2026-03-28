@@ -36,7 +36,7 @@ export class AuthService {
   private generateOtp(): { otp: string; otpExpiry: Date } {
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     const otpExpiry = new Date();
-    otpExpiry.setMinutes(otpExpiry.getMinutes() + 10); // ✅ Fix: 10 min expiry
+    otpExpiry.setMinutes(otpExpiry.getMinutes() + 10);
     return { otp, otpExpiry };
   }
 
@@ -44,23 +44,22 @@ export class AuthService {
   // HELPER — Safe OTP comparison (timing-safe)
   // ─────────────────────────────────────────────────────
   private safeOtpCompare(a: string, b: string): boolean {
-    // ✅ Fix: timing-safe comparison to prevent timing attacks
     if (a.length !== b.length) return false;
     return crypto.timingSafeEqual(Buffer.from(a), Buffer.from(b));
   }
 
   // ─────────────────────────────────────────────────────
-  // HELPER — Temp Token (short lived 15 min)
+  // HELPER — Temp Token (15 min) — developer/Postman flow
   // ─────────────────────────────────────────────────────
   private async generateTempToken(userId: string, email: string, role: string) {
     return this.jwtService.signAsync(
       { sub: userId, email, role, type: 'temp' },
-      { expiresIn: '15m' },
+      { expiresIn: '5m' },
     );
   }
 
   // ─────────────────────────────────────────────────────
-  // HELPER — Main Token (long lived 7 days)
+  // HELPER — Main Token (7 days) — full auth
   // ─────────────────────────────────────────────────────
   private async generateMainToken(userId: string, email: string, role: string) {
     return this.jwtService.signAsync(
@@ -79,7 +78,6 @@ export class AuthService {
     otp: string,
     name?: string,
   ) {
-    // ✅ Fix: shared mail helper — no duplicated HTML
     try {
       await this.mailService.sendMail({
         to,
@@ -102,10 +100,12 @@ export class AuthService {
   }
 
   // ─────────────────────────────────────────────────────
-  // HELPER — Core OTP verify logic (shared, avoids duplication)
+  // HELPER — Core OTP validate (shared)
   // ─────────────────────────────────────────────────────
-  private validateOtp(user: { otpCode: string | null; otpExpiry: Date | null }, inputOtp: string) {
-    // ✅ Fix: shared core logic used by all OTP verify methods
+  private validateOtp(
+    user: { otpCode: string | null; otpExpiry: Date | null },
+    inputOtp: string,
+  ) {
     if (!user.otpCode || !this.safeOtpCompare(user.otpCode, inputOtp)) {
       throw new BadRequestException('Invalid OTP');
     }
@@ -115,7 +115,7 @@ export class AuthService {
   }
 
   // ─────────────────────────────────────────────────────
-  // 1. REGISTER -> Returns tempToken
+  // 1. REGISTER -> Returns tempToken (developer) + saves email (frontend)
   // ─────────────────────────────────────────────────────
   async register(dto: RegisterDto) {
     const existingUser = await this.prisma.user.findUnique({
@@ -124,7 +124,7 @@ export class AuthService {
     if (existingUser) throw new BadRequestException('Email already exists!');
 
     const hashedPassword = await bcrypt.hash(dto.password, 10);
-    const { otp, otpExpiry } = this.generateOtp(); // ✅ Fix: using shared helper
+    const { otp, otpExpiry } = this.generateOtp();
     const role = dto.role as UserRole;
 
     const user = await this.prisma.user.create({
@@ -158,6 +158,7 @@ export class AuthService {
       dto.fullName,
     );
 
+    // tempToken শুধু developer/Postman এর জন্য — frontend use করবে না
     const tempToken = await this.generateTempToken(user.id, user.email, user.role);
 
     return {
@@ -169,14 +170,14 @@ export class AuthService {
   }
 
   // ─────────────────────────────────────────────────────
-  // 2a. VERIFY OTP — by userId (token flow)
+  // 2a. VERIFY OTP — by userId (token flow — developer/Postman)
   // ─────────────────────────────────────────────────────
   async verifyOtp(userId: string, otp: string) {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user) throw new NotFoundException('User not found');
     if (user.isVerified) throw new BadRequestException('Email already verified');
 
-    this.validateOtp(user, otp); // ✅ Fix: shared validation
+    this.validateOtp(user, otp);
 
     await this.prisma.user.update({
       where: { id: user.id },
@@ -194,14 +195,14 @@ export class AuthService {
   }
 
   // ─────────────────────────────────────────────────────
-  // 2b. VERIFY OTP — by email (email flow)
+  // 2b. VERIFY OTP — by email (email flow — frontend)
   // ─────────────────────────────────────────────────────
   async verifyOtpByEmail(email: string, otp: string) {
     const user = await this.prisma.user.findUnique({ where: { email } });
     if (!user) throw new NotFoundException('User not found');
     if (user.isVerified) throw new BadRequestException('Email already verified');
 
-    this.validateOtp(user, otp); // ✅ Fix: shared validation
+    this.validateOtp(user, otp);
 
     await this.prisma.user.update({
       where: { id: user.id },
@@ -226,7 +227,7 @@ export class AuthService {
     if (!user) throw new NotFoundException('User not found');
     if (user.isVerified) throw new BadRequestException('Email already verified');
 
-    const { otp, otpExpiry } = this.generateOtp(); // ✅ Fix: shared helper
+    const { otp, otpExpiry } = this.generateOtp();
 
     await this.prisma.user.update({
       where: { id: user.id },
@@ -247,13 +248,18 @@ export class AuthService {
   // ─────────────────────────────────────────────────────
   // 4. JOB SEEKER — Basic Info
   // ─────────────────────────────────────────────────────
-  async updateJobSeekerBasic(userId: string, dto: JobSeekerBasicDto, profilePicFile?: Express.Multer.File) {
+  async updateJobSeekerBasic(
+    userId: string,
+    dto: JobSeekerBasicDto,
+    profilePicFile?: Express.Multer.File,
+  ) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
       include: { jobSeekerProfile: true },
     });
     if (!user) throw new NotFoundException('User not found');
-    if (user.role !== UserRole.JOB_SEEKER) throw new BadRequestException('Not a job seeker account');
+    if (user.role !== UserRole.JOB_SEEKER)
+      throw new BadRequestException('Not a job seeker account');
 
     const categories =
       typeof dto.preferredJobCategoryIds === 'string'
@@ -409,7 +415,11 @@ export class AuthService {
   // ─────────────────────────────────────────────────────
   // 8. EMPLOYER — Basic Info
   // ─────────────────────────────────────────────────────
-  async updateEmployerBasic(userId: string, dto: EmployerBasicDto, profilePicFile?: Express.Multer.File) {
+  async updateEmployerBasic(
+    userId: string,
+    dto: EmployerBasicDto,
+    profilePicFile?: Express.Multer.File,
+  ) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
       include: { employerProfile: true },
@@ -471,7 +481,11 @@ export class AuthService {
   // ─────────────────────────────────────────────────────
   // 10. COMPANY — Basic Info
   // ─────────────────────────────────────────────────────
-  async updateCompanyBasic(userId: string, dto: CompanyBasicDto, profilePicFile?: Express.Multer.File) {
+  async updateCompanyBasic(
+    userId: string,
+    dto: CompanyBasicDto,
+    profilePicFile?: Express.Multer.File,
+  ) {
     const user = await this.prisma.user.findUnique({
       where: { id: userId },
       include: { employerProfile: true },
@@ -552,9 +566,8 @@ export class AuthService {
     if (!user.isVerified) throw new ForbiddenException('Please verify your email first.');
     if (user.status === 'PENDING')
       throw new ForbiddenException('Your account is waiting for Admin Approval.');
-    if (user.status === 'BLOCKED' || user.status === 'REJECTED') {
+    if (user.status === 'BLOCKED' || user.status === 'REJECTED')
       throw new ForbiddenException('Your account has been blocked or rejected.');
-    }
 
     const token = await this.generateMainToken(user.id, user.email, user.role);
 
@@ -591,10 +604,8 @@ export class AuthService {
   }
 
   // ─────────────────────────────────────────────────────
-  // 13. LOGOUT
-  // ✅ Fix: tokenVersion increment — invalidates all old tokens
-  // Requires `tokenVersion Int @default(0)` field in User schema
-  // and JWT guard must verify tokenVersion matches DB value
+  // 13. LOGOUT — tokenVersion increment করে সব session invalidate
+  // Prisma schema তে: tokenVersion Int @default(0)
   // ─────────────────────────────────────────────────────
   async logout(userId: string) {
     await this.prisma.user.update({
@@ -612,19 +623,23 @@ export class AuthService {
     const user = await this.prisma.user.findUnique({ where: { email: dto.email } });
     if (!user) throw new NotFoundException('User not found');
 
-    // ✅ Fix: unverified users should not be able to reset password
     if (!user.isVerified) {
       throw new ForbiddenException('Please verify your email first before resetting password.');
     }
 
-    const { otp, otpExpiry } = this.generateOtp(); // ✅ Fix: shared helper
+    const { otp, otpExpiry } = this.generateOtp();
 
     await this.prisma.user.update({
       where: { email: dto.email },
       data: { otpCode: otp, otpExpiry },
     });
 
-    await this.sendOtpEmail(user.email, 'Password Reset OTP - HireHubJA', 'Password Reset', otp);
+    await this.sendOtpEmail(
+      user.email,
+      'Password Reset OTP - HireHubJA',
+      'Password Reset',
+      otp,
+    );
 
     const tempToken = await this.generateTempToken(user.id, user.email, user.role);
 
@@ -642,12 +657,11 @@ export class AuthService {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user) throw new NotFoundException('User not found');
 
-    // ✅ Fix: check isVerified
     if (!user.isVerified) {
       throw new ForbiddenException('Please verify your email first.');
     }
 
-    this.validateOtp(user, otp); // ✅ Fix: shared validation
+    this.validateOtp(user, otp);
 
     const resetToken = crypto.randomBytes(32).toString('hex');
 
@@ -673,12 +687,11 @@ export class AuthService {
     const user = await this.prisma.user.findUnique({ where: { email } });
     if (!user) throw new NotFoundException('User not found');
 
-    // ✅ Fix: check isVerified
     if (!user.isVerified) {
       throw new ForbiddenException('Please verify your email first.');
     }
 
-    this.validateOtp(user, otp); // ✅ Fix: shared validation
+    this.validateOtp(user, otp);
 
     const resetToken = crypto.randomBytes(32).toString('hex');
 
@@ -704,12 +717,11 @@ export class AuthService {
     const user = await this.prisma.user.findUnique({ where: { email } });
     if (!user) throw new NotFoundException('User not found');
 
-    // ✅ Fix: check isVerified
     if (!user.isVerified) {
       throw new ForbiddenException('Please verify your email first.');
     }
 
-    const { otp, otpExpiry } = this.generateOtp(); // ✅ Fix: shared helper
+    const { otp, otpExpiry } = this.generateOtp();
 
     await this.prisma.user.update({
       where: { id: user.id },
@@ -734,12 +746,11 @@ export class AuthService {
     const user = await this.prisma.user.findUnique({ where: { id: userId } });
     if (!user) throw new NotFoundException('User not found');
 
-    // ✅ Fix: check isVerified
     if (!user.isVerified) {
       throw new ForbiddenException('Please verify your email first.');
     }
 
-    const { otp, otpExpiry } = this.generateOtp(); // ✅ Fix: shared helper
+    const { otp, otpExpiry } = this.generateOtp();
 
     await this.prisma.user.update({
       where: { id: user.id },
@@ -774,7 +785,7 @@ export class AuthService {
       data: {
         password: hashedPassword,
         resetToken: null,
-        tokenVersion: { increment: 1 }, // ✅ Fix: invalidate all existing sessions after password reset
+        tokenVersion: { increment: 1 },
       },
     });
 
