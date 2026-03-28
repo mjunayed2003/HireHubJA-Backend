@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsOptional, IsString, IsArray } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsString, IsArray, IsIn } from 'class-validator';
 
 export class RegisterJobSeekerDto {
   // --- User Credentials ---
@@ -22,6 +22,8 @@ export class RegisterJobSeekerDto {
   location?: string;
 
   @IsOptional()
+  @IsString()
+  @IsIn(['Entry', 'Mid', 'Senior'])
   experienceLevel?: string;
 
   // --- Arrays 
@@ -30,11 +32,11 @@ export class RegisterJobSeekerDto {
 
   @IsOptional()
   @IsArray()
-  education?: any[]; 
+  education?: any[];
 
   @IsOptional()
   experience?: string; // e.g. '[{"companyName": "ABC", ...}]'
-  
+
   @IsOptional()
   preferredJobCategoryIds?: string; // e.g. '["id1", "id2"]'
 }

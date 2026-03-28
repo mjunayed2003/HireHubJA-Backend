@@ -55,13 +55,58 @@ export class AuthController {
   // ─────────────────────────────────────────────────────
   // 2. VERIFY OTP -> main token
   // POST /auth/verify-otp
-  // Authorization: Bearer {{tempToken}}
+  // Option A: Authorization: Bearer {{tempToken}}
+  // Option B: Body: { email, otp }
   // ─────────────────────────────────────────────────────
-  @UseGuards(JwtAuthGuard)
   @Post('verify-otp')
   @HttpCode(HttpStatus.OK)
-  async verifyOtp(@Body() body: { otp: string }, @Request() req) {
-    return this.authService.verifyOtp(req.user.id, body.otp);
+  async verifyOtp(
+    @Body() body: { otp: string; email?: string },
+    @Request() req,
+  ) {
+    const authHeader = req.headers?.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      try {
+        const token = authHeader.split(' ')[1];
+        const decoded = this.jwtService.decode(token) as any;
+        if (decoded?.sub) {
+          return this.authService.verifyOtp(decoded.sub, body.otp);
+        }
+      } catch {}
+    }
+
+    if (body.email) {
+      return this.authService.verifyOtpByEmail(body.email, body.otp);
+    }
+
+    throw new BadRequestException('Token or email required');
+  }
+
+  // ─────────────────────────────────────────────────────
+  // 3. RESEND OTP
+  // POST /auth/resend-otp
+  // Option A: Authorization: Bearer {{tempToken}}
+  // Option B: Body: { email }
+  // ─────────────────────────────────────────────────────
+  @Post('resend-otp')
+  @HttpCode(HttpStatus.OK)
+  async resendOtp(@Body() body: { email?: string }, @Request() req) {
+    const authHeader = req.headers?.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      try {
+        const token = authHeader.split(' ')[1];
+        const decoded = this.jwtService.decode(token) as any;
+        if (decoded?.email) {
+          return this.authService.resendOtp(decoded.email);
+        }
+      } catch {}
+    }
+
+    if (body.email) {
+      return this.authService.resendOtp(body.email);
+    }
+
+    throw new BadRequestException('Token or email required');
   }
 
   // ═══════════════════════════════════════════════════
@@ -94,14 +139,15 @@ export class AuthController {
     @Request() req,
   ) {
     return this.authService.updateJobSeekerProfessional(req.user.id, dto, {
-      resume: resume ? [resume] :[],
+      resume: resume ? [resume] : [],
     });
   }
 
   @UseGuards(JwtAuthGuard)
   @Post('profile/job-seeker/verification')
   @UseInterceptors(
-    FileFieldsInterceptor([
+    FileFieldsInterceptor(
+      [
         { name: 'idCardFront', maxCount: 1 },
         { name: 'idCardBack', maxCount: 1 },
         { name: 'selfieImage', maxCount: 1 },
@@ -139,7 +185,8 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @Post('profile/employer/verification')
   @UseInterceptors(
-    FileFieldsInterceptor([
+    FileFieldsInterceptor(
+      [
         { name: 'idCardFront', maxCount: 1 },
         { name: 'idCardBack', maxCount: 1 },
         { name: 'selfieImage', maxCount: 1 },
@@ -182,7 +229,7 @@ export class AuthController {
     @Request() req,
   ) {
     return this.authService.updateCompanyVerification(req.user.id, {
-      licenseFile: licenseFile ? [licenseFile] :[],
+      licenseFile: licenseFile ? [licenseFile] : [],
     });
   }
 
@@ -208,47 +255,77 @@ export class AuthController {
   // ═══════════════════════════════════════════════════
 
   // Step 1 — Provide email -> receive tempToken
+  // POST /auth/forgot-password
+  // Body: { email }
   @Post('forgot-password')
   async forgotPassword(@Body() dto: ForgotPasswordDto) {
     return this.authService.forgotPassword(dto);
   }
 
   // Step 2 — Verify OTP -> receive resetToken
-  // Authorization: Bearer {{tempToken}}
-  @UseGuards(JwtAuthGuard)
+  // POST /auth/forgot-password/verify-otp
+  // Option A: Authorization: Bearer {{tempToken}}  +  Body: { otp }
+  // Option B: Body: { email, otp }
   @Post('forgot-password/verify-otp')
   @HttpCode(HttpStatus.OK)
-  async verifyForgotPasswordOtp(@Body() body: { otp: string }, @Request() req) {
-    return this.authService.verifyForgotPasswordOtp(req.user.id, body.otp);
-  }
-
-  // Step 3 — Set new password
-  // Authorization: Bearer {{tempToken}}
-  @UseGuards(JwtAuthGuard)
-  @Post('reset-password')
-  @HttpCode(HttpStatus.OK)
-  async resetPassword(@Body() body: { newPassword: string }, @Request() req) {
-    return this.authService.resetPassword(req.user.id, body.newPassword);
-  }
-
-  // Forgot Password Resend OTP — Token or Email
-  @Post('resend-otp')
-  @HttpCode(HttpStatus.OK)
-  async resendOtp(@Body() body: { email?: string }, @Request() req) {
+  async verifyForgotPasswordOtp(
+    @Body() body: { otp: string; email?: string },
+    @Request() req,
+  ) {
     const authHeader = req.headers?.authorization;
     if (authHeader && authHeader.startsWith('Bearer ')) {
       try {
         const token = authHeader.split(' ')[1];
         const decoded = this.jwtService.decode(token) as any;
-        if (decoded?.email) {
-          return this.authService.resendOtp(decoded.email);
+        if (decoded?.sub) {
+          return this.authService.verifyForgotPasswordOtp(decoded.sub, body.otp);
         }
       } catch {}
     }
+
     if (body.email) {
-      return this.authService.resendOtp(body.email);
+      return this.authService.verifyForgotPasswordOtpByEmail(body.email, body.otp);
     }
 
     throw new BadRequestException('Token or email required');
+  }
+
+  // Step 2b — Resend OTP
+  // POST /auth/forgot-password/resend-otp
+  // Option A: Authorization: Bearer {{tempToken}}
+  // Option B: Body: { email }
+  @Post('forgot-password/resend-otp')
+  @HttpCode(HttpStatus.OK)
+  async resendForgotPasswordOtp(
+    @Body() body: { email?: string },
+    @Request() req,
+  ) {
+    const authHeader = req.headers?.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      try {
+        const token = authHeader.split(' ')[1];
+        const decoded = this.jwtService.decode(token) as any;
+        if (decoded?.sub) {
+          // ✅ token flow — userId দিয়ে
+          return this.authService.resendForgotPasswordOtp(decoded.sub);
+        }
+      } catch {}
+    }
+
+    if (body.email) {
+      // ✅ email flow
+      return this.authService.resendForgotPasswordOtpByEmail(body.email);
+    }
+
+    throw new BadRequestException('Token or email required');
+  }
+
+  // Step 3 — Reset password
+  // POST /auth/forgot-password/reset
+  // Body: { resetToken, newPassword }
+  @Post('forgot-password/reset')
+  @HttpCode(HttpStatus.OK)
+  async resetPassword(@Body() body: { resetToken: string; newPassword: string }) {
+    return this.authService.resetPasswordByToken(body.resetToken, body.newPassword);
   }
 }
