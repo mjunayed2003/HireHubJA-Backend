@@ -53,6 +53,9 @@ export class JobSeekerService {
       include: {
         employer: { select: { companyName: true, profilePic: true } },
         category: true,
+        _count: {
+          select: { applications: true },
+        },
       },
       orderBy: { createdAt: 'desc' },
     });
