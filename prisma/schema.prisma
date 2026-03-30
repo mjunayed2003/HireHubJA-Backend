@@ -204,7 +204,6 @@ model EmployerProfile {
   categoryId  String?
 
   isVerified Boolean    @default(false)
-  status     UserStatus @default(PENDING)
 
   jobsPosted          Job[]
   payments            Payment[]

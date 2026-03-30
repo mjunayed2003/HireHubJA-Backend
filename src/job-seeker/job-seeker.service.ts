@@ -4,6 +4,7 @@ import { ApplyJobDto, ReportJobDto } from './dto/job-action.dto';
 import * as bcrypt from 'bcrypt';
 import { UpdateProfileDto, ChangePasswordDto } from './dto/profile.dto';
 import { NotificationService } from 'src/notification/notification.service';
+import { Prisma } from '../generated/prisma/client';
 
 @Injectable()
 export class JobSeekerService {
@@ -17,66 +18,100 @@ export class JobSeekerService {
   // 1. HOME & SEARCH (With Advanced Filters)
   // ==================================================
   async getAllJobs(query: any) {
-    const {
-      search,
-      location,
-      categoryId,
-      workplaceType,   // e.g. "On-Site", "Hybrid", "Remote", "Contract"
-      employmentType,  // e.g. "Full-Time", "Part-Time"
-      minSalary,       // e.g. "500"
-      maxSalary        // e.g. "700"
-    } = query;
+  const {
+    search,
+    location,
+    categoryId,
+    workplaceType,
+    employmentType,
+    minSalary,
+    maxSalary,
+    page = 1,
+    limit = 15,
+  } = query;
 
-    const jobTypesToSearch: string[] = [];
+  const skip = (Number(page) - 1) * Number(limit);
+  const take = Number(limit);
 
-    if (workplaceType) {
-      // "On-Site" -> "ON_SITE", "Remote" -> "REMOTE"
-      jobTypesToSearch.push(workplaceType.toUpperCase().replace('-', '_'));
-    }
-    if (employmentType) {
-      // "Full-Time" -> "FULL_TIME", "Part-Time" -> "PART_TIME"
-      jobTypesToSearch.push(employmentType.toUpperCase().replace('-', '_'));
-    }
-    let jobs = await this.prisma.job.findMany({
-      where: {
-        status: 'OPEN',
-        AND: [
-          search ? { title: { contains: search, mode: 'insensitive' } } : {},
-          location ? { location: { contains: location, mode: 'insensitive' } } : {},
-          categoryId ? { categoryId } : {},
+  const jobTypesToSearch: string[] = [];
 
-          jobTypesToSearch.length > 0 ? {
-            jobType: { hasEvery: jobTypesToSearch as any }
-          } : {},
-        ],
-      },
+  if (workplaceType) {
+    jobTypesToSearch.push(workplaceType.toUpperCase().replace('-', '_'));
+  }
+  if (employmentType) {
+    jobTypesToSearch.push(employmentType.toUpperCase().replace('-', '_'));
+  }
+
+  const whereConditions: Prisma.JobWhereInput[] = [];
+  
+  if (search) {
+    whereConditions.push({ title: { contains: search, mode: Prisma.QueryMode.insensitive } });
+  }
+  if (location) {
+    whereConditions.push({ location: { contains: location, mode: Prisma.QueryMode.insensitive } });
+  }
+  if (categoryId) {
+    whereConditions.push({ categoryId });
+  }
+  if (jobTypesToSearch.length > 0) {
+    whereConditions.push({ jobType: { hasEvery: jobTypesToSearch as any } });
+  }
+
+  const whereClause: Prisma.JobWhereInput = {
+    status: 'OPEN',
+    AND: [
+      search ? { title: { contains: search, mode: 'insensitive' } } : {},
+      location ? { location: { contains: location, mode: 'insensitive' } } : {},
+      categoryId ? { categoryId } : {},
+      jobTypesToSearch.length > 0
+        ? { jobType: { hasEvery: jobTypesToSearch as any } }
+        : {},
+    ],
+  };
+
+  let [jobs, total] = await Promise.all([
+    this.prisma.job.findMany({
+      where: whereClause,
       include: {
-        employer: { select: { companyName: true, profilePic: true } },
+        employer: { select: { fullName: true, profilePic: true } },
         category: true,
-        _count: {
-          select: { applications: true },
-        },
+        _count: { select: { applications: true } },
       },
       orderBy: { createdAt: 'desc' },
+      skip,
+      take,
+    }),
+    this.prisma.job.count({ where: whereClause }),
+  ]);
+
+  // Salary filter (in-memory — কারণ salary string)
+  if (minSalary || maxSalary) {
+    const filterMin = minSalary ? Number(minSalary) : 0;
+    const filterMax = maxSalary ? Number(maxSalary) : Infinity;
+
+    jobs = jobs.filter((job) => {
+      if (!job.salaryAmount) return false;
+      const extractedNumbers = job.salaryAmount.match(/\d+/g);
+      if (!extractedNumbers) return false;
+      const jobMinSalary = Number(extractedNumbers[0]);
+      const jobMaxSalary = extractedNumbers.length > 1
+        ? Number(extractedNumbers[1])
+        : jobMinSalary;
+      return jobMaxSalary >= filterMin && jobMinSalary <= filterMax;
     });
-
-    if (minSalary || maxSalary) {
-      const filterMin = minSalary ? Number(minSalary) : 0;
-      const filterMax = maxSalary ? Number(maxSalary) : Infinity;
-
-      jobs = jobs.filter((job) => {
-        if (!job.salaryAmount) return false;
-        const extractedNumbers = job.salaryAmount.match(/\d+/g);
-        if (!extractedNumbers) return false;
-
-        const jobMinSalary = Number(extractedNumbers[0]);
-        const jobMaxSalary = extractedNumbers.length > 1 ? Number(extractedNumbers[1]) : jobMinSalary;
-        return jobMaxSalary >= filterMin && jobMinSalary <= filterMax;
-      });
-    }
-
-    return jobs;
   }
+
+  return {
+    data: jobs,
+    meta: {
+      total,
+      page: Number(page),
+      limit: Number(limit),
+      totalPages: Math.ceil(total / Number(limit)),
+      hasNextPage: Number(page) * Number(limit) < total,
+    },
+  };
+}
   // ==================================================
   // 2. JOB DETAILS
   // ==================================================
@@ -130,7 +165,7 @@ export class JobSeekerService {
       data: {
         jobId: dto.jobId,
         jobSeekerId: profileId,
-        status: 'APPLIED',
+        status: 'APPLIED', 
         resumeUrl: resumeUrl,
         availableFrom: dto.availableFrom ? new Date(dto.availableFrom) : null,
         shortMessage: dto.shortMessage ?? null,

@@ -28,7 +28,7 @@ export class AuthService {
     private prisma: PrismaService,
     private jwtService: JwtService,
     private readonly mailService: MailerService,
-  ) {}
+  ) { }
 
   // ─────────────────────────────────────────────────────
   // HELPER — Generate 6-digit OTP + expiry (10 min)
@@ -563,6 +563,12 @@ export class AuthService {
     const isPasswordValid = await bcrypt.compare(dto.password, user.password);
     if (!isPasswordValid) throw new UnauthorizedException('Invalid email or password');
 
+    // only login 3 role
+    const allowedRoles: UserRole[] = [UserRole.JOB_SEEKER, UserRole.EMPLOYER, UserRole.COMPANY];
+    if (!allowedRoles.includes(user.role)) {
+      throw new ForbiddenException('Access denied. This login is not available for your account type.');
+    }
+
     if (!user.isVerified) throw new ForbiddenException('Please verify your email first.');
     if (user.status === 'PENDING')
       throw new ForbiddenException('Your account is waiting for Admin Approval.');
@@ -604,8 +610,8 @@ export class AuthService {
   }
 
   // ─────────────────────────────────────────────────────
-  // 13. LOGOUT — tokenVersion increment করে সব session invalidate
-  // Prisma schema তে: tokenVersion Int @default(0)
+  // 13. LOGOUT — tokenVersion increment session invalidate
+  // Prisma schema : tokenVersion Int @default(0)
   // ─────────────────────────────────────────────────────
   async logout(userId: string) {
     await this.prisma.user.update({

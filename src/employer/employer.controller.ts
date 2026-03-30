@@ -1,6 +1,6 @@
 import {
   Body, Controller, Delete, Get, Param,
-  Post, Put, Request, UploadedFiles,
+  Post, Put, Query, Request, UploadedFiles,
   UseGuards, UseInterceptors
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
@@ -33,11 +33,20 @@ export class EmployerController {
     return this.employerService.createJob(req.user.id, dto);
   }
 
-  // 3. My Jobs List
-  // URL: GET /employer/jobs
+  // 3. My Jobs List (with pagination + search)
+  // URL: GET /employer/jobs?page=1&limit=9&search=...
   @Get('jobs')
-  async getMyJobs(@Request() req) {
-    return this.employerService.getMyJobs(req.user.id);
+  async getMyJobs(
+    @Request() req,
+    @Query('page') page: string = '1',
+    @Query('limit') limit: string = '9',
+    @Query('search') search?: string,
+  ) {
+    return this.employerService.getMyJobs(req.user.id, {
+      page: parseInt(page),
+      limit: parseInt(limit),
+      search,
+    });
   }
 
   // 4. View Applicants for a specific Job
@@ -60,7 +69,7 @@ export class EmployerController {
   async scheduleInterview(
     @Request() req,
     @Param('appId') appId: string,
-    @Body() dto: ScheduleInterviewDto
+    @Body() dto: ScheduleInterviewDto,
   ) {
     return this.employerService.scheduleInterview(req.user.id, appId, dto);
   }
@@ -77,7 +86,7 @@ export class EmployerController {
   @Put('application/:appId/status')
   async updateApplicationStatus(
     @Param('appId') appId: string,
-    @Body() dto: UpdateApplicationStatusDto
+    @Body() dto: UpdateApplicationStatusDto,
   ) {
     return this.employerService.updateApplicationStatus(appId, dto);
   }

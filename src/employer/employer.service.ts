@@ -9,8 +9,8 @@ import { NotificationService } from 'src/notification/notification.service';
 export class EmployerService {
   constructor(
     private prisma: PrismaService,
-    private notificationService: NotificationService, // ✅
-  ) { }
+    private notificationService: NotificationService,
+  ) {}
 
   // ==================================================
   // 1. DASHBOARD STATS
@@ -78,31 +78,65 @@ export class EmployerService {
   }
 
   // ==================================================
-  // 3. MY POSTED JOBS
+  // 3. MY POSTED JOBS (with pagination + search)
   // ==================================================
-  async getMyJobs(userId: string) {
+  async getMyJobs(
+    userId: string,
+    params: {
+      page: number;
+      limit: number;
+      search?: string;
+    },
+  ) {
+    const { page, limit, search } = params;
     const employerId = await this.getEmployerId(userId);
+    const skip = (page - 1) * limit;
 
-    const jobs = await this.prisma.job.findMany({
-      where: { employerId },
-      include: {
-        _count: {
-          select: { applications: true },
+    const where: any = { employerId };
+    if (search) {
+      where.title = { contains: search, mode: 'insensitive' };
+    }
+
+    const [total, jobs] = await Promise.all([
+      this.prisma.job.count({ where }),
+      this.prisma.job.findMany({
+        where,
+        skip,
+        take: limit,
+        include: {
+          _count: { select: { applications: true } },
+          employer: {
+            select: { fullName: true, companyName: true, profilePic: true },
+          },
         },
-      },
-      orderBy: { createdAt: 'desc' },
-    });
+        orderBy: { createdAt: 'desc' },
+      }),
+    ]);
 
-    return jobs.map((job) => ({
-      id: job.id,
-      title: job.title,
-      location: job.location,
-      salary: job.salaryAmount,
-      type: job.jobType,
-      status: job.status,
-      totalApplicants: job._count.applications,
-      postedDate: job.createdAt,
-    }));
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+      data: jobs.map((job) => ({
+        id:              job.id,
+        title:           job.title,
+        location:        job.location,
+        salary:          job.salaryAmount,
+        type:            job.jobType,
+        status:          job.status,
+        totalApplicants: job._count.applications,
+        postedDate:      job.createdAt,
+        posterName:      job.employer?.companyName ?? job.employer?.fullName ?? null,
+        posterPic:       job.employer?.profilePic ?? null,
+      })),
+      meta: {
+        total,
+        page,
+        limit,
+        totalPages,
+        hasNextPage: page < totalPages,
+        hasPrevPage: page > 1,
+      },
+    };
   }
 
   // ==================================================
@@ -164,7 +198,7 @@ export class EmployerService {
       where: { id: applicationId },
       include: {
         job: true,
-        jobSeeker: true, // ✅ user include লাগবে না, jobSeeker তে userId directly আছে
+        jobSeeker: true,
       },
     });
 
@@ -188,7 +222,6 @@ export class EmployerService {
       data: { status: 'INTERVIEW' },
     });
 
-    // ✅ Job Seeker কে notification পাঠান
     await this.notificationService.createNotification(
       application.jobSeeker.userId,
       'Interview Scheduled',
@@ -200,7 +233,7 @@ export class EmployerService {
   }
 
   // ==================================================
-  // 7. REJECT OR HIRE
+  // 7. UPDATE APPLICATION STATUS
   // ==================================================
   async updateApplicationStatus(applicationId: string, dto: UpdateApplicationStatusDto) {
     const application = await this.prisma.application.update({
@@ -212,7 +245,6 @@ export class EmployerService {
       },
     });
 
-    // ✅ Hired হলে notification পাঠান
     if (dto.status === 'HIRED') {
       await this.notificationService.createNotification(
         application.jobSeeker.userId,
@@ -222,7 +254,6 @@ export class EmployerService {
       );
     }
 
-    // ✅ Rejected হলে notification পাঠান
     if (dto.status === 'REJECTED') {
       await this.notificationService.createNotification(
         application.jobSeeker.userId,
@@ -240,6 +271,7 @@ export class EmployerService {
   // ==================================================
   async getAllInterviews(userId: string) {
     const employerId = await this.getEmployerId(userId);
+
     return this.prisma.interview.findMany({
       where: {
         application: {

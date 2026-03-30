@@ -2027,7 +2027,6 @@ export const EmployerProfileScalarFieldEnum = {
   idCardBack: 'idCardBack',
   categoryId: 'categoryId',
   isVerified: 'isVerified',
-  status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
