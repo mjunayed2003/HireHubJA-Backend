@@ -86,6 +86,7 @@ export type JobCountAggregateOutputType = {
   title: number
   description: number
   location: number
+  workTime: number
   isRemote: number
   salaryType: number
   salaryFrequency: number
@@ -167,6 +168,7 @@ export type JobCountAggregateInputType = {
   title?: true
   description?: true
   location?: true
+  workTime?: true
   isRemote?: true
   salaryType?: true
   salaryFrequency?: true
@@ -279,6 +281,7 @@ export type JobGroupByOutputType = {
   title: string
   description: string
   location: string
+  workTime: string[]
   isRemote: boolean
   salaryType: string | null
   salaryFrequency: string | null
@@ -327,6 +330,7 @@ export type JobWhereInput = {
   title?: Prisma.StringFilter<"Job"> | string
   description?: Prisma.StringFilter<"Job"> | string
   location?: Prisma.StringFilter<"Job"> | string
+  workTime?: Prisma.StringNullableListFilter<"Job">
   isRemote?: Prisma.BoolFilter<"Job"> | boolean
   salaryType?: Prisma.StringNullableFilter<"Job"> | string | null
   salaryFrequency?: Prisma.StringNullableFilter<"Job"> | string | null
@@ -357,6 +361,7 @@ export type JobOrderByWithRelationInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   location?: Prisma.SortOrder
+  workTime?: Prisma.SortOrder
   isRemote?: Prisma.SortOrder
   salaryType?: Prisma.SortOrderInput | Prisma.SortOrder
   salaryFrequency?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -390,6 +395,7 @@ export type JobWhereUniqueInput = Prisma.AtLeast<{
   title?: Prisma.StringFilter<"Job"> | string
   description?: Prisma.StringFilter<"Job"> | string
   location?: Prisma.StringFilter<"Job"> | string
+  workTime?: Prisma.StringNullableListFilter<"Job">
   isRemote?: Prisma.BoolFilter<"Job"> | boolean
   salaryType?: Prisma.StringNullableFilter<"Job"> | string | null
   salaryFrequency?: Prisma.StringNullableFilter<"Job"> | string | null
@@ -420,6 +426,7 @@ export type JobOrderByWithAggregationInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   location?: Prisma.SortOrder
+  workTime?: Prisma.SortOrder
   isRemote?: Prisma.SortOrder
   salaryType?: Prisma.SortOrderInput | Prisma.SortOrder
   salaryFrequency?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -453,6 +460,7 @@ export type JobScalarWhereWithAggregatesInput = {
   title?: Prisma.StringWithAggregatesFilter<"Job"> | string
   description?: Prisma.StringWithAggregatesFilter<"Job"> | string
   location?: Prisma.StringWithAggregatesFilter<"Job"> | string
+  workTime?: Prisma.StringNullableListFilter<"Job">
   isRemote?: Prisma.BoolWithAggregatesFilter<"Job"> | boolean
   salaryType?: Prisma.StringNullableWithAggregatesFilter<"Job"> | string | null
   salaryFrequency?: Prisma.StringNullableWithAggregatesFilter<"Job"> | string | null
@@ -477,6 +485,7 @@ export type JobCreateInput = {
   title: string
   description: string
   location: string
+  workTime?: Prisma.JobCreateworkTimeInput | string[]
   isRemote?: boolean
   salaryType?: string | null
   salaryFrequency?: string | null
@@ -506,6 +515,7 @@ export type JobUncheckedCreateInput = {
   title: string
   description: string
   location: string
+  workTime?: Prisma.JobCreateworkTimeInput | string[]
   isRemote?: boolean
   salaryType?: string | null
   salaryFrequency?: string | null
@@ -533,6 +543,7 @@ export type JobUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.StringFieldUpdateOperationsInput | string
+  workTime?: Prisma.JobUpdateworkTimeInput | string[]
   isRemote?: Prisma.BoolFieldUpdateOperationsInput | boolean
   salaryType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   salaryFrequency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -562,6 +573,7 @@ export type JobUncheckedUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.StringFieldUpdateOperationsInput | string
+  workTime?: Prisma.JobUpdateworkTimeInput | string[]
   isRemote?: Prisma.BoolFieldUpdateOperationsInput | boolean
   salaryType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   salaryFrequency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -590,6 +602,7 @@ export type JobCreateManyInput = {
   title: string
   description: string
   location: string
+  workTime?: Prisma.JobCreateworkTimeInput | string[]
   isRemote?: boolean
   salaryType?: string | null
   salaryFrequency?: string | null
@@ -614,6 +627,7 @@ export type JobUpdateManyMutationInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.StringFieldUpdateOperationsInput | string
+  workTime?: Prisma.JobUpdateworkTimeInput | string[]
   isRemote?: Prisma.BoolFieldUpdateOperationsInput | boolean
   salaryType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   salaryFrequency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -638,6 +652,7 @@ export type JobUncheckedUpdateManyInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.StringFieldUpdateOperationsInput | string
+  workTime?: Prisma.JobUpdateworkTimeInput | string[]
   isRemote?: Prisma.BoolFieldUpdateOperationsInput | boolean
   salaryType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   salaryFrequency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -673,6 +688,7 @@ export type JobCountOrderByAggregateInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   location?: Prisma.SortOrder
+  workTime?: Prisma.SortOrder
   isRemote?: Prisma.SortOrder
   salaryType?: Prisma.SortOrder
   salaryFrequency?: Prisma.SortOrder
@@ -840,6 +856,10 @@ export type JobUncheckedUpdateManyWithoutEmployerNestedInput = {
   deleteMany?: Prisma.JobScalarWhereInput | Prisma.JobScalarWhereInput[]
 }
 
+export type JobCreateworkTimeInput = {
+  set: string[]
+}
+
 export type JobCreateresponsibilitiesInput = {
   set: string[]
 }
@@ -850,6 +870,11 @@ export type JobCreatebenefitsInput = {
 
 export type JobCreatejobTypeInput = {
   set: $Enums.JobType[]
+}
+
+export type JobUpdateworkTimeInput = {
+  set?: string[]
+  push?: string | string[]
 }
 
 export type JobUpdateresponsibilitiesInput = {
@@ -928,6 +953,7 @@ export type JobCreateWithoutCategoryInput = {
   title: string
   description: string
   location: string
+  workTime?: Prisma.JobCreateworkTimeInput | string[]
   isRemote?: boolean
   salaryType?: string | null
   salaryFrequency?: string | null
@@ -956,6 +982,7 @@ export type JobUncheckedCreateWithoutCategoryInput = {
   title: string
   description: string
   location: string
+  workTime?: Prisma.JobCreateworkTimeInput | string[]
   isRemote?: boolean
   salaryType?: string | null
   salaryFrequency?: string | null
@@ -1012,6 +1039,7 @@ export type JobScalarWhereInput = {
   title?: Prisma.StringFilter<"Job"> | string
   description?: Prisma.StringFilter<"Job"> | string
   location?: Prisma.StringFilter<"Job"> | string
+  workTime?: Prisma.StringNullableListFilter<"Job">
   isRemote?: Prisma.BoolFilter<"Job"> | boolean
   salaryType?: Prisma.StringNullableFilter<"Job"> | string | null
   salaryFrequency?: Prisma.StringNullableFilter<"Job"> | string | null
@@ -1036,6 +1064,7 @@ export type JobCreateWithoutEmployerInput = {
   title: string
   description: string
   location: string
+  workTime?: Prisma.JobCreateworkTimeInput | string[]
   isRemote?: boolean
   salaryType?: string | null
   salaryFrequency?: string | null
@@ -1063,6 +1092,7 @@ export type JobUncheckedCreateWithoutEmployerInput = {
   title: string
   description: string
   location: string
+  workTime?: Prisma.JobCreateworkTimeInput | string[]
   isRemote?: boolean
   salaryType?: string | null
   salaryFrequency?: string | null
@@ -1116,6 +1146,7 @@ export type JobCreateWithoutApplicationsInput = {
   title: string
   description: string
   location: string
+  workTime?: Prisma.JobCreateworkTimeInput | string[]
   isRemote?: boolean
   salaryType?: string | null
   salaryFrequency?: string | null
@@ -1144,6 +1175,7 @@ export type JobUncheckedCreateWithoutApplicationsInput = {
   title: string
   description: string
   location: string
+  workTime?: Prisma.JobCreateworkTimeInput | string[]
   isRemote?: boolean
   salaryType?: string | null
   salaryFrequency?: string | null
@@ -1186,6 +1218,7 @@ export type JobUpdateWithoutApplicationsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.StringFieldUpdateOperationsInput | string
+  workTime?: Prisma.JobUpdateworkTimeInput | string[]
   isRemote?: Prisma.BoolFieldUpdateOperationsInput | boolean
   salaryType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   salaryFrequency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1214,6 +1247,7 @@ export type JobUncheckedUpdateWithoutApplicationsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.StringFieldUpdateOperationsInput | string
+  workTime?: Prisma.JobUpdateworkTimeInput | string[]
   isRemote?: Prisma.BoolFieldUpdateOperationsInput | boolean
   salaryType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   salaryFrequency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1240,6 +1274,7 @@ export type JobCreateWithoutReportsInput = {
   title: string
   description: string
   location: string
+  workTime?: Prisma.JobCreateworkTimeInput | string[]
   isRemote?: boolean
   salaryType?: string | null
   salaryFrequency?: string | null
@@ -1268,6 +1303,7 @@ export type JobUncheckedCreateWithoutReportsInput = {
   title: string
   description: string
   location: string
+  workTime?: Prisma.JobCreateworkTimeInput | string[]
   isRemote?: boolean
   salaryType?: string | null
   salaryFrequency?: string | null
@@ -1310,6 +1346,7 @@ export type JobUpdateWithoutReportsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.StringFieldUpdateOperationsInput | string
+  workTime?: Prisma.JobUpdateworkTimeInput | string[]
   isRemote?: Prisma.BoolFieldUpdateOperationsInput | boolean
   salaryType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   salaryFrequency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1338,6 +1375,7 @@ export type JobUncheckedUpdateWithoutReportsInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.StringFieldUpdateOperationsInput | string
+  workTime?: Prisma.JobUpdateworkTimeInput | string[]
   isRemote?: Prisma.BoolFieldUpdateOperationsInput | boolean
   salaryType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   salaryFrequency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1364,6 +1402,7 @@ export type JobCreateWithoutSavedByInput = {
   title: string
   description: string
   location: string
+  workTime?: Prisma.JobCreateworkTimeInput | string[]
   isRemote?: boolean
   salaryType?: string | null
   salaryFrequency?: string | null
@@ -1392,6 +1431,7 @@ export type JobUncheckedCreateWithoutSavedByInput = {
   title: string
   description: string
   location: string
+  workTime?: Prisma.JobCreateworkTimeInput | string[]
   isRemote?: boolean
   salaryType?: string | null
   salaryFrequency?: string | null
@@ -1434,6 +1474,7 @@ export type JobUpdateWithoutSavedByInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.StringFieldUpdateOperationsInput | string
+  workTime?: Prisma.JobUpdateworkTimeInput | string[]
   isRemote?: Prisma.BoolFieldUpdateOperationsInput | boolean
   salaryType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   salaryFrequency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1462,6 +1503,7 @@ export type JobUncheckedUpdateWithoutSavedByInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.StringFieldUpdateOperationsInput | string
+  workTime?: Prisma.JobUpdateworkTimeInput | string[]
   isRemote?: Prisma.BoolFieldUpdateOperationsInput | boolean
   salaryType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   salaryFrequency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1489,6 +1531,7 @@ export type JobCreateManyCategoryInput = {
   title: string
   description: string
   location: string
+  workTime?: Prisma.JobCreateworkTimeInput | string[]
   isRemote?: boolean
   salaryType?: string | null
   salaryFrequency?: string | null
@@ -1512,6 +1555,7 @@ export type JobUpdateWithoutCategoryInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.StringFieldUpdateOperationsInput | string
+  workTime?: Prisma.JobUpdateworkTimeInput | string[]
   isRemote?: Prisma.BoolFieldUpdateOperationsInput | boolean
   salaryType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   salaryFrequency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1540,6 +1584,7 @@ export type JobUncheckedUpdateWithoutCategoryInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.StringFieldUpdateOperationsInput | string
+  workTime?: Prisma.JobUpdateworkTimeInput | string[]
   isRemote?: Prisma.BoolFieldUpdateOperationsInput | boolean
   salaryType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   salaryFrequency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1567,6 +1612,7 @@ export type JobUncheckedUpdateManyWithoutCategoryInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.StringFieldUpdateOperationsInput | string
+  workTime?: Prisma.JobUpdateworkTimeInput | string[]
   isRemote?: Prisma.BoolFieldUpdateOperationsInput | boolean
   salaryType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   salaryFrequency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1590,6 +1636,7 @@ export type JobCreateManyEmployerInput = {
   title: string
   description: string
   location: string
+  workTime?: Prisma.JobCreateworkTimeInput | string[]
   isRemote?: boolean
   salaryType?: string | null
   salaryFrequency?: string | null
@@ -1614,6 +1661,7 @@ export type JobUpdateWithoutEmployerInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.StringFieldUpdateOperationsInput | string
+  workTime?: Prisma.JobUpdateworkTimeInput | string[]
   isRemote?: Prisma.BoolFieldUpdateOperationsInput | boolean
   salaryType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   salaryFrequency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1641,6 +1689,7 @@ export type JobUncheckedUpdateWithoutEmployerInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.StringFieldUpdateOperationsInput | string
+  workTime?: Prisma.JobUpdateworkTimeInput | string[]
   isRemote?: Prisma.BoolFieldUpdateOperationsInput | boolean
   salaryType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   salaryFrequency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1668,6 +1717,7 @@ export type JobUncheckedUpdateManyWithoutEmployerInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   location?: Prisma.StringFieldUpdateOperationsInput | string
+  workTime?: Prisma.JobUpdateworkTimeInput | string[]
   isRemote?: Prisma.BoolFieldUpdateOperationsInput | boolean
   salaryType?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   salaryFrequency?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1742,6 +1792,7 @@ export type JobSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
   title?: boolean
   description?: boolean
   location?: boolean
+  workTime?: boolean
   isRemote?: boolean
   salaryType?: boolean
   salaryFrequency?: boolean
@@ -1773,6 +1824,7 @@ export type JobSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extension
   title?: boolean
   description?: boolean
   location?: boolean
+  workTime?: boolean
   isRemote?: boolean
   salaryType?: boolean
   salaryFrequency?: boolean
@@ -1800,6 +1852,7 @@ export type JobSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extension
   title?: boolean
   description?: boolean
   location?: boolean
+  workTime?: boolean
   isRemote?: boolean
   salaryType?: boolean
   salaryFrequency?: boolean
@@ -1827,6 +1880,7 @@ export type JobSelectScalar = {
   title?: boolean
   description?: boolean
   location?: boolean
+  workTime?: boolean
   isRemote?: boolean
   salaryType?: boolean
   salaryFrequency?: boolean
@@ -1846,7 +1900,7 @@ export type JobSelectScalar = {
   updatedAt?: boolean
 }
 
-export type JobOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "employerId" | "title" | "description" | "location" | "isRemote" | "salaryType" | "salaryFrequency" | "salaryAmount" | "isAnonymous" | "responsibilities" | "benefits" | "experienceLevel" | "minExperience" | "educationLevel" | "numberOfEmployees" | "deadline" | "categoryId" | "jobType" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["job"]>
+export type JobOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "employerId" | "title" | "description" | "location" | "workTime" | "isRemote" | "salaryType" | "salaryFrequency" | "salaryAmount" | "isAnonymous" | "responsibilities" | "benefits" | "experienceLevel" | "minExperience" | "educationLevel" | "numberOfEmployees" | "deadline" | "categoryId" | "jobType" | "status" | "createdAt" | "updatedAt", ExtArgs["result"]["job"]>
 export type JobInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   employer?: boolean | Prisma.EmployerProfileDefaultArgs<ExtArgs>
   category?: boolean | Prisma.CategoryDefaultArgs<ExtArgs>
@@ -1879,6 +1933,7 @@ export type $JobPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     title: string
     description: string
     location: string
+    workTime: string[]
     isRemote: boolean
     salaryType: string | null
     salaryFrequency: string | null
@@ -2329,6 +2384,7 @@ export interface JobFieldRefs {
   readonly title: Prisma.FieldRef<"Job", 'String'>
   readonly description: Prisma.FieldRef<"Job", 'String'>
   readonly location: Prisma.FieldRef<"Job", 'String'>
+  readonly workTime: Prisma.FieldRef<"Job", 'String[]'>
   readonly isRemote: Prisma.FieldRef<"Job", 'Boolean'>
   readonly salaryType: Prisma.FieldRef<"Job", 'String'>
   readonly salaryFrequency: Prisma.FieldRef<"Job", 'String'>

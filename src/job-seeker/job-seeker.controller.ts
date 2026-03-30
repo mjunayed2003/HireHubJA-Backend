@@ -28,6 +28,12 @@ export class JobSeekerController {
     return this.jobSeekerService.getMyApplications(req.user.id);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get('matched-categories')
+  async getCategoryMatchedJobs(@Request() req, @Query() query) {
+    return this.jobSeekerService.getCategoryMatchedJobs(req.user.id, query);
+  }
+
   // Dynamic routes
   @Get()
   async getAllJobs(@Query() query) {

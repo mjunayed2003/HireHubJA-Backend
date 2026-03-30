@@ -2067,6 +2067,7 @@ export const JobScalarFieldEnum = {
   title: 'title',
   description: 'description',
   location: 'location',
+  workTime: 'workTime',
   isRemote: 'isRemote',
   salaryType: 'salaryType',
   salaryFrequency: 'salaryFrequency',

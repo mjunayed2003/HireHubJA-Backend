@@ -26,6 +26,11 @@ export class CreateJobDto {
   @IsNotEmpty()
   location!: string;
 
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  workTime?: string[];
+
   @IsBoolean()
   @IsOptional()
   isRemote?: boolean;
