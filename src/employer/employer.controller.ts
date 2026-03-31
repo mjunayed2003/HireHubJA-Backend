@@ -19,7 +19,7 @@ import { UpdateEmployerProfileDto, ChangePasswordDto } from './dto/employer-prof
 @UseGuards(JwtAuthGuard)
 @Controller('employer')
 export class EmployerController {
-  constructor(private readonly employerService: EmployerService) {}
+  constructor(private readonly employerService: EmployerService) { }
 
   // 1. Dashboard Stats
   // URL: GET /employer/dashboard
@@ -77,10 +77,9 @@ export class EmployerController {
   }
 
   // 5. Single Applicant Details
-  // URL: GET /employer/application/:appId
   @Get('application/:appId')
-  async getApplicantDetails(@Param('appId') appId: string) {
-    return this.employerService.getApplicantDetails(appId);
+  async getApplicantDetails(@Request() req, @Param('appId') appId: string) {
+    return this.employerService.getApplicantDetails(req.user.id, appId); // ✅
   }
 
   // 6. Schedule Interview
@@ -102,23 +101,23 @@ export class EmployerController {
   }
 
   // 8. Update Application Status
-  // URL: PUT /employer/application/:appId/status
   @Put('application/:appId/status')
   async updateApplicationStatus(
+    @Request() req, // ✅ add করো
     @Param('appId') appId: string,
     @Body() dto: UpdateApplicationStatusDto,
   ) {
-    return this.employerService.updateApplicationStatus(appId, dto);
+    return this.employerService.updateApplicationStatus(req.user.id, appId, dto); // ✅
   }
 
   // 9. Update Interview
-  // URL: PUT /employer/interview/:interviewId
   @Put('interview/:interviewId')
   async updateInterview(
+    @Request() req,
     @Param('interviewId') interviewId: string,
     @Body() dto: ScheduleInterviewDto,
   ) {
-    return this.employerService.updateInterview(interviewId, dto);
+    return this.employerService.updateInterview(req.user.id, interviewId, dto); // ✅
   }
 
   // 9b. Update Interview Status

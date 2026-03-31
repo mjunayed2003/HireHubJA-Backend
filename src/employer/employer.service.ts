@@ -246,11 +246,16 @@ export class EmployerService {
   }
 
   // ==================================================
-  // 5. CANDIDATE PROFILE
+  // 5. CANDIDATE PROFILE — FIX
   // ==================================================
-  async getApplicantDetails(applicationId: string) {
-    const application = await this.prisma.application.findUnique({
-      where: { id: applicationId },
+  async getApplicantDetails(userId: string, applicationId: string) {
+    const employerId = await this.getEmployerId(userId);
+
+    const application = await this.prisma.application.findFirst({
+      where: {
+        id: applicationId,
+        job: { employerId }, // ✅ গার্ড
+      },
       include: {
         jobSeeker: {
           include: {
@@ -261,8 +266,8 @@ export class EmployerService {
         job: true,
       },
     });
-    
-    if (!application) throw new NotFoundException('Application not found');
+
+    if (!application) throw new NotFoundException('Application not found or access denied');
     return application;
   }
 
@@ -309,9 +314,20 @@ export class EmployerService {
   }
 
   // ==================================================
-  // 7. UPDATE APPLICATION STATUS
+  // 7. UPDATE APPLICATION STATUS — FIX
   // ==================================================
-  async updateApplicationStatus(applicationId: string, dto: UpdateApplicationStatusDto) {
+  async updateApplicationStatus(userId: string, applicationId: string, dto: UpdateApplicationStatusDto) {
+    const employerId = await this.getEmployerId(userId);
+
+    // ✅ আগে ownership check করো
+    const existing = await this.prisma.application.findFirst({
+      where: {
+        id: applicationId,
+        job: { employerId },
+      },
+    });
+    if (!existing) throw new NotFoundException('Application not found or access denied');
+
     const application = await this.prisma.application.update({
       where: { id: applicationId },
       data: { status: dto.status },
@@ -367,14 +383,21 @@ export class EmployerService {
   }
 
   // ==================================================
-  // 9. UPDATE INTERVIEW
+  // 9. UPDATE INTERVIEW — FIX
   // ==================================================
-  async updateInterview(interviewId: string, dto: ScheduleInterviewDto) {
-    const interview = await this.prisma.interview.findUnique({
-      where: { id: interviewId },
-    });
+  async updateInterview(userId: string, interviewId: string, dto: ScheduleInterviewDto) {
+    const employerId = await this.getEmployerId(userId);
 
-    if (!interview) throw new NotFoundException('Interview not found');
+    // ✅ ownership check
+    const interview = await this.prisma.interview.findFirst({
+      where: {
+        id: interviewId,
+        application: {
+          job: { employerId },
+        },
+      },
+    });
+    if (!interview) throw new NotFoundException('Interview not found or access denied');
 
     return this.prisma.interview.update({
       where: { id: interviewId },
@@ -389,7 +412,7 @@ export class EmployerService {
       },
     });
   }
- 
+
   // ==================================================
   // 9b. UPDATE INTERVIEW STATUS
   // ==================================================

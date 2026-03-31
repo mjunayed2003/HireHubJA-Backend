@@ -10,7 +10,11 @@ import { JobSeekerService } from './job-seeker.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ApplyJobDto, ReportJobDto } from './dto/job-action.dto';
 import { ChangePasswordDto, UpdateProfileDto } from './dto/profile.dto';
+import { Roles } from 'src/auth/roles.decorator';
+import { RolesGuard } from 'src/auth/roles.guard';
 
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles('JOB_SEEKER')                
 @Controller('jobs')
 export class JobSeekerController {
   constructor(private readonly jobSeekerService: JobSeekerService) {}
@@ -34,11 +38,6 @@ export class JobSeekerController {
     return this.jobSeekerService.getCategoryMatchedJobs(req.user.id, query);
   }
 
-  // Dynamic routes
-  @Get()
-  async getAllJobs(@Query() query) {
-    return this.jobSeekerService.getAllJobs(query);
-  }
 
   @UseGuards(JwtAuthGuard)
   @Get(':id/details')
