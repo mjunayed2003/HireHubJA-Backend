@@ -1,7 +1,13 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import * as bcrypt from 'bcrypt';
-import { CreateJobDto, ScheduleInterviewDto, UpdateApplicationStatusDto } from './dto/employer.dto';
+import {
+  CreateJobDto,
+  ScheduleInterviewDto,
+  UpdateApplicationStatusDto,
+  UpdateJobDto,
+  UpdateInterviewStatusDto,
+} from './dto/employer.dto';
 import { UpdateEmployerProfileDto, ChangePasswordDto } from './dto/employer-profile.dto';
 import { NotificationService } from 'src/notification/notification.service';
 
@@ -10,7 +16,7 @@ export class EmployerService {
   constructor(
     private prisma: PrismaService,
     private notificationService: NotificationService,
-  ) {}
+  ) { }
 
   // ==================================================
   // 1. DASHBOARD STATS
@@ -106,9 +112,6 @@ export class EmployerService {
         take: limit,
         include: {
           _count: { select: { applications: true } },
-          employer: {
-            select: { fullName: true, companyName: true, profilePic: true },
-          },
         },
         orderBy: { createdAt: 'desc' },
       }),
@@ -118,17 +121,16 @@ export class EmployerService {
 
     return {
       data: jobs.map((job) => ({
-        id:              job.id,
-        title:           job.title,
-        location:        job.location,
-        workTime:        job.workTime,
-        salary:          job.salaryAmount,
-        type:            job.jobType,
-        status:          job.status,
+        id: job.id,
+        title: job.title,
+        location: job.location,
+        workTime: job.workTime,
+        salary: job.salaryAmount,
+        salaryFrequency: job.salaryFrequency,
+        type: job.jobType,
+        status: job.status,
+        experienceLevel: job.experienceLevel,
         totalApplicants: job._count.applications,
-        postedDate:      job.createdAt,
-        posterName:      job.employer?.companyName ?? job.employer?.fullName ?? null,
-        posterPic:       job.employer?.profilePic ?? null,
       })),
       meta: {
         total,
@@ -139,6 +141,67 @@ export class EmployerService {
         hasPrevPage: page > 1,
       },
     };
+  }
+
+  // ==================================================
+  // 3b. GET SINGLE JOB DETAILS
+  // ==================================================
+  async getJobById(userId: string, jobId: string) {
+    const employerId = await this.getEmployerId(userId);
+
+    const job = await this.prisma.job.findFirst({
+      where: { id: jobId, employerId },
+      include: {
+        category: true,
+        _count: {
+          select: { applications: true },
+        },
+      },
+    });
+
+    if (!job) throw new NotFoundException('Job not found or access denied');
+    return job;
+  }
+
+  // ==================================================
+  // 3c. UPDATE JOB
+  // ==================================================
+  async updateJob(userId: string, jobId: string, dto: UpdateJobDto) {
+    const employerId = await this.getEmployerId(userId);
+
+    const existingJob = await this.prisma.job.findFirst({
+      where: { id: jobId, employerId },
+    });
+
+    if (!existingJob) throw new NotFoundException('Job not found or access denied');
+
+    return this.prisma.job.update({
+      where: { id: jobId },
+      data: {
+        title: dto.title,
+        categoryId: dto.categoryId,
+        jobType: dto.jobType,
+        location: dto.location,
+        workTime: dto.workTime,
+        isRemote: dto.isRemote,
+        deadline: dto.deadline ? new Date(dto.deadline) : undefined,
+        numberOfEmployees: dto.numberOfEmployees,
+        description: dto.description,
+        responsibilities: dto.responsibilities,
+        benefits: dto.benefits,
+        experienceLevel: dto.experienceLevel,
+        minExperience: dto.minExperience,
+        educationLevel: dto.educationLevel,
+        salaryType: dto.salaryType,
+        salaryFrequency: dto.salaryFrequency,
+        salaryAmount: dto.salaryAmount,
+        isAnonymous: dto.isAnonymous,
+        status: dto.status,
+      },
+      include: {
+        category: true,
+      },
+    });
   }
 
   // ==================================================
@@ -187,7 +250,7 @@ export class EmployerService {
         job: true,
       },
     });
-
+    
     if (!application) throw new NotFoundException('Application not found');
     return application;
   }
@@ -314,6 +377,87 @@ export class EmployerService {
         editedAt: new Date(),
       },
     });
+  }
+ 
+  // ==================================================
+  // 9b. UPDATE INTERVIEW STATUS
+  // ==================================================
+  async updateInterviewStatus(userId: string, interviewId: string, dto: UpdateInterviewStatusDto) {
+    const employerId = await this.getEmployerId(userId);
+
+    const existingInterview = await this.prisma.interview.findFirst({
+      where: {
+        id: interviewId,
+        application: {
+          job: { employerId },
+        },
+      },
+      include: {
+        application: {
+          include: {
+            job: true,
+            jobSeeker: true,
+          },
+        },
+      },
+    });
+
+    if (!existingInterview) {
+      throw new NotFoundException('Interview not found or access denied');
+    }
+
+    const interview = await this.prisma.interview.update({
+      where: { id: interviewId },
+      data: {
+        status: dto.status,
+        editedAt: new Date(),
+      },
+      include: {
+        application: {
+          include: {
+            job: true,
+            jobSeeker: true,
+          },
+        },
+      },
+    });
+
+    if (dto.status === 'HIRED') {
+      await this.prisma.application.update({
+        where: { id: interview.applicationId },
+        data: { status: 'HIRED' },
+      });
+
+      await this.notificationService.createNotification(
+        interview.application.jobSeeker.userId,
+        'Congratulations! You are Hired',
+        `You have been hired for ${interview.application.job.title}.`,
+        'HIRED',
+      );
+    }
+
+    if (dto.status === 'REJECTED') {
+      await this.prisma.application.update({
+        where: { id: interview.applicationId },
+        data: { status: 'REJECTED' },
+      });
+
+      await this.notificationService.createNotification(
+        interview.application.jobSeeker.userId,
+        'Interview Update',
+        `Your interview outcome for ${interview.application.job.title} is marked as not selected.`,
+        'REJECTED',
+      );
+    }
+
+    if (dto.status === 'SCHEDULED' || dto.status === 'COMPLETED') {
+      await this.prisma.application.update({
+        where: { id: interview.applicationId },
+        data: { status: 'INTERVIEW' },
+      });
+    }
+
+    return interview;
   }
 
   // ==================================================

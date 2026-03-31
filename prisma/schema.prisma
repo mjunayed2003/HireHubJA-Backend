@@ -254,8 +254,8 @@ model Job {
   title       String
   description String  @db.Text
   location    String
-  workTime    String[] // e.g. ["DAY", "NIGHT", "FLEXIBLE"]
-  isRemote    Boolean @default(false) // ✅ Remote toggle
+  workTime    String[]
+  isRemote    Boolean @default(false)
 
   // Salary
   salaryType      String? // "FIXED" | "RANGE" | "NEGOTIABLE"

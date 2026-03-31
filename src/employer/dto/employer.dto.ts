@@ -1,5 +1,5 @@
 import { IsArray, IsEnum, IsNotEmpty, IsOptional, IsString, IsDateString, IsBoolean, IsInt, Min  } from 'class-validator';
-import { JobType, JobStatus, ApplicationStatus } from '../../generated/prisma/client';
+import { JobType, JobStatus, ApplicationStatus, InterviewStatus } from '../../generated/prisma/client';
 
 
 // 1. Post Job DTO
@@ -91,6 +91,96 @@ export class CreateJobDto {
   isAnonymous?: boolean;
 }
 
+// 1b. Update Job DTO
+export class UpdateJobDto {
+  @IsString()
+  @IsOptional()
+  title?: string;
+
+  @IsInt()
+  @Min(1)
+  @IsOptional()
+  numberOfEmployees?: number;
+
+  @IsString()
+  @IsOptional()
+  categoryId?: string;
+
+  @IsArray()
+  @IsEnum(JobType, { each: true })
+  @IsOptional()
+  jobType?: JobType[];
+
+  @IsString()
+  @IsOptional()
+  location?: string;
+
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  workTime?: string[];
+
+  @IsBoolean()
+  @IsOptional()
+  isRemote?: boolean;
+
+  @IsDateString()
+  @IsOptional()
+  deadline?: string;
+
+  @IsString()
+  @IsOptional()
+  description?: string;
+
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  responsibilities?: string[];
+
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  skills?: string[];
+
+  @IsArray()
+  @IsString({ each: true })
+  @IsOptional()
+  benefits?: string[];
+
+  @IsString()
+  @IsOptional()
+  experienceLevel?: string;
+
+  @IsInt()
+  @Min(0)
+  @IsOptional()
+  minExperience?: number;
+
+  @IsString()
+  @IsOptional()
+  educationLevel?: string;
+
+  @IsString()
+  @IsOptional()
+  salaryType?: string;
+
+  @IsString()
+  @IsOptional()
+  salaryFrequency?: string;
+
+  @IsString()
+  @IsOptional()
+  salaryAmount?: string;
+
+  @IsBoolean()
+  @IsOptional()
+  isAnonymous?: boolean;
+
+  @IsEnum(JobStatus)
+  @IsOptional()
+  status?: JobStatus;
+}
+
 // 2. Schedule Interview DTO
 export class ScheduleInterviewDto {
   @IsDateString()
@@ -123,4 +213,11 @@ export class UpdateApplicationStatusDto {
   @IsEnum(ApplicationStatus)
   @IsNotEmpty()
   status!: ApplicationStatus; // 'HIRED' or 'REJECTED'
+}
+
+// 4. Change Interview Status DTO
+export class UpdateInterviewStatusDto {
+  @IsEnum(InterviewStatus)
+  @IsNotEmpty()
+  status!: InterviewStatus;
 }

@@ -10,7 +10,9 @@ import { EmployerService } from './employer.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import {
   CreateJobDto, ScheduleInterviewDto,
-  UpdateApplicationStatusDto
+  UpdateApplicationStatusDto,
+  UpdateJobDto,
+  UpdateInterviewStatusDto,
 } from './dto/employer.dto';
 import { UpdateEmployerProfileDto, ChangePasswordDto } from './dto/employer-profile.dto';
 
@@ -47,6 +49,24 @@ export class EmployerController {
       limit: parseInt(limit),
       search,
     });
+  }
+
+  // 3b. Single Job Details (for edit form)
+  // URL: GET /employer/jobs/:jobId
+  @Get('jobs/:jobId')
+  async getJobById(@Request() req, @Param('jobId') jobId: string) {
+    return this.employerService.getJobById(req.user.id, jobId);
+  }
+
+  // 3c. Update Job
+  // URL: PUT /employer/jobs/:jobId
+  @Put('jobs/:jobId')
+  async updateJob(
+    @Request() req,
+    @Param('jobId') jobId: string,
+    @Body() dto: UpdateJobDto,
+  ) {
+    return this.employerService.updateJob(req.user.id, jobId, dto);
   }
 
   // 4. View Applicants for a specific Job
@@ -99,6 +119,17 @@ export class EmployerController {
     @Body() dto: ScheduleInterviewDto,
   ) {
     return this.employerService.updateInterview(interviewId, dto);
+  }
+
+  // 9b. Update Interview Status
+  // URL: PUT /employer/interview/:interviewId/status
+  @Put('interview/:interviewId/status')
+  async updateInterviewStatus(
+    @Request() req,
+    @Param('interviewId') interviewId: string,
+    @Body() dto: UpdateInterviewStatusDto,
+  ) {
+    return this.employerService.updateInterviewStatus(req.user.id, interviewId, dto);
   }
 
   // ==================================================
