@@ -14,9 +14,10 @@ export class CreateJobDto {
   @IsOptional()
   numberOfEmployees?: number;
 
-  @IsString()
+  @IsArray()
+  @IsString({ each: true })
   @IsNotEmpty()
-  categoryId!: string;
+  categoryIds!: string[]; // Multiple categories
 
   @IsArray()
   @IsEnum(JobType, { each: true })
@@ -102,9 +103,10 @@ export class UpdateJobDto {
   @IsOptional()
   numberOfEmployees?: number;
 
-  @IsString()
+  @IsArray()
+  @IsString({ each: true })
   @IsOptional()
-  categoryId?: string;
+  categoryIds?: string[]; // Multiple categories
 
   @IsArray()
   @IsEnum(JobType, { each: true })

@@ -172,7 +172,6 @@ export const EmployerProfileScalarFieldEnum = {
   licenseFile: 'licenseFile',
   idCardFront: 'idCardFront',
   idCardBack: 'idCardBack',
-  categoryId: 'categoryId',
   isVerified: 'isVerified',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -227,7 +226,6 @@ export const JobScalarFieldEnum = {
   educationLevel: 'educationLevel',
   numberOfEmployees: 'numberOfEmployees',
   deadline: 'deadline',
-  categoryId: 'categoryId',
   jobType: 'jobType',
   status: 'status',
   createdAt: 'createdAt',

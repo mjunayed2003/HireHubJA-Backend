@@ -201,7 +201,6 @@ model EmployerProfile {
 
   idCardFront String?
   idCardBack  String?
-  categoryId  String?
 
   isVerified Boolean    @default(false)
 
@@ -275,8 +274,7 @@ model Job {
   deadline          DateTime? // ✅ Application deadline
 
   // Relations
-  categoryId String
-  category   Category  @relation(fields: [categoryId], references: [id])
+  categories Category[]
   jobType    JobType[]
   status     JobStatus @default(OPEN)
 

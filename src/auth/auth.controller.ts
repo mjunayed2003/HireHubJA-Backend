@@ -54,10 +54,6 @@ export class AuthController {
 
   // ─────────────────────────────────────────────────────
   // 2. VERIFY OTP -> main token
-  // POST /auth/verify-otp
-  // ✅ Priority: email body আগে, তারপর tempToken header
-  // Option A: Body: { email, otp }         ← frontend flow
-  // Option B: Bearer tempToken + Body: { otp } ← developer/Postman flow
   // ─────────────────────────────────────────────────────
   @Post('verify-otp')
   @HttpCode(HttpStatus.OK)
@@ -88,9 +84,6 @@ export class AuthController {
   // ─────────────────────────────────────────────────────
   // 3. RESEND OTP
   // POST /auth/resend-otp
-  // ✅ Priority: email body আগে, তারপর tempToken header
-  // Option A: Body: { email }              ← frontend flow
-  // Option B: Bearer tempToken             ← developer/Postman flow
   // ─────────────────────────────────────────────────────
   @Post('resend-otp')
   @HttpCode(HttpStatus.OK)

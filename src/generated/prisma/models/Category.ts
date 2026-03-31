@@ -253,7 +253,7 @@ export type CategoryCreateInput = {
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  jobs?: Prisma.JobCreateNestedManyWithoutCategoryInput
+  jobs?: Prisma.JobCreateNestedManyWithoutCategoriesInput
   jobSeekers?: Prisma.JobSeekerProfileCreateNestedManyWithoutPreferredJobCategoriesInput
   employers?: Prisma.EmployerProfileCreateNestedManyWithoutPreferredCategoriesInput
 }
@@ -265,7 +265,7 @@ export type CategoryUncheckedCreateInput = {
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutCategoryInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutCategoriesInput
   jobSeekers?: Prisma.JobSeekerProfileUncheckedCreateNestedManyWithoutPreferredJobCategoriesInput
   employers?: Prisma.EmployerProfileUncheckedCreateNestedManyWithoutPreferredCategoriesInput
 }
@@ -277,7 +277,7 @@ export type CategoryUpdateInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  jobs?: Prisma.JobUpdateManyWithoutCategoryNestedInput
+  jobs?: Prisma.JobUpdateManyWithoutCategoriesNestedInput
   jobSeekers?: Prisma.JobSeekerProfileUpdateManyWithoutPreferredJobCategoriesNestedInput
   employers?: Prisma.EmployerProfileUpdateManyWithoutPreferredCategoriesNestedInput
 }
@@ -289,7 +289,7 @@ export type CategoryUncheckedUpdateInput = {
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  jobs?: Prisma.JobUncheckedUpdateManyWithoutCategoryNestedInput
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutCategoriesNestedInput
   jobSeekers?: Prisma.JobSeekerProfileUncheckedUpdateManyWithoutPreferredJobCategoriesNestedInput
   employers?: Prisma.EmployerProfileUncheckedUpdateManyWithoutPreferredCategoriesNestedInput
 }
@@ -356,11 +356,6 @@ export type CategoryListRelationFilter = {
 
 export type CategoryOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
-}
-
-export type CategoryScalarRelationFilter = {
-  is?: Prisma.CategoryWhereInput
-  isNot?: Prisma.CategoryWhereInput
 }
 
 export type CategoryCreateNestedManyWithoutJobSeekersInput = {
@@ -439,18 +434,42 @@ export type CategoryUncheckedUpdateManyWithoutEmployersNestedInput = {
   deleteMany?: Prisma.CategoryScalarWhereInput | Prisma.CategoryScalarWhereInput[]
 }
 
-export type CategoryCreateNestedOneWithoutJobsInput = {
-  create?: Prisma.XOR<Prisma.CategoryCreateWithoutJobsInput, Prisma.CategoryUncheckedCreateWithoutJobsInput>
-  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutJobsInput
-  connect?: Prisma.CategoryWhereUniqueInput
+export type CategoryCreateNestedManyWithoutJobsInput = {
+  create?: Prisma.XOR<Prisma.CategoryCreateWithoutJobsInput, Prisma.CategoryUncheckedCreateWithoutJobsInput> | Prisma.CategoryCreateWithoutJobsInput[] | Prisma.CategoryUncheckedCreateWithoutJobsInput[]
+  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutJobsInput | Prisma.CategoryCreateOrConnectWithoutJobsInput[]
+  connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
 }
 
-export type CategoryUpdateOneRequiredWithoutJobsNestedInput = {
-  create?: Prisma.XOR<Prisma.CategoryCreateWithoutJobsInput, Prisma.CategoryUncheckedCreateWithoutJobsInput>
-  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutJobsInput
-  upsert?: Prisma.CategoryUpsertWithoutJobsInput
-  connect?: Prisma.CategoryWhereUniqueInput
-  update?: Prisma.XOR<Prisma.XOR<Prisma.CategoryUpdateToOneWithWhereWithoutJobsInput, Prisma.CategoryUpdateWithoutJobsInput>, Prisma.CategoryUncheckedUpdateWithoutJobsInput>
+export type CategoryUncheckedCreateNestedManyWithoutJobsInput = {
+  create?: Prisma.XOR<Prisma.CategoryCreateWithoutJobsInput, Prisma.CategoryUncheckedCreateWithoutJobsInput> | Prisma.CategoryCreateWithoutJobsInput[] | Prisma.CategoryUncheckedCreateWithoutJobsInput[]
+  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutJobsInput | Prisma.CategoryCreateOrConnectWithoutJobsInput[]
+  connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+}
+
+export type CategoryUpdateManyWithoutJobsNestedInput = {
+  create?: Prisma.XOR<Prisma.CategoryCreateWithoutJobsInput, Prisma.CategoryUncheckedCreateWithoutJobsInput> | Prisma.CategoryCreateWithoutJobsInput[] | Prisma.CategoryUncheckedCreateWithoutJobsInput[]
+  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutJobsInput | Prisma.CategoryCreateOrConnectWithoutJobsInput[]
+  upsert?: Prisma.CategoryUpsertWithWhereUniqueWithoutJobsInput | Prisma.CategoryUpsertWithWhereUniqueWithoutJobsInput[]
+  set?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  disconnect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  delete?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  update?: Prisma.CategoryUpdateWithWhereUniqueWithoutJobsInput | Prisma.CategoryUpdateWithWhereUniqueWithoutJobsInput[]
+  updateMany?: Prisma.CategoryUpdateManyWithWhereWithoutJobsInput | Prisma.CategoryUpdateManyWithWhereWithoutJobsInput[]
+  deleteMany?: Prisma.CategoryScalarWhereInput | Prisma.CategoryScalarWhereInput[]
+}
+
+export type CategoryUncheckedUpdateManyWithoutJobsNestedInput = {
+  create?: Prisma.XOR<Prisma.CategoryCreateWithoutJobsInput, Prisma.CategoryUncheckedCreateWithoutJobsInput> | Prisma.CategoryCreateWithoutJobsInput[] | Prisma.CategoryUncheckedCreateWithoutJobsInput[]
+  connectOrCreate?: Prisma.CategoryCreateOrConnectWithoutJobsInput | Prisma.CategoryCreateOrConnectWithoutJobsInput[]
+  upsert?: Prisma.CategoryUpsertWithWhereUniqueWithoutJobsInput | Prisma.CategoryUpsertWithWhereUniqueWithoutJobsInput[]
+  set?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  disconnect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  delete?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  connect?: Prisma.CategoryWhereUniqueInput | Prisma.CategoryWhereUniqueInput[]
+  update?: Prisma.CategoryUpdateWithWhereUniqueWithoutJobsInput | Prisma.CategoryUpdateWithWhereUniqueWithoutJobsInput[]
+  updateMany?: Prisma.CategoryUpdateManyWithWhereWithoutJobsInput | Prisma.CategoryUpdateManyWithWhereWithoutJobsInput[]
+  deleteMany?: Prisma.CategoryScalarWhereInput | Prisma.CategoryScalarWhereInput[]
 }
 
 export type CategoryCreateWithoutJobSeekersInput = {
@@ -460,7 +479,7 @@ export type CategoryCreateWithoutJobSeekersInput = {
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  jobs?: Prisma.JobCreateNestedManyWithoutCategoryInput
+  jobs?: Prisma.JobCreateNestedManyWithoutCategoriesInput
   employers?: Prisma.EmployerProfileCreateNestedManyWithoutPreferredCategoriesInput
 }
 
@@ -471,7 +490,7 @@ export type CategoryUncheckedCreateWithoutJobSeekersInput = {
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutCategoryInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutCategoriesInput
   employers?: Prisma.EmployerProfileUncheckedCreateNestedManyWithoutPreferredCategoriesInput
 }
 
@@ -515,7 +534,7 @@ export type CategoryCreateWithoutEmployersInput = {
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  jobs?: Prisma.JobCreateNestedManyWithoutCategoryInput
+  jobs?: Prisma.JobCreateNestedManyWithoutCategoriesInput
   jobSeekers?: Prisma.JobSeekerProfileCreateNestedManyWithoutPreferredJobCategoriesInput
 }
 
@@ -526,7 +545,7 @@ export type CategoryUncheckedCreateWithoutEmployersInput = {
   image?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
-  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutCategoryInput
+  jobs?: Prisma.JobUncheckedCreateNestedManyWithoutCategoriesInput
   jobSeekers?: Prisma.JobSeekerProfileUncheckedCreateNestedManyWithoutPreferredJobCategoriesInput
 }
 
@@ -578,15 +597,82 @@ export type CategoryCreateOrConnectWithoutJobsInput = {
   create: Prisma.XOR<Prisma.CategoryCreateWithoutJobsInput, Prisma.CategoryUncheckedCreateWithoutJobsInput>
 }
 
-export type CategoryUpsertWithoutJobsInput = {
+export type CategoryUpsertWithWhereUniqueWithoutJobsInput = {
+  where: Prisma.CategoryWhereUniqueInput
   update: Prisma.XOR<Prisma.CategoryUpdateWithoutJobsInput, Prisma.CategoryUncheckedUpdateWithoutJobsInput>
   create: Prisma.XOR<Prisma.CategoryCreateWithoutJobsInput, Prisma.CategoryUncheckedCreateWithoutJobsInput>
-  where?: Prisma.CategoryWhereInput
 }
 
-export type CategoryUpdateToOneWithWhereWithoutJobsInput = {
-  where?: Prisma.CategoryWhereInput
+export type CategoryUpdateWithWhereUniqueWithoutJobsInput = {
+  where: Prisma.CategoryWhereUniqueInput
   data: Prisma.XOR<Prisma.CategoryUpdateWithoutJobsInput, Prisma.CategoryUncheckedUpdateWithoutJobsInput>
+}
+
+export type CategoryUpdateManyWithWhereWithoutJobsInput = {
+  where: Prisma.CategoryScalarWhereInput
+  data: Prisma.XOR<Prisma.CategoryUpdateManyMutationInput, Prisma.CategoryUncheckedUpdateManyWithoutJobsInput>
+}
+
+export type CategoryUpdateWithoutJobSeekersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  jobs?: Prisma.JobUpdateManyWithoutCategoriesNestedInput
+  employers?: Prisma.EmployerProfileUpdateManyWithoutPreferredCategoriesNestedInput
+}
+
+export type CategoryUncheckedUpdateWithoutJobSeekersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutCategoriesNestedInput
+  employers?: Prisma.EmployerProfileUncheckedUpdateManyWithoutPreferredCategoriesNestedInput
+}
+
+export type CategoryUncheckedUpdateManyWithoutJobSeekersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type CategoryUpdateWithoutEmployersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  jobs?: Prisma.JobUpdateManyWithoutCategoriesNestedInput
+  jobSeekers?: Prisma.JobSeekerProfileUpdateManyWithoutPreferredJobCategoriesNestedInput
+}
+
+export type CategoryUncheckedUpdateWithoutEmployersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  jobs?: Prisma.JobUncheckedUpdateManyWithoutCategoriesNestedInput
+  jobSeekers?: Prisma.JobSeekerProfileUncheckedUpdateManyWithoutPreferredJobCategoriesNestedInput
+}
+
+export type CategoryUncheckedUpdateManyWithoutEmployersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
 export type CategoryUpdateWithoutJobsInput = {
@@ -611,60 +697,7 @@ export type CategoryUncheckedUpdateWithoutJobsInput = {
   employers?: Prisma.EmployerProfileUncheckedUpdateManyWithoutPreferredCategoriesNestedInput
 }
 
-export type CategoryUpdateWithoutJobSeekersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  jobs?: Prisma.JobUpdateManyWithoutCategoryNestedInput
-  employers?: Prisma.EmployerProfileUpdateManyWithoutPreferredCategoriesNestedInput
-}
-
-export type CategoryUncheckedUpdateWithoutJobSeekersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  jobs?: Prisma.JobUncheckedUpdateManyWithoutCategoryNestedInput
-  employers?: Prisma.EmployerProfileUncheckedUpdateManyWithoutPreferredCategoriesNestedInput
-}
-
-export type CategoryUncheckedUpdateManyWithoutJobSeekersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-}
-
-export type CategoryUpdateWithoutEmployersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  jobs?: Prisma.JobUpdateManyWithoutCategoryNestedInput
-  jobSeekers?: Prisma.JobSeekerProfileUpdateManyWithoutPreferredJobCategoriesNestedInput
-}
-
-export type CategoryUncheckedUpdateWithoutEmployersInput = {
-  id?: Prisma.StringFieldUpdateOperationsInput | string
-  name?: Prisma.StringFieldUpdateOperationsInput | string
-  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  jobs?: Prisma.JobUncheckedUpdateManyWithoutCategoryNestedInput
-  jobSeekers?: Prisma.JobSeekerProfileUncheckedUpdateManyWithoutPreferredJobCategoriesNestedInput
-}
-
-export type CategoryUncheckedUpdateManyWithoutEmployersInput = {
+export type CategoryUncheckedUpdateManyWithoutJobsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   name?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null

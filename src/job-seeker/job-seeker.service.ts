@@ -323,11 +323,11 @@ export class JobSeekerService {
     }
 
     if (params.categoryId) {
-      andConditions.push({ categoryId: params.categoryId });
+      andConditions.push({ categories: { some: { id: params.categoryId } } });
     }
 
     if (params.categoryIds && params.categoryIds.length > 0) {
-      andConditions.push({ categoryId: { in: params.categoryIds } });
+      andConditions.push({ categories: { some: { id: { in: params.categoryIds } } } });
     }
 
     if (params.jobTypesToSearch.length > 0) {
@@ -346,8 +346,8 @@ export class JobSeekerService {
   }
 
   private hasSalaryFilter(minSalary?: any, maxSalary?: any) {
-    return minSalary !== undefined && minSalary !== null && minSalary !== ''
-      || maxSalary !== undefined && maxSalary !== null && maxSalary !== '';
+    return (minSalary !== undefined && minSalary !== null && minSalary !== '')
+      || (maxSalary !== undefined && maxSalary !== null && maxSalary !== '');
   }
 
   private applySalaryFilter<T extends { salaryAmount: string | null }>(
@@ -387,22 +387,22 @@ export class JobSeekerService {
       where: whereClause,
       include: {
         employer: { select: { fullName: true, profilePic: true } },
-        category: true,
-        _count: { select: { applications: true } },
-      },
-      orderBy: { createdAt: 'desc' as const },
-    };
+      categories: { select: { id: true } },
+      _count: { select: { applications: true } },
+    },
+    orderBy: { createdAt: 'desc' as const },
+  };
 
-    let jobs: any[];
-    let total: number;
+  let jobs: any[];
+  let total: number;
 
-    if (this.hasSalaryFilter(minSalary, maxSalary)) {
-      const allJobs = await this.prisma.job.findMany(baseQuery);
-      const filteredJobs = this.applySalaryFilter(allJobs, minSalary, maxSalary);
+  if (this.hasSalaryFilter(minSalary, maxSalary)) {
+    const allJobs = await this.prisma.job.findMany(baseQuery);
+    const filteredJobs = this.applySalaryFilter(allJobs, minSalary, maxSalary);
 
-      total = filteredJobs.length;
-      jobs = filteredJobs.slice(pagination.skip, pagination.skip + pagination.take);
-    } else {
+    total = filteredJobs.length;
+    jobs = filteredJobs.slice(pagination.skip, pagination.skip + pagination.take);
+  } else {
       const [pagedJobs, count] = await Promise.all([
         this.prisma.job.findMany({
           ...baseQuery,

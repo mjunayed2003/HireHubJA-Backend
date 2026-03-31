@@ -62,7 +62,9 @@ export class EmployerService {
       data: {
         employerId,
         title: dto.title,
-        categoryId: dto.categoryId,
+        categories: {
+          connect: dto.categoryIds.map(id => ({ id })),
+        },
         jobType: dto.jobType,
         location: dto.location,
         workTime: dto.workTime ?? [],
@@ -80,6 +82,10 @@ export class EmployerService {
         salaryAmount: dto.salaryAmount,
         isAnonymous: dto.isAnonymous ?? false,
         status: 'OPEN',
+      },
+      include: {
+        categories: { select: { id: true } },
+        employer: { select: { fullName: true, companyName: true } },
       },
     });
   }
@@ -152,7 +158,7 @@ export class EmployerService {
     const job = await this.prisma.job.findFirst({
       where: { id: jobId, employerId },
       include: {
-        category: true,
+        categories: { select: { id: true } },
         _count: {
           select: { applications: true },
         },
@@ -179,7 +185,12 @@ export class EmployerService {
       where: { id: jobId },
       data: {
         title: dto.title,
-        categoryId: dto.categoryId,
+        ...(dto.categoryIds && {
+          categories: {
+            set: [],
+            connect: dto.categoryIds.map(id => ({ id })),
+          },
+        }),
         jobType: dto.jobType,
         location: dto.location,
         workTime: dto.workTime,
@@ -199,7 +210,7 @@ export class EmployerService {
         status: dto.status,
       },
       include: {
-        category: true,
+        categories: { select: { id: true } },
       },
     });
   }

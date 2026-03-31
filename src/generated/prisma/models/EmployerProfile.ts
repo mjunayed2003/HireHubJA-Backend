@@ -40,7 +40,6 @@ export type EmployerProfileMinAggregateOutputType = {
   licenseFile: string | null
   idCardFront: string | null
   idCardBack: string | null
-  categoryId: string | null
   isVerified: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -62,7 +61,6 @@ export type EmployerProfileMaxAggregateOutputType = {
   licenseFile: string | null
   idCardFront: string | null
   idCardBack: string | null
-  categoryId: string | null
   isVerified: boolean | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -84,7 +82,6 @@ export type EmployerProfileCountAggregateOutputType = {
   licenseFile: number
   idCardFront: number
   idCardBack: number
-  categoryId: number
   isVerified: number
   createdAt: number
   updatedAt: number
@@ -108,7 +105,6 @@ export type EmployerProfileMinAggregateInputType = {
   licenseFile?: true
   idCardFront?: true
   idCardBack?: true
-  categoryId?: true
   isVerified?: true
   createdAt?: true
   updatedAt?: true
@@ -130,7 +126,6 @@ export type EmployerProfileMaxAggregateInputType = {
   licenseFile?: true
   idCardFront?: true
   idCardBack?: true
-  categoryId?: true
   isVerified?: true
   createdAt?: true
   updatedAt?: true
@@ -152,7 +147,6 @@ export type EmployerProfileCountAggregateInputType = {
   licenseFile?: true
   idCardFront?: true
   idCardBack?: true
-  categoryId?: true
   isVerified?: true
   createdAt?: true
   updatedAt?: true
@@ -247,7 +241,6 @@ export type EmployerProfileGroupByOutputType = {
   licenseFile: string | null
   idCardFront: string | null
   idCardBack: string | null
-  categoryId: string | null
   isVerified: boolean
   createdAt: Date
   updatedAt: Date
@@ -290,7 +283,6 @@ export type EmployerProfileWhereInput = {
   licenseFile?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
   idCardFront?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
   idCardBack?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
-  categoryId?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
   isVerified?: Prisma.BoolFilter<"EmployerProfile"> | boolean
   createdAt?: Prisma.DateTimeFilter<"EmployerProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"EmployerProfile"> | Date | string
@@ -316,7 +308,6 @@ export type EmployerProfileOrderByWithRelationInput = {
   licenseFile?: Prisma.SortOrderInput | Prisma.SortOrder
   idCardFront?: Prisma.SortOrderInput | Prisma.SortOrder
   idCardBack?: Prisma.SortOrderInput | Prisma.SortOrder
-  categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
   isVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -345,7 +336,6 @@ export type EmployerProfileWhereUniqueInput = Prisma.AtLeast<{
   licenseFile?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
   idCardFront?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
   idCardBack?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
-  categoryId?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
   isVerified?: Prisma.BoolFilter<"EmployerProfile"> | boolean
   createdAt?: Prisma.DateTimeFilter<"EmployerProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"EmployerProfile"> | Date | string
@@ -371,7 +361,6 @@ export type EmployerProfileOrderByWithAggregationInput = {
   licenseFile?: Prisma.SortOrderInput | Prisma.SortOrder
   idCardFront?: Prisma.SortOrderInput | Prisma.SortOrder
   idCardBack?: Prisma.SortOrderInput | Prisma.SortOrder
-  categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
   isVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -399,7 +388,6 @@ export type EmployerProfileScalarWhereWithAggregatesInput = {
   licenseFile?: Prisma.StringNullableWithAggregatesFilter<"EmployerProfile"> | string | null
   idCardFront?: Prisma.StringNullableWithAggregatesFilter<"EmployerProfile"> | string | null
   idCardBack?: Prisma.StringNullableWithAggregatesFilter<"EmployerProfile"> | string | null
-  categoryId?: Prisma.StringNullableWithAggregatesFilter<"EmployerProfile"> | string | null
   isVerified?: Prisma.BoolWithAggregatesFilter<"EmployerProfile"> | boolean
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"EmployerProfile"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"EmployerProfile"> | Date | string
@@ -420,7 +408,6 @@ export type EmployerProfileCreateInput = {
   licenseFile?: string | null
   idCardFront?: string | null
   idCardBack?: string | null
-  categoryId?: string | null
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -446,7 +433,6 @@ export type EmployerProfileUncheckedCreateInput = {
   licenseFile?: string | null
   idCardFront?: string | null
   idCardBack?: string | null
-  categoryId?: string | null
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -470,7 +456,6 @@ export type EmployerProfileUpdateInput = {
   licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -496,7 +481,6 @@ export type EmployerProfileUncheckedUpdateInput = {
   licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -521,7 +505,6 @@ export type EmployerProfileCreateManyInput = {
   licenseFile?: string | null
   idCardFront?: string | null
   idCardBack?: string | null
-  categoryId?: string | null
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -542,7 +525,6 @@ export type EmployerProfileUpdateManyMutationInput = {
   licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -564,7 +546,6 @@ export type EmployerProfileUncheckedUpdateManyInput = {
   licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -601,7 +582,6 @@ export type EmployerProfileCountOrderByAggregateInput = {
   licenseFile?: Prisma.SortOrder
   idCardFront?: Prisma.SortOrder
   idCardBack?: Prisma.SortOrder
-  categoryId?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -623,7 +603,6 @@ export type EmployerProfileMaxOrderByAggregateInput = {
   licenseFile?: Prisma.SortOrder
   idCardFront?: Prisma.SortOrder
   idCardBack?: Prisma.SortOrder
-  categoryId?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -645,7 +624,6 @@ export type EmployerProfileMinOrderByAggregateInput = {
   licenseFile?: Prisma.SortOrder
   idCardFront?: Prisma.SortOrder
   idCardBack?: Prisma.SortOrder
-  categoryId?: Prisma.SortOrder
   isVerified?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -769,7 +747,6 @@ export type EmployerProfileCreateWithoutUserInput = {
   licenseFile?: string | null
   idCardFront?: string | null
   idCardBack?: string | null
-  categoryId?: string | null
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -793,7 +770,6 @@ export type EmployerProfileUncheckedCreateWithoutUserInput = {
   licenseFile?: string | null
   idCardFront?: string | null
   idCardBack?: string | null
-  categoryId?: string | null
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -833,7 +809,6 @@ export type EmployerProfileUpdateWithoutUserInput = {
   licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -857,7 +832,6 @@ export type EmployerProfileUncheckedUpdateWithoutUserInput = {
   licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -881,7 +855,6 @@ export type EmployerProfileCreateWithoutPreferredCategoriesInput = {
   licenseFile?: string | null
   idCardFront?: string | null
   idCardBack?: string | null
-  categoryId?: string | null
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -906,7 +879,6 @@ export type EmployerProfileUncheckedCreateWithoutPreferredCategoriesInput = {
   licenseFile?: string | null
   idCardFront?: string | null
   idCardBack?: string | null
-  categoryId?: string | null
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -954,7 +926,6 @@ export type EmployerProfileScalarWhereInput = {
   licenseFile?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
   idCardFront?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
   idCardBack?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
-  categoryId?: Prisma.StringNullableFilter<"EmployerProfile"> | string | null
   isVerified?: Prisma.BoolFilter<"EmployerProfile"> | boolean
   createdAt?: Prisma.DateTimeFilter<"EmployerProfile"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"EmployerProfile"> | Date | string
@@ -975,7 +946,6 @@ export type EmployerProfileCreateWithoutJobsPostedInput = {
   licenseFile?: string | null
   idCardFront?: string | null
   idCardBack?: string | null
-  categoryId?: string | null
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1000,7 +970,6 @@ export type EmployerProfileUncheckedCreateWithoutJobsPostedInput = {
   licenseFile?: string | null
   idCardFront?: string | null
   idCardBack?: string | null
-  categoryId?: string | null
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1039,7 +1008,6 @@ export type EmployerProfileUpdateWithoutJobsPostedInput = {
   licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1064,7 +1032,6 @@ export type EmployerProfileUncheckedUpdateWithoutJobsPostedInput = {
   licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1087,7 +1054,6 @@ export type EmployerProfileCreateWithoutPaymentsInput = {
   licenseFile?: string | null
   idCardFront?: string | null
   idCardBack?: string | null
-  categoryId?: string | null
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1112,7 +1078,6 @@ export type EmployerProfileUncheckedCreateWithoutPaymentsInput = {
   licenseFile?: string | null
   idCardFront?: string | null
   idCardBack?: string | null
-  categoryId?: string | null
   isVerified?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1151,7 +1116,6 @@ export type EmployerProfileUpdateWithoutPaymentsInput = {
   licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1176,7 +1140,6 @@ export type EmployerProfileUncheckedUpdateWithoutPaymentsInput = {
   licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1199,7 +1162,6 @@ export type EmployerProfileUpdateWithoutPreferredCategoriesInput = {
   licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1224,7 +1186,6 @@ export type EmployerProfileUncheckedUpdateWithoutPreferredCategoriesInput = {
   licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1248,7 +1209,6 @@ export type EmployerProfileUncheckedUpdateManyWithoutPreferredCategoriesInput = 
   licenseFile?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardFront?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   idCardBack?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  categoryId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1319,7 +1279,6 @@ export type EmployerProfileSelect<ExtArgs extends runtime.Types.Extensions.Inter
   licenseFile?: boolean
   idCardFront?: boolean
   idCardBack?: boolean
-  categoryId?: boolean
   isVerified?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1346,7 +1305,6 @@ export type EmployerProfileSelectCreateManyAndReturn<ExtArgs extends runtime.Typ
   licenseFile?: boolean
   idCardFront?: boolean
   idCardBack?: boolean
-  categoryId?: boolean
   isVerified?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1369,7 +1327,6 @@ export type EmployerProfileSelectUpdateManyAndReturn<ExtArgs extends runtime.Typ
   licenseFile?: boolean
   idCardFront?: boolean
   idCardBack?: boolean
-  categoryId?: boolean
   isVerified?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -1392,13 +1349,12 @@ export type EmployerProfileSelectScalar = {
   licenseFile?: boolean
   idCardFront?: boolean
   idCardBack?: boolean
-  categoryId?: boolean
   isVerified?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type EmployerProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "companyName" | "fullName" | "phone" | "profilePic" | "location" | "about" | "website" | "businessRegCertId" | "taxId" | "authorizedRepId" | "licenseFile" | "idCardFront" | "idCardBack" | "categoryId" | "isVerified" | "createdAt" | "updatedAt", ExtArgs["result"]["employerProfile"]>
+export type EmployerProfileOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "userId" | "companyName" | "fullName" | "phone" | "profilePic" | "location" | "about" | "website" | "businessRegCertId" | "taxId" | "authorizedRepId" | "licenseFile" | "idCardFront" | "idCardBack" | "isVerified" | "createdAt" | "updatedAt", ExtArgs["result"]["employerProfile"]>
 export type EmployerProfileInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   jobsPosted?: boolean | Prisma.EmployerProfile$jobsPostedArgs<ExtArgs>
@@ -1437,7 +1393,6 @@ export type $EmployerProfilePayload<ExtArgs extends runtime.Types.Extensions.Int
     licenseFile: string | null
     idCardFront: string | null
     idCardBack: string | null
-    categoryId: string | null
     isVerified: boolean
     createdAt: Date
     updatedAt: Date
@@ -1883,7 +1838,6 @@ export interface EmployerProfileFieldRefs {
   readonly licenseFile: Prisma.FieldRef<"EmployerProfile", 'String'>
   readonly idCardFront: Prisma.FieldRef<"EmployerProfile", 'String'>
   readonly idCardBack: Prisma.FieldRef<"EmployerProfile", 'String'>
-  readonly categoryId: Prisma.FieldRef<"EmployerProfile", 'String'>
   readonly isVerified: Prisma.FieldRef<"EmployerProfile", 'Boolean'>
   readonly createdAt: Prisma.FieldRef<"EmployerProfile", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"EmployerProfile", 'DateTime'>
